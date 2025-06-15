@@ -1,0 +1,150 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Rule: Generating a Task List from a PRD
+
+## Goal
+
+To guide an AI assistant in creating a detailed, step-by-step task list in Markdown format based on an existing Product Requirements Document (PRD). The task list should guide a developer through implementation with comprehensive progress tracking and decision logging.
+
+## Output
+
+- **Format:** Markdown (`.md`)
+- **Location:** `/tasks/<feature-folder>/`
+- **Filename:** `tasks-[prd-file-name].md` (e.g., `tasks-prd-user-profile-editing.md`)
+- **Directory Structure:** Create `<feature-folder>` only if it doesn't exist; reuse existing feature folders
+
+## Process
+
+1.  **Receive PRD Reference:** The user points the AI to a specific PRD file
+2.  **Analyze PRD:** The AI reads and analyzes the functional requirements, user stories, and other sections of the specified PRD.
+3.  **Phase 1: Generate Parent Tasks:** Based on the PRD analysis, create the file and generate the main, high-level tasks required to implement the feature. Use your judgement on how many high-level tasks to use. It's likely to be about 5. Present these tasks to the user in the specified format (without sub-tasks yet). Inform the user: "I have generated the high-level tasks based on the PRD. Ready to generate the sub-tasks? Respond with 'Go' to proceed."
+4.  **Wait for Confirmation:** Pause and wait for the user to respond with "Go".
+5.  **Phase 2: Generate Sub-Tasks & Structure:** Once the user confirms:
+   - Break down each parent task into smaller, actionable sub-tasks with complexity sizing (S/M/L/XL)
+   - Analyze method layers (controller → service → repository) for technical tasks
+   - Create granular sub-tasks for each implementation layer
+   - Identify cross-cutting concerns (validation, error handling, logging)
+   - Organize tasks into progress tracking sections
+   - Add status indicators to relevant files
+6.  **Identify Relevant Files:** Based on the tasks and PRD, identify potential files that will need to be created or modified. List these under the `Relevant Files` section with status indicators, including corresponding test files if applicable.
+7.  **Create Implementation Plan:** Generate a detailed implementation plan based on PRD analysis.
+8.  **Generate Final Output:** Combine all sections into the final Markdown structure with progress tracking capabilities.
+9.  **Save Task List:** Save the generated document in the `/tasks/<feature-folder>/` directory with the filename `tasks-[prd-file-name].md`.
+
+## Output Format
+
+The generated task list _must_ follow this structure:
+
+```markdown
+# [Feature Name] Implementation Tasks
+
+Brief description of the feature and its purpose based on PRD analysis.
+
+## 🧠 Findings & Decisions Log
+(Initially empty - to be populated during implementation)
+- <Short summary of finding, decision, or change>
+  - Details: <What was discovered, decided, or changed>
+  - Rationale: <Why this matters or what triggered the change>
+  - Impact: <How this affects the plan, tasks, or implementation>
+
+## 📂 Relevant Files
+
+List of files to be created or modified for the tasks. Use status indicators:
+- `path/to/potential/file1.ts` - Brief description of purpose (not started)
+- `path/to/file1.test.ts` - Unit tests for `file1.ts` (not started)
+- `path/to/another/file.tsx` - Brief description ⏳ (in-progress)
+- `path/to/another/file.test.tsx` - Unit tests for `another/file.tsx` ✅ (completed)
+- `lib/utils/helpers.ts` - Utility functions needed
+- `lib/utils/helpers.test.ts` - Unit tests for `helpers.ts`
+
+### Notes
+
+- Unit tests should typically be placed alongside the code files they are testing
+- Use `npx jest [optional/path/to/test/file]` to run tests
+- Status indicators: ✅ (completed), ⏳ (in-progress), (no indicator for not started)
+
+## 🗺️ Implementation Plan
+
+Detailed description of how the feature will be implemented based on PRD analysis, including:
+- Architecture approach and design decisions
+- Data flow and integration points
+- Key technical considerations and constraints
+
+## ✅ Completed Tasks
+(Initially empty)
+
+## 🚧 In Progress Tasks
+- [ ] 1.0 Parent Task Title (L)
+  - [ ] 1.1 Sub-task description with complexity sizing (M)
+  - [ ] 1.2 Another sub-task description (S)
+- [ ] 2.0 Another Parent Task Title (XL)
+  - [ ] 2.1 Technical sub-task for data layer (M)
+  - [ ] 2.2 Business logic implementation (L)
+  - [ ] 2.3 API endpoint creation (M)
+  - [ ] 2.4 Validation and error handling (S)
+
+## 🔮 Future Tasks
+(Tasks identified but not yet prioritized)
+
+```
+
+## Deep Method Analysis & Task Breakdown
+
+When generating sub-tasks:
+
+1. **Analyze Method Layers**
+   - Examine each method's responsibility and complexity
+   - Identify dependencies between methods and services
+   - Understand data flow through multiple layers (controller → service → repository)
+
+2. **Granular Task Division**
+   - Break down complex methods into smaller, focused sub-tasks
+   - Create separate tasks for each implementation layer
+   - Include cross-cutting concerns (validation, error handling, logging)
+   - Use complexity sizing: S (Small), M (Medium), L (Large), XL (Extra Large)
+   - Use indentation to show parent-child task relationships
+
+3. **Progress Tracking Structure**
+   - Organize tasks into Completed, In Progress, and Future sections
+   - Use status indicators for files and components
+   - Enable precise progress tracking at granular level
+
+## 🤖 AI Maintenance Instructions
+
+When AI works on tasks from this generated list:
+
+1. **Task Management**
+   - Move tasks between sections (🚧 → ✅) as work progresses
+   - Add newly discovered tasks to appropriate sections
+   - Update complexity sizing if estimates change
+
+2. **Decision Logging**
+   - Update Findings & Decisions Log after significant discoveries
+   - Document approach changes, blockers, and design decisions
+   - Maintain rationale for future reference
+
+3. **File Status Updates**
+   - Update status indicators in Relevant Files section (⏳, ✅)
+   - Add new files as they're identified during implementation
+   - Remove obsolete entries
+
+4. **Progress Tracking**
+   - Mark sub-tasks complete individually for precise tracking
+   - Update Implementation Plan if approach evolves
+   - Maintain clear parent-child task relationships
+
+## Interaction Model
+
+The process explicitly requires a pause after generating parent tasks to get user confirmation ("Go") before proceeding to generate the detailed sub-tasks and full structure. This ensures the high-level plan aligns with user expectations before diving into details.
+
+## Target Audience
+
+Assume the primary reader of the task list is a **junior developer** who will implement the feature, with comprehensive tracking capabilities for project management.

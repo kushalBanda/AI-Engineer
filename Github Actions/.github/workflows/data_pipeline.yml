@@ -1,0 +1,45 @@
+name: Data-Pipeline-Workflow
+
+on:
+    push:
+    workflow_dispatch:
+    schedule:
+        - cron: "35 0 * * *"
+
+jobs:
+    run-data-pipeline:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository code
+                uses: actions/checkout@v4
+                with:
+                    token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+            - name: Setup Python
+                uses: actions/setup-python@v4
+                with:
+                    python-version: "3.12"
+                    cache: "pip"
+            - name: Install dependencies
+                run: pip install -r requirements.txt
+            - name: Run data pipeline
+                env:
+                    PERSONAL_ACCESS_TOKEN: ${{ secrets.YT_API_KEY }}
+                run: python code/data_pipeline.py
+            - name: Check for changes
+                id: git-check
+                run: |
+                    git config --global user.name "GitHub Actions"
+                    git config --global user.email "github-actions@github.com"
+                    git add .
+                    git diff --staged --quiet || echo "changes=true" >> $GITHUB_ENV
+            - name: Commit changes
+                if: env.changes == 'true'
+                run: |
+                    git commit -m "Update data pipeline"
+                    git push
+
+
+
+
+
+

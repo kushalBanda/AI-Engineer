@@ -1,0 +1,90 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Task List Management
+
+Guidelines for managing task lists in markdown files to track progress on completing a PRD
+
+## Task Implementation
+
+### Workflow Steps
+
+1. **Read the task list file**
+   - Parse sections: 🧠 Findings & Decisions Log, ✅ Completed, 🚧 In Progress, 🔮 Future
+   - Review latest Findings Log entries to maintain context
+   - Identify highest-priority unchecked task (topmost in In Progress, else first in Future)
+   - Check if task has sub-tasks (indented items below)
+
+2. **Prompt for confirmation** 
+   - Ask: *"Ready to start **<exact task text>**?"*
+   - For tasks with sub-tasks, offer options:
+     > *"This task has <N> sub-tasks. Would you like to:*
+     > *1. Work on the entire task and all sub-tasks*
+     > *2. Focus on specific sub-tasks one by one*
+     > *3. Choose a different task?"*
+   - Wait for user approval before proceeding
+
+3. **Execute confirmed task**
+   - **One sub-task at a time:** Do **NOT** start the next sub-task until you ask the user for permission and they say "yes" or "y"
+   - For technical tasks: Analyze implementation layers (data → service → API) and break into logical steps
+   - If runtime info needed (logs, errors), ask user to run code and share output before proceeding
+   - If same approach fails twice, ask: *"This approach failed before. Try different method or continue anyway?"*
+
+4. **Update task list and files**
+   - **Completion protocol:**  
+     1. Mark finished sub-task as completed `[ ]` → `[x]`
+     2. Mark parent task complete **only** when ALL sub-tasks are `[x]`
+     3. Move tasks between sections as appropriate (🔮 Future → 🚧 In Progress → ✅ Completed)
+   - Update 🧠 Findings & Decisions Log with discoveries, blockers, or approach changes
+   - Update file status indicators in Relevant Files section (⏳ → ✅)
+   - Add new files discovered during implementation
+   - Add newly discovered tasks to appropriate sections
+5. **Loop** - Return to step 1 for next task
+
+## 🧭 Guidelines
+
+| Situation | Action |
+|-----------|--------|
+| **Multiple tasks in In Progress** | Pick topmost; confirm with user |
+| **User declines suggested task** | Ask which task to do instead |
+| **Task has sub-tasks** | Offer individual vs. full task options |
+| **New tasks discovered** | Add to Future Tasks section |
+| **Parent task completion** | Mark complete only when ALL sub-tasks done |
+| **Need runtime information** | Ask user to run code and share logs/output |
+| **Same approach fails twice** | Confirm before retrying or suggest alternatives |
+
+## Task List Maintenance
+
+1. **Update the task list as you work:**
+   - Mark tasks and subtasks as completed (`[x]`) per the protocol above
+   - Move tasks between progress sections (🔮 → 🚧 → ✅)
+   - Add new tasks as they emerge
+   - Update 🧠 Findings & Decisions Log with key discoveries
+
+2. **Maintain the "Relevant Files" section:**
+   - List every file created or modified
+   - Update status indicators: ✅ (completed), ⏳ (in-progress), (none for not started)
+   - Give each file a one-line description of its purpose
+   - Add new files discovered during implementation
+
+## AI Instructions
+
+When working with task lists, the AI must:
+
+1. Work with enhanced task structure (progress sections, findings log, status indicators)
+2. Regularly update the task list file after finishing any significant work
+3. Follow the completion protocol and hierarchy rules
+4. Add newly discovered tasks to appropriate sections
+5. Keep "Relevant Files" accurate with status indicators
+6. Before starting work, check which sub-task is next and confirm with user
+7. Update Findings & Decisions Log with approach changes and discoveries
+8. For technical implementations, break down across implementation layers
+9. Always request user confirmation before starting each sub-task
+10. Ask for runtime information when needed rather than making assumptions
