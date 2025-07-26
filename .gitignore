@@ -162,3 +162,7 @@ cython_debug/
 
 # Cursor Rules
 *.mdc
+
+# .env
+.env
+*/.env
