@@ -1,0 +1,5 @@
+CLAUDE.md
+.DS_Store
+.env
+.venv
+FASTAPI Key.pem
