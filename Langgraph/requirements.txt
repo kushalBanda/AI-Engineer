@@ -1,9 +1,0 @@
-pydantic
-langchain
-langgraph
-langchain-core
-langchain-community
-langchain-openai
-python-dotenv
-arxiv
-wikipedia
