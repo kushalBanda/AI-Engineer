@@ -36,4 +36,5 @@ print(graph.invoke({"foo": "Hello, World!"}))
 
 # Generate visualizations
 parent_graph_png = graph.get_graph().draw_mermaid_png()
+display(Image(parent_graph_png))
 subgraph_png = subgraph.get_graph().draw_mermaid_png()
