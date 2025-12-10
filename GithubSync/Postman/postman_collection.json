@@ -1,0 +1,159 @@
+{
+  "info": {
+    "name": "GitHub API (FastAPI)",
+    "description": "Local FastAPI GitHub API wrapper. Base URL: http://localhost:8000. Organization, repositories, commits, and pull requests endpoints.",
+    "_postman_id": "github-organized-api-collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "base_url",   "value": "http://localhost:8000", "type": "string"},
+    {"key": "auth_token", "value": "",                  "type": "string"},
+    {"key": "org",        "value": "",                  "type": "string"},
+    {"key": "owner",      "value": "",                  "type": "string"},
+    {"key": "repo",       "value": "",                  "type": "string"},
+    {"key": "pull_number","value": "",                  "type": "string"},
+    {"key": "commit_sha", "value": "",                  "type": "string"}
+  ],
+  "item": [
+    {
+      "name": "Organisation & Users",
+      "item": [
+        {
+          "name": "Get authenticated user profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": { "raw": "{{base_url}}/org/user", "host": ["{{base_url}}"], "path": ["org", "user"] }
+          }
+        },
+        {
+          "name": "List orgs for authenticated user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": { "raw": "{{base_url}}/org/user/orgs", "host": ["{{base_url}}"], "path": ["org","user","orgs"] }
+          }
+        },
+        {
+          "name": "Get a single org info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": { "raw": "{{base_url}}/org/orgs/{{org}}", "host": ["{{base_url}}"], "path": ["org", "orgs", "{{org}}"] }
+          }
+        },
+        {
+          "name": "List repos of an organisation",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": { "raw": "{{base_url}}/org/orgs/{{org}}/repos", "host": ["{{base_url}}"], "path": ["org","orgs","{{org}}","repos"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Repositories",
+      "item": [
+        {
+          "name": "Get repo details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": { "raw": "{{base_url}}/repos/{{owner}}/{{repo}}", "host": ["{{base_url}}"], "path": ["repos","{{owner}}","{{repo}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Commits",
+      "item": [
+        {
+          "name": "List commits of a repo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": { "raw": "{{base_url}}/repos/{{owner}}/{{repo}}/commits", "host": ["{{base_url}}"], "path": ["repos","{{owner}}","{{repo}}","commits"] }
+          }
+        },
+        {
+          "name": "Get a single commit by SHA",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": { "raw": "{{base_url}}/repos/{{owner}}/{{repo}}/commits/{{commit_sha}}", "host": ["{{base_url}}"], "path": ["repos","{{owner}}","{{repo}}","commits","{{commit_sha}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pull Requests",
+      "item": [
+        {
+          "name": "List all PRs for a repo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/repos/{{owner}}/{{repo}}/pulls?state=all",
+              "host": ["{{base_url}}"],
+              "path": ["repos","{{owner}}","{{repo}}","pulls"],
+              "query": [
+                {"key": "state", "value": "all"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get a single PR by number",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": { "raw": "{{base_url}}/repos/{{owner}}/{{repo}}/pulls/{{pull_number}}", "host": ["{{base_url}}"], "path": ["repos","{{owner}}","{{repo}}","pulls","{{pull_number}}"] }
+          }
+        },
+        {
+          "name": "List commits in a PR",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "token {{auth_token}}"},
+              {"key": "Accept", "value": "application/vnd.github.v3+json"}
+            ],
+            "url": { "raw": "{{base_url}}/repos/{{owner}}/{{repo}}/pulls/{{pull_number}}/commits",
+                   "host": ["{{base_url}}"],
+                   "path": ["repos","{{owner}}","{{repo}}","pulls","{{pull_number}}","commits"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
