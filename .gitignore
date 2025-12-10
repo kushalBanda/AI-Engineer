@@ -179,3 +179,6 @@ cython_debug/
 
 # Chat
 GithubSync/chat/
+
+# Claude.md
+CLAUDE.md
