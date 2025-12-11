@@ -182,3 +182,9 @@ GithubSync/chat/
 
 # Claude.md
 CLAUDE.md
+
+# Package lock
+package-lock.json
+
+# Node modules
+node_modules/

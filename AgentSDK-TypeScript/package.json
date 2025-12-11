@@ -1,0 +1,17 @@
+{
+  "name": "agentsdk-typescript",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --watch index.js"
+  },
+  "dependencies": {
+    "@openai/agents": "^0.3.4",
+    "dotenv": "^17.2.3",
+    "zod": "^3.25.76"
+  }
+}
