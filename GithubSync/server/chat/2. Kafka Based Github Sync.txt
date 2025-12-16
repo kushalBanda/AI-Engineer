@@ -1,0 +1,425 @@
+Kafka-Based GitHub Data Synchronization System - Implementation Plan
+
+Overview
+
+Build a production-ready continuous GitHub data fetching system that:
+- Uses Kafka to buffer API requests and prevent rate limit violations (5000 req/hour)
+- Operates separate Kafka topics per resource type (orgs, repos, commits, pulls)
+- Stores data in S3 with repository-based folder structure
+- Batches uploads (10-50 records or 30-60 seconds) for efficiency
+
+System Architecture
+
+Scheduler Service (APScheduler)
+    ↓ (fetches data periodically)
+Rate Limit Manager (Redis-backed)
+    ↓ (checks before each API call)
+Enhanced GitHub Client
+    ↓ (publishes to Kafka)
+Kafka Topics (github-orgs, github-repos, github-commits, github-pulls)
+    ↓ (consumed by workers)
+Consumer Workers (4 workers, one per topic)
+    ↓ (batch accumulation: 50 records OR 60 seconds)
+S3 Client
+    ↓ (uploads to S3)
+S3 Bucket: s3://github-scm/{owner}/{repo}/{data_type}/{timestamp}.json.gz
+
+Implementation Phases
+
+Phase 1: Foundation & Dependencies
+
+Goal: Set up project structure, dependencies, and infrastructure
+
+1. Add Dependencies to pyproject.toml
+- boto3>=1.34.0 - AWS S3 client
+- apscheduler>=3.10.4 - Job scheduling
+- redis>=5.0.0 - Rate limit state storage
+- pyyaml>=6.0.1 - Config file parsing
+- aiofiles>=23.2.0 - Async file operations
+- structlog>=24.1.0 - Structured logging
+2. Update docker-compose.yml
+- Add Redis service on port 6379
+- Disable Kafka auto-topic-creation
+- Add volume for Redis persistence
+3. Create Directory Structure
+sync/
+├── core/          # Rate limiter, config
+├── clients/       # Enhanced GitHub clients
+├── scheduler/     # APScheduler service
+├── kafka/         # Producer, DLQ handler
+├── consumers/     # Kafka consumers (4)
+├── storage/       # S3 client
+├── models/        # Data models
+└── config/        # YAML configs
+4. Create Configuration Files
+- sync/config/sync_targets.yaml - List of orgs/repos to sync
+- sync/core/config.py - Pydantic settings class
+- .env - Add sync-specific variables (batch size, intervals, Redis config)
+5. Create Kafka Topics Script
+- scripts/setup_topics.sh - Creates 4 main topics + 4 DLQ topics
+- Partitions: orgs=3, repos=5, commits=5, pulls=3
+- Retention: 7 days, compression: gzip
+
+Phase 2: Rate Limit Management
+
+Goal: Prevent GitHub rate limit violations with intelligent throttling
+
+File: sync/core/rate_limiter.py
+
+Key Features:
+- Parse GitHub response headers: X-RateLimit-Remaining, X-RateLimit-Reset
+- Use Redis to store rate limit state (enables multi-process coordination)
+- Block requests when remaining < 100 (safety buffer)
+- Calculate sleep time until reset window
+- Exponential backoff on 429 responses: 1s, 2s, 4s, 8s, 16s, 32s
+
+Methods:
+class RateLimitManager:
+    def __init__(self, redis_client: Redis, buffer: int = 100)
+    async def update_from_headers(headers: dict) -> None
+    async def can_make_request() -> bool
+    async def wait_if_needed() -> None  # Blocks if needed
+    def get_wait_time() -> float
+
+Redis Keys:
+- github:ratelimit:remaining - Current remaining requests
+- github:ratelimit:reset - Unix timestamp of reset time
+- github:ratelimit:limit - Total limit (5000)
+
+Phase 3: Enhanced GitHub Client
+
+Goal: Wrap existing GitHubClient with rate limit awareness and retry logic
+
+File: sync/clients/enhanced_github_client.py
+
+Key Features:
+- Extends existing Github/api/utils/client.py::GitHubClient
+- Inject RateLimitManager dependency
+- Call rate_limiter.wait_if_needed() before each request
+- Update rate limiter from response headers after each request
+- Retry logic with exponential backoff (max 5 retries)
+- Persistent httpx.AsyncClient for connection pooling
+
+File: sync/clients/org_fetcher.py, repo_fetcher.py, commit_fetcher.py, pull_fetcher.py
+
+Responsibilities:
+- Thin wrappers around EnhancedGitHubClient
+- Call specific GitHub API endpoints
+- Return standardized data structures
+- Handle pagination for list endpoints
+
+Phase 4: Kafka Producer
+
+Goal: Reliable message publishing with proper partitioning and error handling
+
+File: sync/kafka/producer_manager.py
+
+Key Features:
+- Singleton KafkaProducer instance (connection pooling)
+- Topic-specific publish methods: publish_org(), publish_repo(), publish_commit(), publish_pull()
+- Partition key strategy: org.login for orgs, repo.full_name for repos/commits/PRs
+- Compression: gzip
+- Exactly-once semantics: acks='all', enable_idempotence=True
+- Retry configuration: 3 retries, max 5 in-flight requests
+
+Message Schema:
+{
+"schema_version": "1.0",
+"event_type": "repo_sync|org_sync|commit_sync|pr_sync",
+"timestamp": "ISO-8601",
+"repo|org|commit|pull_request": { /* GitHub API response */ },
+"metadata": {
+    "sync_id": "uuid",
+    "owner": "...",
+    "repo": "...",
+    "rate_limit_remaining": 4850
+}
+}
+
+File: sync/kafka/dlq_handler.py
+
+Purpose: Route failed messages to Dead Letter Queue after 3 retries
+- Add error metadata, stack trace, retry count
+- Publish to {topic}-dlq topics
+
+Phase 5: Scheduler Service
+
+Goal: Orchestrate continuous data fetching with configurable intervals
+
+File: sync/scheduler/sync_scheduler.py
+
+Key Features:
+- Uses APScheduler with AsyncIOScheduler
+- Reads targets from sync/config/sync_targets.yaml
+- Configurable intervals (env variables):
+- Organizations: 6 hours
+- Repositories: 2 hours
+- Commits: 30 minutes
+- Pull Requests: 15 minutes
+
+Main Methods:
+class GitHubSyncScheduler:
+    def __init__(self, producer: GitHubKafkaProducer, rate_limiter: RateLimitManager)
+    async def start() -> None  # Start all scheduled jobs
+    async def stop() -> None
+    async def fetch_and_publish_orgs() -> None
+    async def fetch_and_publish_repos() -> None
+    async def fetch_and_publish_commits() -> None
+    async def fetch_and_publish_pulls() -> None
+
+Logic Flow:
+1. Read org/repo list from sync_targets.yaml
+2. For each target, call appropriate fetcher
+3. Fetcher checks rate limit → makes API call → updates rate limit
+4. Publish result to Kafka topic
+5. Log metrics (request count, rate limit status)
+
+File: sync/config/sync_targets.yaml
+
+organizations:
+- facebook
+- google
+
+repositories:
+- owner: torvalds
+    repo: linux
+    sync_commits: true
+    sync_prs: false
+
+Phase 6: S3 Storage
+
+Goal: Upload batched data to S3 with proper organization and compression
+
+File: sync/storage/s3_client.py
+
+Key Features:
+- Initialize with AWS credentials from settings
+- Upload batched data as compressed JSON (gzip)
+- Repository-based folder structure
+- Retry logic with exponential backoff (max 5 retries)
+
+Folder Structures:
+- Repos/Commits/PRs: s3://github-scm/{owner}/{repo}/{data_type}/{timestamp}.json.gz
+- Orgs: s3://github-scm/{org}/_meta/orgs/{timestamp}.json.gz
+- User profiles: s3://github-scm/_users/{login}/{timestamp}.json.gz
+
+Methods:
+class S3Client:
+    def __init__(self, access_key, secret_key, bucket, region)
+    async def upload_batch(data: List[dict], owner: str, repo: str, data_type: str) -> str
+    async def upload_org_batch(data: List[dict], org: str) -> str
+    def _compress_json(data: List[dict]) -> bytes  # gzip compression
+    async def _upload_with_retry(key: str, data: bytes) -> None
+
+Phase 7: Kafka Consumers
+
+Goal: Consume messages, batch accumulate, and upload to S3
+
+File: sync/consumers/base_consumer.py
+
+Base Consumer Logic:
+class BaseS3Consumer:
+    def __init__(self, topic, s3_client, batch_size=50, batch_timeout=60)
+
+    async def consume() -> None:
+        # Main loop
+        while True:
+            messages = self.consumer.poll(timeout_ms=1000)
+
+            # Add to buffer
+            for record in messages:
+                self.buffer.append(record.value)
+
+            # Check batch conditions
+            if len(buffer) >= 50 OR time_since_last_upload >= 60:
+                await upload_batch()
+                consumer.commit()  # Manual offset commit
+
+Specific Consumers (inherit from BaseS3Consumer):
+- sync/consumers/org_consumer.py - Topic: github-orgs
+- sync/consumers/repo_consumer.py - Topic: github-repos
+- sync/consumers/commit_consumer.py - Topic: github-commits
+- sync/consumers/pull_consumer.py - Topic: github-pulls
+
+Key Features:
+- Manual offset commit (only after successful S3 upload)
+- Error handling with DLQ routing
+- Consumer group IDs: {topic}-consumer-group
+- Extract owner/repo from metadata for S3 path
+
+Phase 8: Main Entry Point
+
+Goal: Unified CLI for running scheduler and consumers
+
+File: sync/main.py
+
+import asyncio
+import click
+
+@click.group()
+def cli():
+    """GitHub Sync Service"""
+    pass
+
+@cli.command()
+def scheduler():
+    """Start scheduler service"""
+    # Initialize rate limiter, producer, scheduler
+    # Start scheduler
+    # Run forever
+
+@cli.command()
+@click.option('--topic', required=True)
+def consumer(topic):
+    """Start consumer for specific topic"""
+    # Initialize S3 client, consumer
+    # Run consume loop
+
+if __name__ == '__main__':
+    cli()
+
+Usage:
+# Start scheduler
+python -m sync.main scheduler
+
+# Start consumers (4 separate terminals)
+python -m sync.main consumer --topic github-orgs
+python -m sync.main consumer --topic github-repos
+python -m sync.main consumer --topic github-commits
+python -m sync.main consumer --topic github-pulls
+
+Phase 9: Scripts & Monitoring
+
+Goal: Operational tooling for setup and monitoring
+
+File: scripts/setup_topics.sh
+- Creates 8 Kafka topics (4 main + 4 DLQ)
+- Configures partitions, retention, compression
+
+File: scripts/start_consumers.sh
+- Launches all 4 consumers in background using nohup or tmux
+
+File: scripts/monitor_sync.py
+- Queries Redis for rate limit status
+- Checks consumer lag via Kafka API
+- Displays S3 upload statistics
+- Counts DLQ messages
+
+Critical Configuration Changes
+
+.env Additions
+
+# Kafka
+KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+
+# Rate Limit
+RATE_LIMIT_BUFFER=100
+
+# Batch Settings
+BATCH_SIZE=50
+BATCH_TIMEOUT_SECONDS=60
+
+# Sync Intervals (seconds)
+SYNC_INTERVAL_ORGS=21600      # 6 hours
+SYNC_INTERVAL_REPOS=7200      # 2 hours
+SYNC_INTERVAL_COMMITS=1800    # 30 minutes
+SYNC_INTERVAL_PULLS=900       # 15 minutes
+
+docker-compose.yml Addition
+
+redis:
+    image: redis:7-alpine
+    ports:
+    - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+    - redis-data:/data
+
+volumes:
+redis-data:
+
+Implementation Order
+
+1. ✅ Day 1: Dependencies, directory structure, configs, Docker updates
+2. ✅ Day 2: Rate limiter + Redis integration, create Kafka topics
+3. ✅ Day 3: Enhanced GitHub client + fetcher classes
+4. ✅ Day 4: Kafka producer + DLQ handler
+5. ✅ Day 5: S3 client + compression utilities
+6. ✅ Day 6-7: Scheduler service + YAML config
+7. ✅ Day 8-9: Base consumer + 4 specific consumers
+8. ✅ Day 10: Main entry point CLI
+9. ✅ Day 11: Scripts (setup, start, monitor)
+10. ✅ Day 12: Integration testing + documentation
+
+Success Criteria
+
+- Scheduler fetches data continuously without rate limit errors
+- Rate limiter blocks requests when < 100 remaining
+- All 4 Kafka topics receive messages with proper partitioning
+- Consumers batch accumulate (50 records or 60 seconds)
+- S3 folder structure matches: {owner}/{repo}/{data_type}/{timestamp}.json.gz
+- Files are gzip compressed
+- Manual offset commit only after successful S3 upload
+- DLQ captures failed messages with error metadata
+- No duplicate fetches for same repo in same time window
+- System runs continuously for 24+ hours without errors
+
+Key Files (Priority Order)
+
+1. sync/core/rate_limiter.py - Foundation for rate limit protection
+2. sync/clients/enhanced_github_client.py - Enhanced API client
+3. sync/kafka/producer_manager.py - Message publishing
+4. sync/scheduler/sync_scheduler.py - Orchestration layer
+5. sync/consumers/base_consumer.py - Batch upload logic
+6. sync/storage/s3_client.py - S3 integration
+7. sync/main.py - Entry point CLI
+8. scripts/setup_topics.sh - Infrastructure setup
+
+Monitoring & Observability
+
+Metrics to Track:
+- Requests made per hour (should stay < 5000)
+- Rate limit remaining (warn if < 200)
+- Messages published per topic
+- Consumer lag per topic
+- Batches uploaded to S3
+- DLQ message count (alert if > 0)
+
+Logging Strategy:
+- Use structlog for structured JSON logs
+- Log levels: INFO for normal ops, WARNING for rate limit approaching, ERROR for failures
+- Include context: sync_id, topic, owner/repo, rate_limit_remaining
+
+Edge Cases Handled
+
+1. Rate Limit Exhaustion: Block all requests until reset window
+2. Large Repositories: Pagination handled by fetcher classes
+3. Network Failures: S3 upload retry with exponential backoff (max 5 attempts)
+4. Kafka Broker Down: Producer retry with different broker
+5. Consumer Crashes: Offset not committed, messages replayed on restart
+6. Duplicate Messages: Idempotent S3 uploads (timestamp in filename)
+7. GitHub API 429 Responses: Exponential backoff, update rate limiter
+8. Empty Batches: Only upload if buffer length > 0
+
+Security Considerations
+
+- ✅ AWS credentials in .env (should use IAM roles in production)
+- ✅ GitHub token rotation (manual process, document in README)
+- ✅ Redis password protection (add in production)
+- ✅ S3 bucket encryption at rest (enable via AWS console)
+- ✅ Kafka message encryption (optional, for sensitive data)
+
+Production Deployment Notes
+
+- Deploy scheduler as single instance (use Redis leader election if multi-instance)
+- Deploy multiple consumer instances per topic (scale horizontally)
+- Use Kafka replication factor = 3 in production
+- Enable S3 versioning for data recovery
+- Set up CloudWatch alarms for DLQ messages, rate limit warnings
+- Use AWS Secrets Manager instead of .env for credentials
+- Enable Kafka message retention = 7 days (balance storage vs replay capability)

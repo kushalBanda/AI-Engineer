@@ -1,0 +1,659 @@
+Enhanced Kafka-Based GitHub Data Synchronization System - Implementation Plan
+
+Overview
+
+Build a production-ready continuous GitHub data fetching system that:
+- Uses Kafka to buffer API requests and prevent rate limit violations (5000 req/hour)
+- Operates separate Kafka topics per resource type (orgs, repos, commits, pulls)
+- Stores data in S3 with repository-based folder structure
+- Batches uploads (50 records or 60 seconds) for efficiency
+- Includes webhook support for real-time updates (90% API call reduction)
+- Handles all critical edge cases (secondary limits, rebalancing, failures)
+
+Key Enhancements:
+✅ Webhook support for real-time updates
+✅ Conditional requests with ETag caching
+✅ Secondary rate limit handling (concurrent requests, CPU time)
+✅ Consumer rebalancing protection
+✅ Distributed locking for scheduler
+✅ Strong idempotency (content hash + timestamp)
+✅ Incremental sync support
+
+System Architecture
+
+┌─────────────────┐
+│ GitHub Webhooks │──┐
+└─────────────────┘  │
+                     │
+┌─────────────────┐  │    ┌──────────────────┐
+│ Scheduler       │──┼───▶│ Rate Limit       │
+│ (APScheduler)   │  │    │ Manager (Redis)  │
+└─────────────────┘  │    └──────────────────┘
+                     │           │
+                     │           ▼
+                     │    ┌──────────────────┐
+                     │    │ Enhanced GitHub  │
+                     │    │ Client           │
+                     │    └──────────────────┘
+                     │           │
+                     ▼           ▼
+            ┌─────────────────────────┐
+            │   Kafka Topics          │
+            │  ┌───────────────────┐ │
+            │  │ github-orgs       │ │
+            │  │ github-repos      │ │
+            │  │ github-commits    │ │
+            │  │ github-pulls      │ │
+            │  │ github-events     │ │ (webhooks)
+            │  └───────────────────┘ │
+            └─────────────────────────┘
+                     │
+                     ▼
+            ┌─────────────────────────┐
+            │   Consumer Workers       │
+            │  (4 workers + 1 webhook) │
+            └─────────────────────────┘
+                     │
+                     ▼
+            ┌─────────────────────────┐
+            │   S3 Client             │
+            │   (Batch Upload)        │
+            └─────────────────────────┘
+                     │
+                     ▼
+            s3://github-scm/{owner}/{repo}/{data_type}/{timestamp}-{hash}.json.gz
+
+Implementation Phases
+
+Phase 1: Foundation & Dependencies
+
+Goal: Set up project structure, dependencies, and infrastructure
+
+1. Add Dependencies to pyproject.toml
+- boto3>=1.34.0 - AWS S3 client
+- apscheduler>=3.10.4 - Job scheduling
+- redis>=5.0.0 - Rate limit state storage + distributed locks
+- pyyaml>=6.0.1 - Config file parsing
+- aiofiles>=23.2.0 - Async file operations
+- structlog>=24.1.0 - Structured logging
+- fastapi>=0.104.1 - Webhook receiver (already in project)
+- kafka-python-ng>=2.2.3 - Kafka client (already in project)
+
+2. Update docker-compose.yml
+- Keep Kafka + Zookeeper services
+- Add Redis service on port 6379
+- Disable Kafka auto-topic-creation
+- Add volume for Redis persistence
+
+3. Create Directory Structure
+sync/
+├── core/          # Rate limiter, config, distributed locks
+├── clients/       # Enhanced GitHub clients (REST + GraphQL)
+├── scheduler/     # APScheduler service
+├── webhooks/      # Webhook receiver and router
+├── kafka/         # Producer, DLQ handler
+├── consumers/     # Kafka consumers (5: 4 data + 1 webhook)
+├── storage/       # S3 client
+├── models/        # Data models
+└── config/        # YAML configs
+
+4. Create Configuration Files
+- sync/config/sync_targets.yaml - List of orgs/repos to sync
+- sync/core/config.py - Pydantic settings class
+- .env - Add sync-specific variables
+
+5. Create Kafka Topics Script
+- scripts/setup_topics.sh - Creates 5 main topics + 5 DLQ topics
+- Partitions: orgs=3, repos=5, commits=5, pulls=3, events=5
+- Retention: 7 days, compression: gzip
+- Replication factor: 1 (dev), 3 (production)
+
+Phase 2: Enhanced Rate Limit Management
+
+Goal: Prevent GitHub rate limit violations with intelligent throttling + secondary limits
+
+File: sync/core/rate_limiter.py
+
+Key Features:
+- Parse GitHub response headers: X-RateLimit-Remaining, X-RateLimit-Reset
+- Use Redis to store rate limit state (enables multi-process coordination)
+- Block requests when remaining < 100 (safety buffer)
+- Calculate sleep time until reset window
+- Exponential backoff on 429 responses: 1s, 2s, 4s, 8s, 16s, 32s
+- Track concurrent requests (max 5) - SECONDARY RATE LIMIT
+- Circuit breaker for abuse detection
+- Use Redis server time to avoid clock skew
+
+Methods:
+class RateLimitManager:
+    def __init__(self, redis_client: Redis, buffer: int = 100)
+    async def update_from_headers(headers: dict) -> None
+    async def can_make_request() -> bool
+    async def wait_if_needed() -> None  # Blocks if needed
+    async def acquire_request_slot() -> bool  # For concurrent limit (max 5)
+    async def release_request_slot() -> None
+    async def check_secondary_limits() -> bool  # Concurrent + CPU time
+    def get_wait_time() -> float
+    def get_server_time() -> float  # Use Redis time, not local
+
+Redis Keys:
+- github:ratelimit:remaining - Current remaining requests
+- github:ratelimit:reset - Unix timestamp of reset time
+- github:ratelimit:limit - Total limit (5000)
+- github:ratelimit:concurrent - Current concurrent requests (max 5)
+- github:ratelimit:circuit_open - Circuit breaker state
+
+Phase 3: Enhanced GitHub Client
+
+Goal: Wrap existing GitHubClient with rate limit awareness, retry logic, and optimizations
+
+File: sync/clients/enhanced_github_client.py
+
+Key Features:
+- Extends existing Github/api/utils/client.py::GitHubClient
+- Inject RateLimitManager dependency
+- Call rate_limiter.wait_if_needed() before each request
+- Acquire/release concurrent request slot (secondary limit)
+- Update rate limiter from response headers after each request
+- Retry logic with exponential backoff (max 5 retries)
+- Persistent httpx.AsyncClient for connection pooling
+- Conditional requests with ETag caching (NEW)
+- Support for GraphQL API (NEW - optional)
+
+Methods:
+class EnhancedGitHubClient(GitHubClient):
+    def __init__(self, token: str, rate_limiter: RateLimitManager, redis: Redis)
+    async def get_with_etag(self, endpoint: str, params: dict = None) -> tuple[dict, str]
+        # Returns (data, etag) or (None, etag) if 304 Not Modified
+    async def get_conditional(self, endpoint: str) -> Optional[dict]
+        # Uses stored ETag from Redis, returns None if not modified
+    async def graphql_query(self, query: str, variables: dict = None) -> dict
+        # GraphQL API support
+
+File: sync/clients/org_fetcher.py, repo_fetcher.py, commit_fetcher.py, pull_fetcher.py
+
+Responsibilities:
+- Thin wrappers around EnhancedGitHubClient
+- Call specific GitHub API endpoints
+- Return standardized data structures
+- Handle pagination for list endpoints
+- Store pagination state in Redis if interrupted (NEW)
+- Use incremental sync with "since" parameter (NEW)
+
+Enhancements:
+- Incremental sync: Track last_sync timestamp in Redis
+- Pagination state: Store current page in Redis on interruption
+- ETag caching: Use conditional requests for unchanged data
+
+Phase 4: Kafka Producer with Enhanced Features
+
+Goal: Reliable message publishing with proper partitioning, error handling, and idempotency
+
+File: sync/kafka/producer_manager.py
+
+Key Features:
+- Singleton KafkaProducer instance (connection pooling)
+- Topic-specific publish methods: publish_org(), publish_repo(), publish_commit(), publish_pull(), publish_event()
+- Partition key strategy: org.login for orgs, repo.full_name for repos/commits/PRs
+- Compression: gzip
+- Exactly-once semantics: acks='all', enable_idempotence=True
+- Retry configuration: 3 retries, max 5 in-flight requests
+- Idempotency keys: content hash + timestamp (NEW)
+
+Message Schema:
+{
+  "schema_version": "1.0",
+  "event_type": "repo_sync|org_sync|commit_sync|pr_sync|webhook_event",
+  "timestamp": "ISO-8601",
+  "idempotency_key": "sha256(content + timestamp)",  // NEW
+  "repo|org|commit|pull_request|event": { /* GitHub API response */ },
+  "metadata": {
+    "sync_id": "uuid",
+    "owner": "...",
+    "repo": "...",
+    "rate_limit_remaining": 4850,
+    "etag": "...",  // NEW - for conditional requests
+    "incremental": true,  // NEW - indicates incremental sync
+    "since": "2024-01-01T00:00:00Z"  // NEW - last sync time
+  }
+}
+
+File: sync/kafka/dlq_handler.py
+
+Purpose: Route failed messages to Dead Letter Queue after 3 retries
+- Add error metadata, stack trace, retry count
+- Publish to {topic}-dlq topics
+- Store failure reason and timestamp
+
+Phase 5: Webhook Receiver (NEW)
+
+Goal: Receive GitHub webhooks for real-time updates
+
+File: sync/webhooks/receiver.py
+
+Key Features:
+- FastAPI endpoint for GitHub webhooks
+- Validate webhook signatures (security)
+- Route events to appropriate Kafka topics
+- Handle webhook delivery retries (idempotency)
+
+Endpoints:
+POST /webhooks/github
+  - Validates X-Hub-Signature-256 header
+  - Routes to github-events Kafka topic
+  - Returns 200 immediately (async processing)
+
+File: sync/webhooks/router.py
+
+Purpose: Route webhook events to appropriate topics
+- push events → github-commits topic
+- pull_request events → github-pulls topic
+- repository events → github-repos topic
+- organization events → github-orgs topic
+
+Logic:
+class WebhookRouter:
+    async def route_event(event_type: str, payload: dict) -> None
+        # Extract owner/repo from payload
+        # Determine target topic
+        # Publish to Kafka with proper partitioning
+
+Phase 6: Scheduler Service with Distributed Locking
+
+Goal: Orchestrate continuous data fetching with configurable intervals + prevent duplicates
+
+File: sync/scheduler/sync_scheduler.py
+
+Key Features:
+- Uses APScheduler with AsyncIOScheduler
+- Reads targets from sync/config/sync_targets.yaml
+- Distributed locking via Redis (prevents multiple instances)
+- Configurable intervals (env variables):
+  - Organizations: 6 hours
+  - Repositories: 2 hours
+  - Commits: 30 minutes (only for inactive repos)
+  - Pull Requests: 15 minutes (only for inactive repos)
+- Incremental sync support (NEW)
+
+Main Methods:
+class GitHubSyncScheduler:
+    def __init__(
+        self, 
+        producer: GitHubKafkaProducer, 
+        rate_limiter: RateLimitManager,
+        redis: Redis
+    )
+    async def start() -> None  # Start all scheduled jobs
+    async def stop() -> None
+    async def acquire_scheduler_lock() -> bool  # NEW - distributed lock
+    async def fetch_and_publish_orgs() -> None
+    async def fetch_and_publish_repos() -> None
+    async def fetch_and_publish_commits() -> None  # Incremental sync
+    async def fetch_and_publish_pulls() -> None  # Incremental sync
+
+Logic Flow:
+1. Acquire distributed lock (Redis SET NX with TTL)
+2. Read org/repo list from sync_targets.yaml
+3. For each target:
+   a. Check rate limit → acquire request slot
+   b. Get last_sync timestamp from Redis (incremental sync)
+   c. Call appropriate fetcher with "since" parameter
+   d. Fetcher checks rate limit → makes API call → updates rate limit
+   e. Publish result to Kafka topic
+   f. Update last_sync timestamp in Redis
+   g. Release request slot
+4. Log metrics (request count, rate limit status)
+5. Release distributed lock
+
+File: sync/core/distributed_lock.py (NEW)
+
+Purpose: Redis-based distributed locking
+class DistributedLock:
+    async def acquire(key: str, ttl: int = 3600) -> bool
+    async def release(key: str) -> None
+    async def refresh(key: str, ttl: int) -> None
+
+Phase 7: S3 Storage with Enhanced Idempotency
+
+Goal: Upload batched data to S3 with proper organization, compression, and idempotency
+
+File: sync/storage/s3_client.py
+
+Key Features:
+- Initialize with AWS credentials from settings
+- Upload batched data as compressed JSON (gzip)
+- Repository-based folder structure
+- Retry logic with exponential backoff (max 5 retries)
+- Strong idempotency via content hash (NEW)
+- Check for existing files before upload (NEW)
+- S3 multipart upload for large batches (NEW)
+
+Folder Structures:
+- Repos/Commits/PRs: s3://github-scm/{owner}/{repo}/{data_type}/{timestamp}-{hash}.json.gz
+- Orgs: s3://github-scm/{org}/_meta/orgs/{timestamp}-{hash}.json.gz
+- Events: s3://github-scm/{owner}/{repo}/events/{timestamp}-{hash}.json.gz
+
+Methods:
+class S3Client:
+    def __init__(self, access_key, secret_key, bucket, region)
+    async def upload_batch(data: List[dict], owner: str, repo: str, data_type: str) -> str
+    async def upload_org_batch(data: List[dict], org: str) -> str
+    def _compress_json(data: List[dict]) -> bytes  # gzip compression
+    def _generate_hash(data: List[dict]) -> str  # SHA256 hash for idempotency
+    async def _check_exists(key: str) -> bool  # Check if file already exists
+    async def _upload_with_retry(key: str, data: bytes) -> None
+    async def _upload_multipart(key: str, data: bytes) -> None  # For large files
+
+Phase 8: Enhanced Kafka Consumers
+
+Goal: Consume messages, batch accumulate, upload to S3 with rebalancing protection
+
+File: sync/consumers/base_consumer.py
+
+Base Consumer Logic:
+class BaseS3Consumer:
+    def __init__(self, topic, s3_client, batch_size=50, batch_timeout=60)
+
+    async def consume() -> None:
+        # Main loop with rebalancing protection
+        try:
+            while True:
+                # Check if rebalancing
+                if self._is_rebalancing():
+                    await asyncio.sleep(1)
+                    continue
+                
+                messages = self.consumer.poll(timeout_ms=1000)
+                
+                # Add to buffer
+                for record in messages:
+                    # Check idempotency (NEW)
+                    if await self._is_duplicate(record.value):
+                        continue
+                    self.buffer.append(record.value)
+                
+                # Check batch conditions
+                if len(buffer) >= 50 OR time_since_last_upload >= 60:
+                    await self._upload_batch_safely()
+                    # Only commit if not rebalancing
+                    if not self._is_rebalancing():
+                        await self.consumer.commit()
+        except RebalanceInProgress:
+            # Don't commit during rebalance
+            logger.warning("Rebalancing in progress, skipping commit")
+    
+    async def _upload_batch_safely(self) -> None:
+        # Transactional batch upload
+        # Store batch state in Redis before upload
+        # Mark complete after successful upload
+        # Handle partial failures
+    
+    async def _is_duplicate(self, message: dict) -> bool:
+        # Check idempotency_key in Redis
+        # Return True if already processed
+    
+    def _is_rebalancing(self) -> bool:
+        # Check if consumer is in rebalancing state
+        # Use consumer.assignment() to detect
+
+Specific Consumers (inherit from BaseS3Consumer):
+- sync/consumers/org_consumer.py - Topic: github-orgs
+- sync/consumers/repo_consumer.py - Topic: github-repos
+- sync/consumers/commit_consumer.py - Topic: github-commits
+- sync/consumers/pull_consumer.py - Topic: github-pulls
+- sync/consumers/webhook_consumer.py - Topic: github-events (NEW)
+
+Key Features:
+- Manual offset commit (only after successful S3 upload AND outside rebalance)
+- Error handling with DLQ routing
+- Consumer group IDs: {topic}-consumer-group
+- Extract owner/repo from metadata for S3 path
+- Idempotency checking before processing (NEW)
+- Rebalancing detection and protection (NEW)
+
+Phase 9: Main Entry Point
+
+Goal: Unified CLI for running scheduler, webhook receiver, and consumers
+
+File: sync/main.py
+
+import asyncio
+import click
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+@click.group()
+def cli():
+    """GitHub Sync Service"""
+    pass
+
+@cli.command()
+def scheduler():
+    """Start scheduler service"""
+    # Initialize rate limiter, producer, scheduler
+    # Acquire distributed lock
+    # Start scheduler
+    # Run forever
+
+@cli.command()
+def webhook():
+    """Start webhook receiver service"""
+    # Initialize FastAPI app
+    # Register webhook routes
+    # Start uvicorn server
+
+@cli.command()
+@click.option('--topic', required=True)
+def consumer(topic):
+    """Start consumer for specific topic"""
+    # Initialize S3 client, consumer
+    # Run consume loop
+
+if __name__ == '__main__':
+    cli()
+
+Usage:
+# Start scheduler (single instance with lock)
+python -m sync.main scheduler
+
+# Start webhook receiver
+python -m sync.main webhook
+
+# Start consumers (5 separate terminals/processes)
+python -m sync.main consumer --topic github-orgs
+python -m sync.main consumer --topic github-repos
+python -m sync.main consumer --topic github-commits
+python -m sync.main consumer --topic github-pulls
+python -m sync.main consumer --topic github-events
+
+Phase 10: Scripts & Monitoring
+
+Goal: Operational tooling for setup and monitoring
+
+File: scripts/setup_topics.sh
+- Creates 10 Kafka topics (5 main + 5 DLQ)
+- Configures partitions, retention, compression
+- Sets replication factor
+
+File: scripts/start_consumers.sh
+- Launches all 5 consumers in background using nohup or tmux
+
+File: scripts/monitor_sync.py
+- Queries Redis for rate limit status
+- Checks consumer lag via Kafka API
+- Displays S3 upload statistics
+- Counts DLQ messages
+- Shows distributed lock status
+- Monitors webhook delivery status
+
+Critical Configuration Changes
+
+.env Additions
+
+# Kafka
+KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+
+# Rate Limit
+RATE_LIMIT_BUFFER=100
+RATE_LIMIT_CONCURRENT_MAX=5
+
+# Batch Settings
+BATCH_SIZE=50
+BATCH_TIMEOUT_SECONDS=60
+
+# Sync Intervals (seconds)
+SYNC_INTERVAL_ORGS=21600      # 6 hours
+SYNC_INTERVAL_REPOS=7200      # 2 hours
+SYNC_INTERVAL_COMMITS=1800    # 30 minutes (inactive repos only)
+SYNC_INTERVAL_PULLS=900       # 15 minutes (inactive repos only)
+
+# Webhook
+WEBHOOK_SECRET=your_webhook_secret
+WEBHOOK_PORT=8001
+
+# Scheduler Lock
+SCHEDULER_LOCK_TTL=3600  # 1 hour
+
+# Idempotency
+IDEMPOTENCY_TTL=86400  # 24 hours
+
+docker-compose.yml
+
+Keep existing Kafka + Zookeeper, add:
+
+redis:
+    image: redis:7-alpine
+    ports:
+    - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+    - redis-data:/data
+
+volumes:
+redis-data:
+
+Implementation Order
+
+1. ✅ Day 1: Dependencies, directory structure, configs, Docker updates
+2. ✅ Day 2: Enhanced rate limiter + Redis integration (secondary limits)
+3. ✅ Day 3: Enhanced GitHub client + fetcher classes (ETags, incremental sync)
+4. ✅ Day 4: Kafka producer + DLQ handler (idempotency keys)
+5. ✅ Day 5: Webhook receiver + router
+6. ✅ Day 6: Distributed locking + scheduler enhancements
+7. ✅ Day 7: S3 client + compression utilities (idempotency)
+8. ✅ Day 8-9: Enhanced base consumer + 5 specific consumers (rebalancing protection)
+9. ✅ Day 10: Main entry point CLI
+10. ✅ Day 11: Scripts (setup, start, monitor)
+11. ✅ Day 12: Integration testing + documentation
+
+Success Criteria
+
+- Scheduler fetches data continuously without rate limit errors
+- Rate limiter blocks requests when < 100 remaining
+- Secondary rate limits handled (max 5 concurrent requests)
+- Distributed lock prevents multiple scheduler instances
+- Webhook receiver processes events in real-time
+- All 5 Kafka topics receive messages with proper partitioning
+- Consumers batch accumulate (50 records or 60 seconds)
+- Consumer rebalancing doesn't cause duplicates
+- S3 folder structure matches: {owner}/{repo}/{data_type}/{timestamp}-{hash}.json.gz
+- Files are gzip compressed
+- Manual offset commit only after successful S3 upload AND outside rebalance
+- DLQ captures failed messages with error metadata
+- No duplicate uploads (idempotency via hash)
+- Incremental sync reduces API calls for unchanged data
+- System runs continuously for 24+ hours without errors
+
+Key Files (Priority Order)
+
+1. sync/core/rate_limiter.py - Foundation for rate limit protection (enhanced)
+2. sync/core/distributed_lock.py - Prevent multiple scheduler instances
+3. sync/clients/enhanced_github_client.py - Enhanced API client (ETags, GraphQL)
+4. sync/kafka/producer_manager.py - Message publishing (idempotency keys)
+5. sync/webhooks/receiver.py - Webhook receiver
+6. sync/scheduler/sync_scheduler.py - Orchestration layer (distributed lock)
+7. sync/consumers/base_consumer.py - Batch upload logic (rebalancing protection)
+8. sync/storage/s3_client.py - S3 integration (idempotency)
+9. sync/main.py - Entry point CLI
+10. scripts/setup_topics.sh - Infrastructure setup
+
+Monitoring & Observability
+
+Metrics to Track:
+- Requests made per hour (should stay < 5000)
+- Rate limit remaining (warn if < 200)
+- Concurrent requests (should stay < 5)
+- Messages published per topic
+- Consumer lag per topic
+- Batches uploaded to S3
+- DLQ message count (alert if > 0)
+- Webhook delivery success rate
+- Distributed lock status
+- Idempotency hit rate (duplicate detection)
+
+Logging Strategy:
+- Use structlog for structured JSON logs
+- Log levels: INFO for normal ops, WARNING for rate limit approaching, ERROR for failures
+- Include context: sync_id, topic, owner/repo, rate_limit_remaining, idempotency_key
+
+Edge Cases Handled (Enhanced)
+
+1. Rate Limit Exhaustion: Block all requests until reset window
+2. Secondary Rate Limits: Track concurrent requests (max 5), circuit breaker
+3. Large Repositories: Pagination handled by fetcher classes, streaming for huge repos
+4. Network Failures: S3 upload retry with exponential backoff (max 5 attempts)
+5. Kafka Broker Down: Producer retry with different broker
+6. Consumer Crashes: Offset not committed, messages replayed on restart
+7. Consumer Rebalancing: Don't commit during rebalance, detect rebalancing state
+8. Duplicate Messages: Strong idempotency (content hash + timestamp), check Redis before processing
+9. GitHub API 429 Responses: Exponential backoff, update rate limiter
+10. Empty Batches: Only upload if buffer length > 0
+11. Multiple Scheduler Instances: Distributed lock prevents duplicates
+12. Clock Skew: Use Redis server time for rate limit calculations
+13. S3 Upload Failures: Transactional batch processing, store state in Redis
+14. Webhook Delivery Failures: Idempotency keys, retry logic
+15. Pagination Interruption: Store pagination state in Redis, resume on restart
+
+Security Considerations
+
+- ✅ AWS credentials in .env (should use IAM roles in production)
+- ✅ GitHub token rotation (manual process, document in README)
+- ✅ Redis password protection (add in production)
+- ✅ S3 bucket encryption at rest (enable via AWS console)
+- ✅ Kafka message encryption (optional, for sensitive data)
+- ✅ Webhook signature validation (X-Hub-Signature-256)
+- ✅ Distributed lock with TTL (prevent deadlocks)
+
+Production Deployment Notes
+
+- Deploy scheduler as single instance (distributed lock ensures only one active)
+- Deploy multiple consumer instances per topic (scale horizontally)
+- Deploy webhook receiver behind load balancer (multiple instances)
+- Use Kafka replication factor = 3 in production
+- Enable S3 versioning for data recovery
+- Set up CloudWatch alarms for DLQ messages, rate limit warnings, consumer lag
+- Use AWS Secrets Manager instead of .env for credentials
+- Enable Kafka message retention = 7 days (balance storage vs replay capability)
+- Monitor webhook delivery success rate and retry failed deliveries
+- Set up alerting for distributed lock conflicts (indicates multiple scheduler instances)
+
+Key Enhancements Summary
+
+✅ Webhook Support: Real-time updates, 90% API call reduction
+✅ Conditional Requests: ETag caching for unchanged data
+✅ Incremental Sync: Track "since" timestamps, only fetch new data
+✅ Secondary Rate Limits: Concurrent request tracking (max 5)
+✅ Distributed Locking: Prevent multiple scheduler instances
+✅ Strong Idempotency: Content hash + timestamp, Redis-based deduplication
+✅ Consumer Rebalancing Protection: Don't commit during rebalance
+✅ Transactional Batches: Store state in Redis, handle partial failures
+✅ Clock Skew Protection: Use Redis server time
+✅ GraphQL Support: Optional for complex queries
+
+This enhanced plan addresses all critical edge cases while maintaining Kafka's benefits (replay capability, scalability, durability).
+

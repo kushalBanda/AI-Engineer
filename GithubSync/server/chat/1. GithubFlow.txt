@@ -1,0 +1,445 @@
+GitHub to S3 Real-Time Data Pipeline - Implementation Plan
+
+Overview
+
+Build a production-ready, event-driven pipeline to fetch GitHub data (Organizations, Users, Repositories, Commits,
+Pull Requests) via GitHub REST API, stream through Kafka, and store in AWS S3 with date-partitioned structure
+optimized for Spark processing and TimescaleDB ingestion.
+
+Architecture Summary
+
+GitHub API → Fetcher Service → Kafka Topics → Consumer Service → S3 (Parquet + JSON)
+                                                                        ↓
+                                                                Spark Processing
+                                                                        ↓
+                                                                TimescaleDB
+
+File Format Strategy
+
+Dual-format approach for flexibility:
+
+1. Parquet (processed/) - Primary format for analytics
+- Columnar storage optimized for Spark
+- 50-80% compression vs JSON
+- Schema enforcement
+- Efficient filtering/aggregations
+2. JSON Lines (raw/) - Raw data lake
+- Human-readable for debugging
+- Event replay capability
+- Line-delimited for streaming
+
+S3 Folder Structure
+
+s3://github-scm/
+├── raw/year=2025/month=12/day=06/
+│   ├── organizations/orgs_20251206_143052_a1b2c3d4.jsonl
+│   ├── users/users_20251206_143052_e5f6g7h8.jsonl
+│   ├── repositories/repos_20251206_143100_m3n4o5p6.jsonl
+│   ├── commits/commits_20251206_143200_q7r8s9t0.jsonl
+│   └── pull_requests/prs_20251206_143300_y5z6a7b8.jsonl
+│
+└── processed/year=2025/month=12/day=06/
+    ├── organizations/orgs_20251206_143052.parquet
+    ├── users/users_20251206_143052.parquet
+    ├── repositories/repos_20251206_143100.parquet
+    ├── commits/commits_20251206_143200.parquet
+    └── pull_requests/prs_20251206_143300.parquet
+
+File naming: {entity}_{YYYYMMDD}_{HHMMSS}_{uuid8}.{ext}
+
+Kafka Topics Architecture
+
+Raw data topics (GitHub API responses):
+- github.organizations.raw
+- github.users.raw
+- github.repositories.raw
+- github.commits.raw
+- github.pull_requests.raw
+
+Processed data topics (normalized/enriched):
+- github.organizations.processed
+- github.users.processed
+- github.repositories.processed
+- github.commits.processed
+- github.pull_requests.processed
+
+Control topics:
+- github.fetch.commands - Trigger fetch operations
+- github.errors.dlq - Dead Letter Queue for failed messages
+
+Partitions: 3-12 per topic based on volume (commits=12, repos/PRs=6, orgs/users=3)
+
+Project Structure
+
+Github/
+├── shared/                   # Core utilities
+│   ├── config.py            # Pydantic Settings for env management
+│   ├── logger.py            # Structured logging setup
+│   ├── exceptions.py        # Custom exception hierarchy
+│   ├── constants.py         # Kafka topics, API endpoints
+│   └── utils.py             # Helper functions
+│
+├── models/                   # Pydantic data models
+│   ├── base.py              # Base model with common fields
+│   ├── organization.py      # Organization schema
+│   ├── user.py              # User schema
+│   ├── repository.py        # Repository schema
+│   ├── commit.py            # Commit schema
+│   └── pull_request.py      # Pull Request schema
+│
+├── clients/                  # External API clients
+│   ├── github_client.py     # GitHub REST API client
+│   ├── rate_limiter.py      # Rate limiting logic (5000/hour)
+│   └── pagination.py        # Link header pagination handler
+│
+├── fetchers/                 # GitHub data fetchers
+│   ├── base_fetcher.py      # Abstract base fetcher
+│   ├── organization_fetcher.py
+│   ├── user_fetcher.py
+│   ├── repository_fetcher.py
+│   ├── commit_fetcher.py
+│   └── pull_request_fetcher.py
+│
+├── producers/                # Kafka producers
+│   ├── base_producer.py     # Base producer with retry logic
+│   ├── github_producer.py   # GitHub data to Kafka
+│   └── producer_factory.py  # Factory pattern for producers
+│
+├── consumers/                # Kafka consumers
+│   ├── base_consumer.py     # Base consumer with error handling
+│   ├── s3_writer.py         # Main S3 writer consumer
+│   ├── batch_accumulator.py # Micro-batching (100 msgs/60s)
+│   └── transformer.py       # JSON → Parquet conversion
+│
+├── storage/                  # S3 storage layer
+│   ├── s3_client.py         # boto3 wrapper
+│   ├── path_builder.py      # Partition path construction
+│   └── file_writer.py       # JSON/Parquet file writing
+│
+├── orchestration/            # Pipeline orchestration
+│   ├── fetch_pipeline.py    # Main pipeline coordinator
+│   └── schedulers.py        # Scheduling logic
+│
+└── scripts/                  # Executable scripts
+    ├── create_topics.py     # Create Kafka topics
+    ├── run_fetcher.py       # Start GitHub fetcher service
+    ├── run_consumer.py      # Start S3 writer consumer
+    ├── test_pipeline.py     # End-to-end pipeline test
+    └── backfill.py          # Historical data backfill
+
+Critical Files to Implement
+
+1. Github/shared/config.py
+
+Purpose: Central configuration management using Pydantic Settings
+- Load from .env file (GitHub PAT, AWS credentials)
+- Type-safe settings with validation
+- Environment-specific configs (dev/staging/prod)
+- Default values for all settings
+
+2. Github/clients/github_client.py
+
+Purpose: GitHub REST API client
+- Authentication with PAT token
+- Rate limit handling (5000 requests/hour)
+- Exponential backoff retry logic
+- Link header pagination
+- Error handling (401, 403, 404, 429, 5xx)
+
+3. Github/models/base.py
+
+Purpose: Base Pydantic model for all entities
+- Common fields: fetched_at, entity_type, pipeline_version
+- JSON serialization/deserialization
+- Schema generation for documentation
+- Validation rules
+
+4. Github/producers/github_producer.py
+
+Purpose: Kafka producer for GitHub data
+- Serialize to JSON
+- Partition by entity key (owner/repo/sha)
+- Retry logic with tenacity
+- Metrics tracking (messages sent, failures)
+- DLQ for permanent failures
+
+5. Github/consumers/s3_writer.py
+
+Purpose: Kafka consumer → S3 uploader
+- Consume from multiple topics
+- Micro-batching (accumulate 100 msgs or 60s)
+- Transform JSON → Parquet with PyArrow
+- Upload to S3 with date partitioning
+- Manual offset commit after successful S3 upload
+
+Dependencies to Add
+
+Update pyproject.toml:
+
+dependencies = [
+    "kafka-python-ng>=2.2.3",    # Existing
+    "boto3>=1.35.0",              # AWS S3
+    "requests>=2.32.0",           # HTTP client
+    "pydantic>=2.10.0",           # Data validation
+    "pydantic-settings>=2.6.0",   # Config management
+    "pyarrow>=18.0.0",            # Parquet support
+    "pandas>=2.2.0",              # Data manipulation
+    "python-dotenv>=1.0.1",       # .env loading
+    "tenacity>=9.0.0",            # Retry logic
+    "ratelimit>=2.2.1",           # Rate limiting
+    "click>=8.1.7",               # CLI commands
+    "rich>=13.9.0",               # Terminal output
+]
+
+Security Implementation
+
+1. Create .gitignore
+
+.env
+.env.local
+__pycache__/
+*.pyc
+.venv/
+logs/
+.DS_Store
+*.log
+
+2. Create .env.example
+
+# GitHub
+GITHUB_PAT=your_github_personal_access_token
+
+# AWS
+AWS_ACCESS_ID=your_aws_access_key_id
+AWS_ACCESS_KEY=your_aws_secret_access_key
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=github-scm
+
+# Kafka
+KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+
+# Application
+LOG_LEVEL=INFO
+ENVIRONMENT=development
+
+3. AWS IAM Policy (Minimal Permissions)
+
+{
+"Version": "2012-10-17",
+"Statement": [{
+    "Effect": "Allow",
+    "Action": ["s3:PutObject", "s3:GetObject", "s3:ListBucket"],
+    "Resource": ["arn:aws:s3:::github-scm", "arn:aws:s3:::github-scm/*"]
+}]
+}
+
+Implementation Phases
+
+Phase 1: Foundation Setup
+
+Files:
+- .gitignore
+- .env.example
+- Github/shared/config.py
+- Github/shared/logger.py
+- Github/shared/exceptions.py
+- Github/shared/constants.py
+- Update pyproject.toml
+
+Actions:
+- Install dependencies: uv sync
+- Test config loading from .env
+- Verify logging output
+
+Phase 2: Data Models
+
+Files:
+- Github/models/base.py
+- Github/models/organization.py
+- Github/models/user.py
+- Github/models/repository.py
+- Github/models/commit.py
+- Github/models/pull_request.py
+
+Testing: Validate with sample GitHub API responses
+
+Phase 3: GitHub API Integration
+
+Files:
+- Github/clients/github_client.py
+- Github/clients/rate_limiter.py
+- Github/clients/pagination.py
+- Github/fetchers/base_fetcher.py
+- Github/fetchers/organization_fetcher.py
+- Github/fetchers/repository_fetcher.py
+- Github/fetchers/commit_fetcher.py
+- Github/fetchers/pull_request_fetcher.py
+
+Testing: Integration tests with real GitHub API
+
+Phase 4: Kafka Producers
+
+Files:
+- Github/scripts/create_topics.py
+- Github/producers/base_producer.py
+- Github/producers/github_producer.py
+
+Actions:
+- Create Kafka topics
+- Test message production
+- Verify serialization
+
+Phase 5: S3 Storage Layer
+
+Files:
+- Github/storage/s3_client.py
+- Github/storage/path_builder.py
+- Github/storage/file_writer.py
+- Github/consumers/transformer.py
+
+Testing: Upload test files to S3, verify partitioning
+
+Phase 6: Kafka Consumers
+
+Files:
+- Github/consumers/base_consumer.py
+- Github/consumers/batch_accumulator.py
+- Github/consumers/s3_writer.py
+
+Testing: End-to-end consumer tests
+
+Phase 7: Orchestration & Scripts
+
+Files:
+- Github/orchestration/fetch_pipeline.py
+- Github/scripts/run_fetcher.py
+- Github/scripts/run_consumer.py
+- Github/scripts/test_pipeline.py
+
+Testing: Full pipeline end-to-end test
+
+Error Handling Strategy
+
+Transient Errors (Retry with exponential backoff):
+- Network timeouts
+- GitHub rate limits (429)
+- Temporary 5xx errors
+- Kafka broker unavailable
+
+Permanent Errors (Send to DLQ):
+- 401/403 Authentication failures
+- 404 Resource not found
+- Invalid data schema
+- S3 permission errors
+
+Retry Configuration:
+- Max retries: 3
+- Base delay: 1s
+- Backoff factor: 2
+- Max delay: 60s
+
+Key Implementation Details
+
+Rate Limiting
+
+- GitHub limit: 5000 requests/hour (authenticated)
+- Strategy: Monitor X-RateLimit-Remaining header
+- Sleep when < 100 requests remaining
+- Handle 429 with retry after X-RateLimit-Reset
+
+Pagination
+
+- Use Link header pagination (rel="next")
+- Max 100 results per page
+- Fetch all pages for complete datasets
+
+Kafka Configuration
+
+Producer:
+- acks='all' - Wait for all replicas
+- compression_type='snappy' - Fast compression
+- batch_size=32768 - 32KB batches
+- linger_ms=100 - 100ms batch window
+
+Consumer:
+- enable_auto_commit=False - Manual commit
+- max_poll_records=500 - Batch processing
+- auto_offset_reset='earliest' - Start from beginning
+
+Micro-Batching
+
+- Accumulate 100 messages OR 60 seconds (whichever first)
+- Single S3 upload per batch
+- Reduces S3 PUT costs
+- Improves throughput
+
+Testing Strategy
+
+Unit Tests:
+- All models validate correctly
+- API client handles errors
+- Producers serialize properly
+- Path builder generates correct S3 paths
+
+Integration Tests:
+- GitHub API integration
+- Kafka message flow
+- S3 upload/download
+- Parquet conversion
+
+End-to-End Test:
+1. Run scripts/create_topics.py
+2. Start consumer: scripts/run_consumer.py
+3. Start fetcher: scripts/run_fetcher.py
+4. Verify data in S3
+5. Validate Parquet files readable by Spark
+
+Code Quality Standards
+
+- Type hints: All function signatures
+- Docstrings: Google-style for all public methods
+- Error handling: Try/except with specific exceptions
+- Logging: Structured JSON logs with context
+- Constants: No magic numbers or hardcoded strings
+- DRY: Reuse via base classes and utilities
+
+Success Criteria
+
+✅ All GitHub entity types fetched (orgs, users, repos, commits, PRs)
+✅ Data streams through Kafka in real-time
+✅ S3 files organized in date-partitioned structure
+✅ Both JSON and Parquet formats available
+✅ Rate limiting prevents GitHub API blocks
+✅ Errors handled gracefully with DLQ
+✅ No credentials in git repository
+✅ End-to-end pipeline test passes
+✅ Code coverage > 80%
+✅ Ready for Spark processing
+
+Next Steps After Implementation
+
+1. Spark Processing Layer:
+- Read Parquet from S3
+- Apply transformations/filtering
+- Load into TimescaleDB
+2. Airflow DAGs (Optional):
+- Schedule periodic backfills
+- Monitor pipeline health
+- Trigger manual fetches
+3. Monitoring:
+- CloudWatch metrics
+- Alerting for failures
+- Dashboard for pipeline status
+
+Estimated Timeline
+
+- Phase 1 (Foundation): 1 day
+- Phase 2 (Models): 1 day
+- Phase 3 (GitHub API): 2 days
+- Phase 4 (Kafka Producers): 1 day
+- Phase 5 (S3 Storage): 1 day
+- Phase 6 (Kafka Consumers): 2 days
+- Phase 7 (Orchestration): 1 day
+- Testing & Documentation: 1 day
+
+Total: ~10 days of focused development
