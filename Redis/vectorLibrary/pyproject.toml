@@ -13,5 +13,6 @@ dependencies = [
     "langchain-text-splitters>=1.1.0",
     "langchainhub>=0.1.21",
     "langgraph>=1.0.5",
+    "pageindex>=0.2.4",
     "tiktoken>=0.12.0",
 ]

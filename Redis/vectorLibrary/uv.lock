@@ -1052,6 +1052,19 @@ wheels = [
 ]
 
 [[package]]
+name = "pageindex"
+version = "0.2.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "openai" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cd/79/6caa5be3624c0a8c185b9dc974c4dec949cbe8b1b27438f15d2c77faf9b7/pageindex-0.2.4.tar.gz", hash = "sha256:570ee0dd30c899fb2f8579fb4e53976dee6049942b7c9b239e6cef3246d95442", size = 4362, upload_time = "2026-01-01T12:44:59.623Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/57/fe/f92c3bfeef1705e2cb4dfced5432fdd827d201d7d05d90c4b7059c3758f0/pageindex-0.2.4-py3-none-any.whl", hash = "sha256:b90308b4a9a6d2c766fd652a40899abbba35d59b8960475aa208cb4d0756806a", size = 5328, upload_time = "2026-01-01T12:44:58.435Z" },
+]
+
+[[package]]
 name = "ply"
 version = "3.11"
 source = { registry = "https://pypi.org/simple" }
@@ -1582,6 +1595,7 @@ dependencies = [
     { name = "langchain-text-splitters" },
     { name = "langchainhub" },
     { name = "langgraph" },
+    { name = "pageindex" },
     { name = "tiktoken" },
 ]
 
@@ -1595,6 +1609,7 @@ requires-dist = [
     { name = "langchain-text-splitters", specifier = ">=1.1.0" },
     { name = "langchainhub", specifier = ">=0.1.21" },
     { name = "langgraph", specifier = ">=1.0.5" },
+    { name = "pageindex", specifier = ">=0.2.4" },
     { name = "tiktoken", specifier = ">=0.12.0" },
 ]
 
