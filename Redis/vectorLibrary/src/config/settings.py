@@ -13,9 +13,3 @@ class Settings:
         
     def get_redis_url(self):
         return f"redis://:{self.redis_password}@{self.redis_host}:{self.redis_port}"
-
-    def pdf_list(self):
-        pdf_list = [
-            "https://arxiv.org/pdf/2501.12948.pdf",
-        ]
-        return pdf_list
