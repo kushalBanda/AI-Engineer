@@ -1,9 +1,9 @@
 # LineTrace Codebase Analysis
 
 ### File Structure Summary
-- Total Files: 251
-- Total Directories: 90
-- File Extensions: .md: 37, .ipynb: 19, .txt: 13, .py: 98, .png: 12, .lock: 5, .toml: 4, .mdc: 4, .pdf: 3, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .json: 8, .pkl: 5, .csv: 1, .log: 1, .pem: 1, .yml: 1, .jsx: 7
+- Total Files: 267
+- Total Directories: 93
+- File Extensions: .md: 37, .ipynb: 19, .txt: 13, .py: 100, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 10, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
 
 ### Directory Tree
 ```
@@ -67,6 +67,25 @@
    │  │  └── short_term_memory.ipynb
    │  ├── Python
    │  │  └── Redis.py
+   │  ├── vectorLibrary
+   │  │  ├── uv.lock
+   │  │  ├── resources
+   │  │  │  ├── nke-10k-2023.pdf
+   │  │  │  ├── amzn-10k-2023.pdf
+   │  │  │  ├── jnj-10k-2023.pdf
+   │  │  │  ├── aapl-10k-2023.pdf
+   │  │  │  ├── testset_15.csv
+   │  │  │  ├── retrieval_basic_rag_test.csv
+   │  │  │  ├── 2022-chevy-colorado-ebrochure.pdf
+   │  │  │  ├── nvd-10k-2023.pdf
+   │  │  │  ├── testset.csv
+   │  │  │  ├── msft-10k-2023.pdf
+   │  │  │  ├── propositions.json
+   │  │  │  └── generation_basic_rag_test.csv
+   │  │  ├── pyproject.toml
+   │  │  └── src
+   │  │    ├── connection.py
+   │  │    └── settings.py
    │  └── Javascript
    │    ├── client.js
    │    ├── server.js
