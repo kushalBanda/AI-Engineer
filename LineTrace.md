@@ -1,9 +1,9 @@
 # LineTrace Codebase Analysis
 
 ### File Structure Summary
-- Total Files: 267
-- Total Directories: 93
-- File Extensions: .md: 37, .ipynb: 19, .txt: 13, .py: 100, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 10, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
+- Total Files: 285
+- Total Directories: 98
+- File Extensions: .md: 38, .ipynb: 21, .txt: 14, .py: 113, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 11, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
 
 ### Directory Tree
 ```
@@ -84,8 +84,24 @@
    │  │  │  └── generation_basic_rag_test.csv
    │  │  ├── pyproject.toml
    │  │  └── src
-   │  │    ├── connection.py
-   │  │    └── settings.py
+   │  │    ├── cache
+   │  │     │  ├── __init__.py
+   │  │     │  └── connection.py
+   │  │    ├── config
+   │  │     │  ├── __init__.py
+   │  │     │  ├── openai.py
+   │  │     │  └── settings.py
+   │  │    ├── resources
+   │  │     │  └── 2501.12948.pdf
+   │  │    ├── retriever.py
+   │  │    ├── __init__.py
+   │  │    ├── agents
+   │  │     │  ├── mermaid.py
+   │  │     │  ├── graph.py
+   │  │     │  ├── __init__.py
+   │  │     │  ├── edges.py
+   │  │     │  └── nodes.py
+   │  │    └── main.py
    │  └── Javascript
    │    ├── client.js
    │    ├── server.js
@@ -252,7 +268,14 @@
    │  │    ├── traces-default-tools-trace-span.png
    │  │    └── traces-default-trace-span.png
    │  └── Practical-guide-to-building-agents.pdf
+  ├── KnowledgeGraph
+   │  ├── config.py
+   │  ├── requirements.txt
+   │  ├── KG.ipynb
+   │  ├── KG.py
+   │  └── neo4j.ipynb
   ├── README.md
+  ├── LineTrace.md
   ├── AWS
    │  ├── EC2-FastAPI
    │  │  ├── requirements.txt
