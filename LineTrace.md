@@ -1,9 +1,9 @@
 # LineTrace Codebase Analysis
 
 ### File Structure Summary
-- Total Files: 285
-- Total Directories: 98
-- File Extensions: .md: 38, .ipynb: 21, .txt: 14, .py: 113, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 11, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
+- Total Files: 288
+- Total Directories: 99
+- File Extensions: .md: 38, .ipynb: 22, .txt: 14, .py: 115, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 11, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
 
 ### Directory Tree
 ```
@@ -269,6 +269,10 @@
    │  │    └── traces-default-trace-span.png
    │  └── Practical-guide-to-building-agents.pdf
   ├── KnowledgeGraph
+   │  ├── Neo4j
+   │  │  ├── config.py
+   │  │  ├── genai-workshop-w-outputs.ipynb
+   │  │  └── Quickstart.py
    │  ├── config.py
    │  ├── requirements.txt
    │  ├── KG.ipynb
