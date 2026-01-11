@@ -180,8 +180,9 @@ cython_debug/
 # Chat
 GithubSync/chat/
 
-# Claude.md
+# .md files
 CLAUDE.md
+GEMINI.md
 
 # Package lock
 package-lock.json
