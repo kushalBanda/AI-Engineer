@@ -182,6 +182,7 @@ GithubSync/chat/
 
 # .md files
 CLAUDE.md
+AGENTS.md
 GEMINI.md
 
 # Package lock
