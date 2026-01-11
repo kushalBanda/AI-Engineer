@@ -1,9 +1,9 @@
 # LineTrace Codebase Analysis
 
 ### File Structure Summary
-- Total Files: 288
+- Total Files: 289
 - Total Directories: 99
-- File Extensions: .md: 38, .ipynb: 22, .txt: 14, .py: 115, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 11, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
+- File Extensions: .md: 39, .ipynb: 22, .txt: 14, .py: 115, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 11, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
 
 ### Directory Tree
 ```
@@ -291,6 +291,7 @@
    │  │  └── CLAUDE.md
    │  └── EC2
    │    └── FastAPI
+  ├── GEMINI.md
   ├── AgentSDK-TypeScript
    │  ├── agentTool.js
    │  ├── Readme.md
