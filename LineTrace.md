@@ -3,7 +3,7 @@
 ### File Structure Summary
 - Total Files: 289
 - Total Directories: 99
-- File Extensions: .md: 39, .ipynb: 22, .txt: 14, .py: 115, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 11, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
+- File Extensions: .md: 40, .ipynb: 21, .txt: 14, .py: 115, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 11, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
 
 ### Directory Tree
 ```
@@ -271,7 +271,6 @@
   ├── KnowledgeGraph
    │  ├── Neo4j
    │  │  ├── config.py
-   │  │  ├── genai-workshop-w-outputs.ipynb
    │  │  └── Quickstart.py
    │  ├── config.py
    │  ├── requirements.txt
@@ -292,6 +291,7 @@
    │  └── EC2
    │    └── FastAPI
   ├── GEMINI.md
+  ├── AGENTS.md
   ├── AgentSDK-TypeScript
    │  ├── agentTool.js
    │  ├── Readme.md
