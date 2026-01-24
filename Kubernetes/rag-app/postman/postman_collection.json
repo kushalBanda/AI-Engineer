@@ -1,0 +1,56 @@
+{
+  "info": {
+    "name": "rag-app",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Ingest",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"documents\": [\n    {\n      \"text\": \"Hello RAG\",\n      \"metadata\": {\"source\": \"postman\"}\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/ingest",
+          "host": ["{{baseUrl}}"],
+          "path": ["ingest"]
+        }
+      }
+    },
+    {
+      "name": "Query",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"What is this about?\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/query",
+          "host": ["{{baseUrl}}"],
+          "path": ["query"]
+        }
+      }
+    }
+  ]
+}
