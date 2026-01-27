@@ -1,0 +1,15 @@
+[project]
+name = "llm-detect-ai-generated-text"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "keras>=3.13.1",
+    "keras-nlp[torch]>=0.19.0",
+    "matplotlib>=3.10.8",
+    "pandas>=2.0.0,<3.0",
+    "tensorflow>=2.19.0,<2.20",
+    "tensorflow-text>=2.19.0",
+    "torch>=2.10.0",
+]
