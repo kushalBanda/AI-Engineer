@@ -1,19 +1,17 @@
 # LineTrace Codebase Analysis
 
 ### File Structure Summary
-- Total Files: 289
-- Total Directories: 99
-- File Extensions: .md: 40, .ipynb: 21, .txt: 14, .py: 115, .png: 12, .lock: 6, .toml: 5, .mdc: 4, .pdf: 11, .csv: 5, .json: 9, .js: 10, .yaml: 3, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
+- Total Files: 288
+- Total Directories: 102
+- File Extensions: .lock: 7, .toml: 6, .md: 42, .txt: 15, .py: 129, .png: 6, .mdc: 4, .pdf: 11, .csv: 5, .json: 12, .js: 10, .yaml: 5, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
 
 ### Directory Tree
 ```
   ├── Langgraph
    │  ├── Basics
-   │  │  ├── Basics.ipynb
    │  │  ├── requirements.txt
    │  │  └── Basic.py
    │  ├── Chatbot
-   │  │  ├── Tools.ipynb
    │  │  ├── requirements.txt
    │  │  ├── Tools.py
    │  │  └── Graph.png
@@ -32,11 +30,6 @@
    │  │  ├── pyproject.toml
    │  │  ├── README.md
    │  │  └── main.py
-   │  ├── Graphs
-   │  │  ├── Hello_World.ipynb
-   │  │  ├── Sequential.ipynb
-   │  │  ├── Conditional_Agent.ipynb
-   │  │  └── Multi-Input.ipynb
    │  └── Workflows + Agents
    │    ├── PromptChaining.py
    │    ├── Augment.py
@@ -61,10 +54,11 @@
    │  └── Prompts
    │    └── GPT-4.1 Prompting Guide.pdf
   ├── LICENSE
+  ├── uv.lock
   ├── Redis
    │  ├── Memory
-   │  │  ├── long_term_memory_agent.ipynb
-   │  │  └── short_term_memory.ipynb
+   │  │  ├── short_term_memory.py
+   │  │  └── long_term_memory_agent.py
    │  ├── Python
    │  │  └── Redis.py
    │  ├── vectorLibrary
@@ -147,8 +141,6 @@
    │  │  ├── templates
    │  │  │  └── index.html
    │  │  ├── CI_CD_1.txt
-   │  │  ├── notebook
-   │  │  │  └── notebook.ipynb
    │  │  ├── custom_jenkins
    │  │  │  ├── Dockerfile
    │  │  │  └── config.xml
@@ -186,8 +178,6 @@
    │  │  ├── templates
    │  │  │  └── index.html
    │  │  ├── kubernetes-deployment.yaml
-   │  │  ├── notebook
-   │  │  │  └── iris.ipynb
    │  │  └── src
    │  │    ├── model_training.py
    │  │    ├── custom_exception.py
@@ -197,6 +187,7 @@
    │  └── Lambda_GitHubActions
    │    ├── README.md
    │    └── lambda_function.py
+  ├── pyproject.toml
   ├── MCP
    │  ├── requirements.txt
    │  ├── 1-introduction-and-context
@@ -245,28 +236,7 @@
    │  │  ├── 1. Router Agent.py
    │  │  └── 2. Triage Agent.py
    │  ├── Agent SDK
-   │  │  ├── agents-sdk-intro.py
-   │  │  └── agents-sdk-intro.ipynb
-   │  ├── agents-sdk-course
-   │  │  ├── uv.lock
-   │  │  ├── chapters
-   │  │  │  ├── 08-alt-models.ipynb
-   │  │  │  ├── 05-handoffs.ipynb
-   │  │  │  ├── 02-tracing.ipynb
-   │  │  │  ├── 06-streaming.ipynb
-   │  │  │  ├── 03-tools.ipynb
-   │  │  │  ├── 01-prompting.ipynb
-   │  │  │  ├── 04-guardrails.ipynb
-   │  │  │  └── 07-voice.ipynb
-   │  │  ├── pyproject.toml
-   │  │  ├── README.md
-   │  │  └── assets
-   │  │    ├── traces-metadata.png
-   │  │    ├── traces-data-control.png
-   │  │    ├── traces-default-trace.png
-   │  │    ├── traces-custom-trace.png
-   │  │    ├── traces-default-tools-trace-span.png
-   │  │    └── traces-default-trace-span.png
+   │  │  └── agents-sdk-intro.py
    │  └── Practical-guide-to-building-agents.pdf
   ├── KnowledgeGraph
    │  ├── Neo4j
@@ -274,10 +244,15 @@
    │  │  └── Quickstart.py
    │  ├── config.py
    │  ├── requirements.txt
-   │  ├── KG.ipynb
-   │  ├── KG.py
-   │  └── neo4j.ipynb
+   │  └── KG.py
   ├── README.md
+  ├── AgentSDK-Ts
+   │  ├── agentTool.js
+   │  ├── Readme.md
+   │  ├── package-lock.json
+   │  ├── package.json
+   │  ├── helloWorld.js
+   │  └── dynamicInstructions.js
   ├── LineTrace.md
   ├── AWS
    │  ├── EC2-FastAPI
@@ -292,13 +267,39 @@
    │    └── FastAPI
   ├── GEMINI.md
   ├── AGENTS.md
-  ├── AgentSDK-TypeScript
-   │  ├── agentTool.js
-   │  ├── Readme.md
-   │  ├── package-lock.json
-   │  ├── package.json
-   │  ├── helloWorld.js
-   │  └── dynamicInstructions.js
+  ├── Kubernetes
+   │  ├── uv.lock
+   │  ├── pyproject.toml
+   │  ├── README.md
+   │  ├── rag-app
+   │  │  ├── app
+   │  │  │  ├── config.py
+   │  │  │  ├── __init__.py
+   │  │  │  ├── utils
+   │  │  │  │  ├── __init__.py
+   │  │  │  │  └── text.py
+   │  │  │  ├── api.py
+   │  │  │  ├── schemas.py
+   │  │  │  ├── main.py
+   │  │  │  └── services
+   │  │  │    ├── store.py
+   │  │  │    ├── __init__.py
+   │  │  │    ├── llm.py
+   │  │  │    ├── embeddings.py
+   │  │  │    └── retrieval.py
+   │  │  ├── requirements.txt
+   │  │  ├── Dockerfile
+   │  │  ├── Makefile
+   │  │  ├── k8s
+   │  │  │  ├── deployment.yaml
+   │  │  │  └── service.yaml
+   │  │  ├── postman
+   │  │  │  ├── postman_collection.json
+   │  │  │  └── postman_environment.json
+   │  │  ├── README.md
+   │  │  └── data
+   │  │    └── index.json
+   │  └── CLAUDE.md
   ├── Webhooks
    │  ├── sender.py
    │  ├── requirements.txt
@@ -389,11 +390,12 @@
    │       └── services
    │          ├── githubOAuth.js
    │          └── api.js
-  └── Authentication
-     ├── models.py
-     ├── uv.lock
-     ├── database.py
-     ├── pyproject.toml
-     └── main.py
+  ├── Authentication
+   │  ├── models.py
+   │  ├── uv.lock
+   │  ├── database.py
+   │  ├── pyproject.toml
+   │  └── main.py
+  └── AICodeDetector
 ```
 
