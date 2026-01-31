@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import Anthropic from "@anthropic-ai/sdk";
+import { pool } from "./db";
 
 const app = express();
 app.use(cors());
@@ -63,6 +64,11 @@ app.post("/api/detect", async (req, res) => {
         label: "uncertain",
         rationale: "No JSON found"
     };
+
+    await pool.query(
+        "INSERT INTO code_review.detection_requests (code, language, result) VALUES ($1, $2, $3)",
+        [code, language ?? null, JSON.stringify(parsed)]
+    );
 
     res.json(parsed);
 });
