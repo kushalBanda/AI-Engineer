@@ -1,9 +1,9 @@
 # LineTrace Codebase Analysis
 
 ### File Structure Summary
-- Total Files: 288
-- Total Directories: 102
-- File Extensions: .lock: 7, .toml: 6, .md: 42, .txt: 15, .py: 129, .png: 6, .mdc: 4, .pdf: 11, .csv: 5, .json: 12, .js: 10, .yaml: 5, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7
+- Total Files: 301
+- Total Directories: 109
+- File Extensions: .lock: 7, .toml: 6, .md: 42, .txt: 15, .py: 129, .png: 6, .mdc: 4, .pdf: 11, .csv: 5, .json: 15, .js: 10, .yaml: 5, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7, .ts: 10
 
 ### Directory Tree
 ```
@@ -397,5 +397,25 @@
    │  ├── pyproject.toml
    │  └── main.py
   └── AICodeDetector
+     ├── postman
+      │  └── AICodeDetector.postman_collection.json
+     └── backend
+        ├── package-lock.json
+        ├── package.json
+        └── src
+           ├── app.ts
+           ├── utils
+            │  └── githubSignature.ts
+           ├── db
+            │  └── db.ts
+           ├── server.ts
+           ├── routes
+            │  ├── detect.ts
+            │  ├── github.ts
+            │  └── health.ts
+           └── services
+              ├── github.ts
+              ├── anthropic.ts
+              └── health.ts
 ```
 
