@@ -1,9 +1,9 @@
 # LineTrace Codebase Analysis
 
 ### File Structure Summary
-- Total Files: 301
+- Total Files: 302
 - Total Directories: 109
-- File Extensions: .lock: 7, .toml: 6, .md: 42, .txt: 15, .py: 129, .png: 6, .mdc: 4, .pdf: 11, .csv: 5, .json: 15, .js: 10, .yaml: 5, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7, .ts: 10
+- File Extensions: .lock: 7, .toml: 6, .md: 42, .txt: 15, .py: 129, .png: 6, .mdc: 4, .pdf: 11, .csv: 5, .json: 15, .js: 10, .yaml: 5, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7, .ts: 11
 
 ### Directory Tree
 ```
@@ -405,7 +405,8 @@
         └── src
            ├── app.ts
            ├── utils
-            │  └── githubSignature.ts
+            │  ├── githubSignature.ts
+            │  └── extractJson.ts
            ├── db
             │  └── db.ts
            ├── server.ts
@@ -414,8 +415,8 @@
             │  ├── github.ts
             │  └── health.ts
            └── services
+              ├── detect.ts
               ├── github.ts
-              ├── anthropic.ts
               └── health.ts
 ```
 
