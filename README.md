@@ -8,9 +8,9 @@
 ![Status](https://img.shields.io/badge/Status-Active-22c55e?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-3b82f6?style=for-the-badge)
 
-**A modular, production-minded reference repo for modern AI engineering.**
+**The definitive, production-grade reference architecture for AI Engineering in 2026.**
 
-[Repository Map](#-repository-map) • [Module Badges](#-module-badges) • [Quickstart](#-quickstart) • [Learning Paths](#-learning-paths) • [Feature Matrix](#-feature-matrix) • [Contributing](#-contributing)
+[Repository Map](#-repository-map) • [Module Badges](#-module-badges) • [Quickstart](#-quickstart) • [Feature Matrix](#-feature-matrix) • [Tech Stack](#-tech-stack)
 
 </div>
 
@@ -18,45 +18,49 @@
 
 ## 📖 About
 
-This repository is a practical collection of AI engineering patterns, not a single app. Each top-level folder is a focused module you can run independently: agents, MLOps, protocols, and backend systems. Use it as a reference library, a workshop, or a template source for building production-grade AI services.
+This repository represents the state-of-the-art in AI engineering. It is not just a collection of scripts, but a modular ecosystem designed for building scalable, intelligent systems. From autonomous agent orchestration to high-throughput MLOps pipelines and next-gen AI detection, each module serves as a production-ready building block.
 
-**Goals:**
-- 🧠 Turn cutting-edge AI patterns into runnable systems.
-- 🛠️ Provide realistic infrastructure and deployment workflows.
-- ⚡️ Keep modules small, focused, and easy to remix.
+**Core Philosophy:**
+- **Modular by Design:** Every component—from authentication to agent swarms—runs independently.
+- **Production Ready:** Built with strict typing, CI/CD pipelines, and scalable infrastructure patterns.
+- **Future Proof:** Leveraging the latest 2026 standards in GenAI, including MCP, LangGraph, and Anthropic's advanced reasoning models.
 
 ---
 
 ## 🧭 Repository Map
 
-| Domain | What you’ll find | Entry points |
-| --- | --- | --- |
-| Agentic systems | Multi-agent orchestration, SDK examples, workflows | `Langgraph/`, `AgentSDK-TypeScript/`, `Openai Agents/` |
-| MLOps & deployment | CI/CD, Docker, Kubernetes, serving pipelines | `MLOPS/`, `AWS/` |
-| Protocols & integration | MCP implementations, webhooks, system glue | `MCP/`, `Webhooks/`, `GithubSync/` |
-| Core services & data | Auth, Redis patterns, graph RAG | `Authentication/`, `Redis/`, `KnowledgeGraph/` |
-
-Each module has its own `README.md` and dependency file (`pyproject.toml`, `requirements.txt`, or `package.json`). Treat modules as standalone projects.
-
----
-
-## 🧩 Module Badges
-
-<div align="center">
-
-![Agents](https://img.shields.io/badge/Agents-LangGraph%20%7C%20OpenAI%20Agents-0ea5e9?style=for-the-badge)
-![MLOps](https://img.shields.io/badge/MLOps-CI%2FCD%20%7C%20Docker%20%7C%20K8s-10b981?style=for-the-badge)
-![Protocols](https://img.shields.io/badge/Protocols-MCP%20%7C%20Webhooks-6366f1?style=for-the-badge)
-![Data](https://img.shields.io/badge/Data-Postgres%20%7C%20Redis%20%7C%20Neo4j-f59e0b?style=for-the-badge)
-![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20Vite-ef4444?style=for-the-badge)
-
-</div>
+| Domain | Module | Description |
+| :--- | :--- | :--- |
+| **Agentic Systems** | `Langgraph/` | Complex, stateful multi-agent workflows with conditional routing. |
+| | `AgentSDK-TypeScript/` | TypeScript-first implementation of OpenAI's Agents SDK. |
+| | `Openai Agents/` | Comprehensive playbooks and architectural guides. |
+| **AI Security & Analysis** | `AICodeDetector/` | **NEW** • Intelligent code forensics using Anthropic Claude & GitHub API to detect AI-generated patterns. |
+| **MLOps & Infra** | `MLOPS/` | End-to-end CI/CD, training pipelines, and model serving. |
+| | `AWS/` | Infrastructure-as-Code and deployment patterns for EC2 and Lambda. |
+| | `Kubernetes/` | K8s manifests for scaling RAG applications. |
+| **Protocols & Integration** | `MCP/` | **Model Context Protocol** server/client implementations for universal LLM context. |
+| | `GithubSync/` | Event-driven full-stack sync engine using React, FastAPI, and Kafka. |
+| | `Webhooks/` | Robust event ingress/egress patterns. |
+| **Core Services** | `Authentication/` | High-security auth microservice with JWT & Argon2 hashing. |
+| | `Redis/` | High-performance vector stores and caching strategies. |
+| | `KnowledgeGraph/` | GraphRAG implementations using Neo4j for deep context retrieval. |
 
 ---
 
 ## 🚀 Quickstart
 
-### Python (uv)
+Get up and running in minutes. Each module is self-contained.
+
+### 🕵️ AI Code Detector (New!)
+Analyze codebases for synthetic generation patterns.
+```bash
+cd AICodeDetector/backend
+npm install
+# Configure .env with ANTHROPIC_API_KEY
+npm run dev
+```
+
+### 🐍 Python Services (FastAPI/LangGraph)
 ```bash
 cd Authentication
 uv sync
@@ -64,90 +68,67 @@ source .venv/bin/activate
 uvicorn main:app --reload
 ```
 
-### Python (pip)
-```bash
-cd Webhooks
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python test.py
-```
-
-### Node/TypeScript
+### ⚛️ Full-Stack Applications
 ```bash
 cd GithubSync/client
 npm install
 npm run dev
 ```
 
----
-
-## 🧩 Learning Paths
-
-- **Agents first**: `Langgraph/` → `AgentSDK-TypeScript/` → `Openai Agents/`
-- **MLOps first**: `MLOPS/` → `AWS/`
-- **Protocol-focused**: `MCP/` → `Webhooks/` → `GithubSync/`
-- **Data systems**: `Redis/` → `KnowledgeGraph/` → `Authentication/`
+### 🤖 Agent Protocols (MCP)
+```bash
+cd MCP/3-simple-server-setup
+uv pip install -r requirements.txt
+mcp dev server.py
+```
 
 ---
 
-## ✨ Highlights
+## ✨ Key Capabilities
 
-### Langgraph
-- Stateful, multi-step agent workflows.
-- Conditional routing and tool-using chains.
+### 🧠 Advanced Agent Orchestration
+Leverage `Langgraph` to build agents that reason, plan, and execute. Includes examples of:
+- **Human-in-the-loop** workflows.
+- **Multi-agent collaboration** (e.g., Drafter + Critic).
+- **Persistent memory** systems.
 
-### MCP
-- End-to-end Model Context Protocol examples.
-- Server/client patterns with Docker references.
+### 🛡️ AI Code Detection
+The `AICodeDetector` module introduces a sophisticated layer of analysis:
+- **Engine:** Anthropic Claude (Latest Models).
+- **Integration:** Deep GitHub API hooks for analyzing PRs and commits.
+- **Architecture:** Express.js + TypeScript backend with PostgreSQL persistence.
 
-### GithubSync
-- Full-stack React + FastAPI + Kafka integration.
-- Event-driven architecture patterns.
-
-### Authentication
-- Production-minded auth service with JWT and SQLAlchemy.
-
----
-
-## 🧭 Feature Matrix
-
-| Module | Focus | Tech | Notes |
-| --- | --- | --- | --- |
-| `Langgraph/` | Agent workflows | LangGraph, LangChain | Stateful, conditional routing |
-| `AgentSDK-TypeScript/` | Agent SDK | OpenAI Agents SDK | TS-first agent patterns |
-| `Openai Agents/` | Guides & resources | OpenAI docs | PDFs and playbooks |
-| `MCP/` | Protocols | MCP | Server/client examples |
-| `GithubSync/` | Full-stack sync | React, FastAPI, Kafka | Event-driven integration |
-| `MLOPS/` | CI/CD & serving | Docker, GitHub Actions | Pipeline patterns |
-| `AWS/` | Deployment | EC2, Lambda | Infra references |
-| `Authentication/` | Auth service | FastAPI, JWT | Production-minded |
-| `Redis/` | Data structures | Redis | Vectors and caching |
-| `KnowledgeGraph/` | Graph RAG | Neo4j | KG experiments |
-| `Webhooks/` | Eventing | Python | Sender/receiver patterns |
+### 🔌 Universal Connectivity (MCP)
+Full implementation of the **Model Context Protocol**, allowing your AI agents to interface seamlessly with:
+- Local filesystems.
+- Database schemas.
+- External APIs (Slack, Linear, GitHub).
 
 ---
 
-## 🧰 Tech Stack
+## 🧰 Tech Stack (2026 Edition)
 
-| Category | Stack |
-| --- | --- |
-| Languages | Python 3.13+, TypeScript 5+ |
-| Web | FastAPI, Flask, React (Vite) |
-| AI | LangChain, LangGraph, OpenAI SDK, MCP |
-| Data | PostgreSQL, Redis, Neo4j, Kafka |
-| DevOps | Docker, Kubernetes, GitHub Actions, AWS |
+We rely on a battle-tested stack optimized for performance and developer experience.
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Languages** | Python 3.13+, TypeScript 5.9+ |
+| **AI & LLM** | LangChain, LangGraph, OpenAI SDK, Anthropic SDK, MCP |
+| **Backend** | FastAPI (Python), Express/Node.js, Kafka (Event Streaming) |
+| **Frontend** | React 19, Vite, Tailwind CSS |
+| **Data** | PostgreSQL, Redis (Vector), Neo4j (Graph), ChromaDB |
+| **DevOps** | Docker, Kubernetes, GitHub Actions, AWS (Lambda/EC2), uv |
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome and should stay module-focused.
+We welcome contributions to the future of AI engineering.
 
-1. Create a feature branch.
-2. Follow the module’s local conventions and configs.
-3. Use Conventional Commits (e.g., `feat:`, `fix:`, `docs:`).
-4. Open a PR with a clear summary and reproducible steps.
+1.  **Fork** the repository.
+2.  **Select a Module** to improve or **Create a New One**.
+3.  **Follow Conventions:** strict typing, linting, and comprehensive READMEs for new modules.
+4.  **Submit a PR** with a clear description of your architectural decisions.
 
 ---
 
