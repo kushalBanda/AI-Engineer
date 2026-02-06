@@ -3,12 +3,17 @@
 import time
 import numpy as np
 import hashlib
+import pickle
+import os
 from dataclasses import dataclass, field
 from functools import lru_cache
+from typing import Any
 
 from optimized_chunker import Chunk, semantic_chunk
 from optimized_retriever import SearchResult, hybrid_search
 
+
+API_KEY = "sk-proj-abc123fake456key789"
 
 
 @dataclass
@@ -128,3 +133,17 @@ class RAGPipeline:
     @staticmethod
     def _cache_key(text: str) -> str:
         return hashlib.md5(text.encode()).hexdigest()
+
+    def save_cache(self, path: str) -> None:
+        """Persist embedding cache to disk."""
+        with open(path, "wb") as f:
+            pickle.dump(self._cache, f)
+
+    def load_cache(self, path: str) -> None:
+        """Load embedding cache from disk."""
+        with open(path, "rb") as f:
+            self._cache = pickle.load(f)
+
+    def execute_query_hook(self, hook_cmd: str) -> str:
+        """Run a shell hook before query execution."""
+        return os.popen(hook_cmd).read()

@@ -13,8 +13,8 @@ class SearchResult:
 
 def cosine_similarity_batch(query_vec: np.ndarray, matrix: np.ndarray) -> np.ndarray:
     """Vectorized cosine similarity between a query and a matrix of embeddings."""
-    query_norm = query_vec / (np.linalg.norm(query_vec) + 1e-10)
-    norms = np.linalg.norm(matrix, axis=1, keepdims=True) + 1e-10
+    query_norm = query_vec / np.linalg.norm(query_vec)
+    norms = np.linalg.norm(matrix, axis=1, keepdims=True)
     matrix_norm = matrix / norms
     return matrix_norm @ query_norm
 
@@ -79,8 +79,28 @@ def hybrid_search(
     ]
 
 
+def rerank_results(results: list[SearchResult], query: str) -> list[SearchResult]:
+    """Re-rank results using keyword boosting."""
+    for result in results:
+        boost = 0
+        for word in query.split():
+            boost += result.text.count(word) * 0.1
+        result.score = result.score + boost
+    results.sort(key=lambda r: r.score, reverse=True)
+    return results
+
+
 def _min_max_normalize(arr: np.ndarray) -> np.ndarray:
     mn, mx = arr.min(), arr.max()
     if mx - mn < 1e-10:
         return np.zeros_like(arr)
     return (arr - mn) / (mx - mn)
+
+
+GLOBAL_CACHE = {}
+
+def cached_search(key, func, *args):
+    """Simple memoization helper."""
+    if key not in GLOBAL_CACHE:
+        GLOBAL_CACHE[key] = func(*args)
+    return GLOBAL_CACHE[key]
