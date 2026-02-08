@@ -35,6 +35,7 @@ This repository is a practical collection of AI engineering patterns, not a sing
 | Agentic systems         | Multi-agent orchestration, SDK examples, workflows | `Langgraph/`, `AgentSDK-TypeScript/`, `Openai Agents/` |
 | MLOps & deployment      | CI/CD, Docker, Kubernetes, serving pipelines       | `MLOPS/`, `AWS/`                                         |
 | Protocols & integration | MCP implementations, webhooks, system glue         | `MCP/`, `Webhooks/`, `GithubSync/`                     |
+| Structured extraction   | Typed LLM outputs via Instructor + Pydantic        | `567-labs-instructor/`                                  |
 | Core services & data    | Auth, Redis patterns, graph RAG                    | `Authentication/`, `Redis/`, `KnowledgeGraph/`         |
 
 Each module has its own `README.md` and dependency file (`pyproject.toml`, `requirements.txt`, or `package.json`). Treat modules as standalone projects.
@@ -48,6 +49,7 @@ Each module has its own `README.md` and dependency file (`pyproject.toml`, `requ
 ![Agents](https://img.shields.io/badge/Agents-LangGraph%20%7C%20OpenAI%20Agents-0ea5e9?style=for-the-badge)
 ![MLOps](https://img.shields.io/badge/MLOps-CI%2FCD%20%7C%20Docker%20%7C%20K8s-10b981?style=for-the-badge)
 ![Protocols](https://img.shields.io/badge/Protocols-MCP%20%7C%20Webhooks-6366f1?style=for-the-badge)
+![Instructor](https://img.shields.io/badge/Instructor-Pydantic%20%7C%20Structured%20Output-a855f7?style=for-the-badge)
 ![Data](https://img.shields.io/badge/Data-Postgres%20%7C%20Redis%20%7C%20Neo4j-f59e0b?style=for-the-badge)
 ![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20Vite-ef4444?style=for-the-badge)
 
@@ -88,6 +90,7 @@ npm run dev
 
 ## 🧩 Learning Paths
 
+- **Structured output**: `567-labs-instructor/openai/` → `567-labs-instructor/anthropic/`
 - **Agents first**: `Langgraph/` → `AgentSDK-TypeScript/` → `Openai Agents/`
 - **MLOps first**: `MLOPS/` → `AWS/`
 - **Protocol-focused**: `MCP/` → `Webhooks/` → `GithubSync/`
@@ -112,6 +115,12 @@ npm run dev
 - Full-stack React + FastAPI + Kafka integration.
 - Event-driven architecture patterns.
 
+### 567-labs-instructor
+
+- Structured data extraction from LLMs using [Instructor](https://github.com/567-labs/instructor) + Pydantic.
+- Multi-provider examples: OpenAI (code generation) and Anthropic (entity extraction).
+- Automatic validation, retries, and type-safe responses — no manual JSON parsing.
+
 ### Authentication
 
 - Production-minded auth service with JWT and SQLAlchemy.
@@ -132,6 +141,7 @@ npm run dev
 | `Authentication/`      | Auth service       | FastAPI, JWT           | Production-minded             |
 | `Redis/`               | Data structures    | Redis                  | Vectors and caching           |
 | `KnowledgeGraph/`      | Graph RAG          | Neo4j                  | Knowledge Graph              |
+| `567-labs-instructor/` | Structured output  | Instructor, Pydantic   | OpenAI & Anthropic examples   |
 | `Webhooks/`            | Eventing           | Python                 | Sender/receiver patterns      |
 
 ---
@@ -142,7 +152,7 @@ npm run dev
 | --------- | --------------------------------------- |
 | Languages | Python 3.13+, TypeScript 5+             |
 | Web       | FastAPI, Flask, React (Vite)            |
-| AI        | LangChain, LangGraph, OpenAI SDK, MCP   |
+| AI        | LangChain, LangGraph, OpenAI SDK, MCP, Instructor |
 | Data      | PostgreSQL, Redis, Neo4j, Kafka         |
 | DevOps    | Docker, Kubernetes, GitHub Actions, AWS |
 
