@@ -21,6 +21,7 @@
 This repository is a practical collection of AI engineering patterns, not a single app. Each top-level folder is a focused module you can run independently: agents, MLOps, protocols, and backend systems. Use it as a reference library, a workshop, or a template source for building production-grade AI services.
 
 **Goals:**
+
 - 🧠 Turn cutting-edge AI patterns into runnable systems.
 - 🛠️ Provide realistic infrastructure and deployment workflows.
 - ⚡️ Keep modules small, focused, and easy to remix.
@@ -29,12 +30,12 @@ This repository is a practical collection of AI engineering patterns, not a sing
 
 ## 🧭 Repository Map
 
-| Domain | What you’ll find | Entry points |
-| --- | --- | --- |
-| Agentic systems | Multi-agent orchestration, SDK examples, workflows | `Langgraph/`, `AgentSDK-TypeScript/`, `Openai Agents/` |
-| MLOps & deployment | CI/CD, Docker, Kubernetes, serving pipelines | `MLOPS/`, `AWS/` |
-| Protocols & integration | MCP implementations, webhooks, system glue | `MCP/`, `Webhooks/`, `GithubSync/` |
-| Core services & data | Auth, Redis patterns, graph RAG | `Authentication/`, `Redis/`, `KnowledgeGraph/` |
+| Domain                  | What you’ll find                                  | Entry points                                                 |
+| ----------------------- | -------------------------------------------------- | ------------------------------------------------------------ |
+| Agentic systems         | Multi-agent orchestration, SDK examples, workflows | `Langgraph/`, `AgentSDK-TypeScript/`, `Openai Agents/` |
+| MLOps & deployment      | CI/CD, Docker, Kubernetes, serving pipelines       | `MLOPS/`, `AWS/`                                         |
+| Protocols & integration | MCP implementations, webhooks, system glue         | `MCP/`, `Webhooks/`, `GithubSync/`                     |
+| Core services & data    | Auth, Redis patterns, graph RAG                    | `Authentication/`, `Redis/`, `KnowledgeGraph/`         |
 
 Each module has its own `README.md` and dependency file (`pyproject.toml`, `requirements.txt`, or `package.json`). Treat modules as standalone projects.
 
@@ -57,6 +58,7 @@ Each module has its own `README.md` and dependency file (`pyproject.toml`, `requ
 ## 🚀 Quickstart
 
 ### Python (uv)
+
 ```bash
 cd Authentication
 uv sync
@@ -65,6 +67,7 @@ uvicorn main:app --reload
 ```
 
 ### Python (pip)
+
 ```bash
 cd Webhooks
 python -m venv .venv
@@ -74,6 +77,7 @@ python test.py
 ```
 
 ### Node/TypeScript
+
 ```bash
 cd GithubSync/client
 npm install
@@ -94,49 +98,53 @@ npm run dev
 ## ✨ Highlights
 
 ### Langgraph
+
 - Stateful, multi-step agent workflows.
 - Conditional routing and tool-using chains.
 
 ### MCP
+
 - End-to-end Model Context Protocol examples.
 - Server/client patterns with Docker references.
 
 ### GithubSync
+
 - Full-stack React + FastAPI + Kafka integration.
 - Event-driven architecture patterns.
 
 ### Authentication
+
 - Production-minded auth service with JWT and SQLAlchemy.
 
 ---
 
 ## 🧭 Feature Matrix
 
-| Module | Focus | Tech | Notes |
-| --- | --- | --- | --- |
-| `Langgraph/` | Agent workflows | LangGraph, LangChain | Stateful, conditional routing |
-| `AgentSDK-TypeScript/` | Agent SDK | OpenAI Agents SDK | TS-first agent patterns |
-| `Openai Agents/` | Guides & resources | OpenAI docs | PDFs and playbooks |
-| `MCP/` | Protocols | MCP | Server/client examples |
-| `GithubSync/` | Full-stack sync | React, FastAPI, Kafka | Event-driven integration |
-| `MLOPS/` | CI/CD & serving | Docker, GitHub Actions | Pipeline patterns |
-| `AWS/` | Deployment | EC2, Lambda | Infra references |
-| `Authentication/` | Auth service | FastAPI, JWT | Production-minded |
-| `Redis/` | Data structures | Redis | Vectors and caching |
-| `KnowledgeGraph/` | Graph RAG | Neo4j | KG experiments |
-| `Webhooks/` | Eventing | Python | Sender/receiver patterns |
+| Module                   | Focus              | Tech                   | Notes                         |
+| ------------------------ | ------------------ | ---------------------- | ----------------------------- |
+| `Langgraph/`           | Agent workflows    | LangGraph, LangChain   | Stateful, conditional routing |
+| `AgentSDK-TypeScript/` | Agent SDK          | OpenAI Agents SDK      | TS-first agent patterns       |
+| `Openai Agents/`       | Guides & resources | OpenAI docs            | PDFs and playbooks            |
+| `MCP/`                 | Protocols          | MCP                    | Server/client examples        |
+| `GithubSync/`          | Full-stack sync    | React, FastAPI, Kafka  | Event-driven integration      |
+| `MLOPS/`               | CI/CD & serving    | Docker, GitHub Actions | Pipeline patterns             |
+| `AWS/`                 | Deployment         | EC2, Lambda            | Infra references              |
+| `Authentication/`      | Auth service       | FastAPI, JWT           | Production-minded             |
+| `Redis/`               | Data structures    | Redis                  | Vectors and caching           |
+| `KnowledgeGraph/`      | Graph RAG          | Neo4j                  | Knowledge Graph              |
+| `Webhooks/`            | Eventing           | Python                 | Sender/receiver patterns      |
 
 ---
 
 ## 🧰 Tech Stack
 
-| Category | Stack |
-| --- | --- |
-| Languages | Python 3.13+, TypeScript 5+ |
-| Web | FastAPI, Flask, React (Vite) |
-| AI | LangChain, LangGraph, OpenAI SDK, MCP |
-| Data | PostgreSQL, Redis, Neo4j, Kafka |
-| DevOps | Docker, Kubernetes, GitHub Actions, AWS |
+| Category  | Stack                                   |
+| --------- | --------------------------------------- |
+| Languages | Python 3.13+, TypeScript 5+             |
+| Web       | FastAPI, Flask, React (Vite)            |
+| AI        | LangChain, LangGraph, OpenAI SDK, MCP   |
+| Data      | PostgreSQL, Redis, Neo4j, Kafka         |
+| DevOps    | Docker, Kubernetes, GitHub Actions, AWS |
 
 ---
 
