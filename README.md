@@ -37,6 +37,7 @@ This repository is a practical collection of AI engineering patterns, not a sing
 | Protocols & integration | MCP implementations, webhooks, system glue         | `MCP/`, `Webhooks/`, `GithubSync/`                     |
 | Structured extraction   | Typed LLM outputs via Instructor + Pydantic        | `567-labs-instructor/`                                  |
 | Core services & data    | Auth, Redis patterns, graph RAG                    | `Authentication/`, `Redis/`, `KnowledgeGraph/`         |
+| Comparison              | Side-by-side model & frontend evaluations          | `Comparison/`                                          |
 
 Each module has its own `README.md` and dependency file (`pyproject.toml`, `requirements.txt`, or `package.json`). Treat modules as standalone projects.
 
@@ -143,6 +144,7 @@ npm run dev
 | `KnowledgeGraph/`      | Graph RAG          | Neo4j                  | Knowledge Graph              |
 | `567-labs-instructor/` | Structured output  | Instructor, Pydantic   | OpenAI & Anthropic examples   |
 | `Webhooks/`            | Eventing           | Python                 | Sender/receiver patterns      |
+| `Comparison/`          | Model comparison   | HTML, CSS              | Claude vs GPT evaluations     |
 
 ---
 
