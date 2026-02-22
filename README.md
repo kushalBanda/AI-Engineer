@@ -161,9 +161,9 @@ npm run dev
 | --------- | --------------------------------------- |
 | Languages | Python 3.13+, TypeScript 5+             |
 | Web       | FastAPI, Flask, React (Vite)            |
-| AI        | LangChain, LangGraph, OpenAI SDK, MCP, Instructor |
+| AI        | LangChain, LangGraph, OpenAI SDK, MCP, Instructor, Hugging Face |
 | Data      | PostgreSQL, Redis, Neo4j, Kafka         |
-| DevOps    | Docker, Kubernetes, GitHub Actions, AWS |
+| DevOps    | Docker, Kubernetes, GitHub Actions, AWS, Hugging Face Jobs |
 
 ---
 
