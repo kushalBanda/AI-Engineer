@@ -49,7 +49,7 @@ Each module has its own `README.md` and dependency file (`pyproject.toml`, `requ
 
 ![Agents](https://img.shields.io/badge/Agents-LangGraph%20%7C%20OpenAI%20Agents-0ea5e9?style=for-the-badge)
 ![MLOps](https://img.shields.io/badge/MLOps-CI%2FCD%20%7C%20Docker%20%7C%20K8s%20%7C%20HF-10b981?style=for-the-badge)
-![HuggingFace](https://img.shields.io/badge/Hugging%20Face-Training%20%7C%20Fine--tuning-f97316?style=for-the-badge)
+![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Training%20%7C%20Fine--tuning-f97316?style=for-the-badge)
 ![Protocols](https://img.shields.io/badge/Protocols-MCP%20%7C%20Webhooks-6366f1?style=for-the-badge)
 ![Instructor](https://img.shields.io/badge/Instructor-Pydantic%20%7C%20Structured%20Output-a855f7?style=for-the-badge)
 ![Data](https://img.shields.io/badge/Data-Postgres%20%7C%20Redis%20%7C%20Neo4j-f59e0b?style=for-the-badge)
@@ -112,7 +112,7 @@ npm run dev
 - End-to-end Model Context Protocol examples.
 - Server/client patterns with Docker references.
 
-### HuggingFace
+### Hugging Face
 
 - Model training and fine-tuning workflows on Hugging Face.
 - Notebook-based experimentation for trainer/job setup.
