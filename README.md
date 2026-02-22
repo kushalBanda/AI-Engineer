@@ -33,7 +33,7 @@ This repository is a practical collection of AI engineering patterns, not a sing
 | Domain                  | What you’ll find                                  | Entry points                                                 |
 | ----------------------- | -------------------------------------------------- | ------------------------------------------------------------ |
 | Agentic systems         | Multi-agent orchestration, SDK examples, workflows | `Langgraph/`, `AgentSDK-TypeScript/`, `Openai Agents/` |
-| MLOps & deployment      | CI/CD, Docker, Kubernetes, serving pipelines       | `MLOPS/`, `AWS/`                                         |
+| MLOps & deployment      | CI/CD, Docker, Kubernetes, serving pipelines       | `MLOPS/`, `AWS/`, `HuggingFace/`                          |
 | Protocols & integration | MCP implementations, webhooks, system glue         | `MCP/`, `Webhooks/`, `GithubSync/`                     |
 | Structured extraction   | Typed LLM outputs via Instructor + Pydantic        | `567-labs-instructor/`                                  |
 | Core services & data    | Auth, Redis patterns, graph RAG                    | `Authentication/`, `Redis/`, `KnowledgeGraph/`         |
@@ -93,7 +93,7 @@ npm run dev
 
 - **Structured output**: `567-labs-instructor/openai/` → `567-labs-instructor/anthropic/`
 - **Agents first**: `Langgraph/` → `AgentSDK-TypeScript/` → `Openai Agents/`
-- **MLOps first**: `MLOPS/` → `AWS/`
+- **MLOps first**: `MLOPS/` → `HuggingFace/` → `AWS/`
 - **Protocol-focused**: `MCP/` → `Webhooks/` → `GithubSync/`
 - **Data systems**: `Redis/` → `KnowledgeGraph/` → `Authentication/`
 
@@ -110,6 +110,11 @@ npm run dev
 
 - End-to-end Model Context Protocol examples.
 - Server/client patterns with Docker references.
+
+### HuggingFace
+
+- Model training and fine-tuning workflows on Hugging Face.
+- Notebook-based experimentation for trainer/job setup.
 
 ### GithubSync
 
@@ -138,6 +143,7 @@ npm run dev
 | `MCP/`                 | Protocols          | MCP                    | Server/client examples        |
 | `GithubSync/`          | Full-stack sync    | React, FastAPI, Kafka  | Event-driven integration      |
 | `MLOPS/`               | CI/CD & serving    | Docker, GitHub Actions | Pipeline patterns             |
+| `HuggingFace/`         | Model training     | Hugging Face, Python   | Fine-tuning/trainer workflows |
 | `AWS/`                 | Deployment         | EC2, Lambda            | Infra references              |
 | `Authentication/`      | Auth service       | FastAPI, JWT           | Production-minded             |
 | `Redis/`               | Data structures    | Redis                  | Vectors and caching           |
