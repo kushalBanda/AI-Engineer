@@ -8,9 +8,9 @@
 ![Status](https://img.shields.io/badge/Status-Active-22c55e?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-3b82f6?style=for-the-badge)
 
-**A modular, production-minded reference repo for modern AI engineering.**
+**The definitive, production-grade reference architecture for AI Engineering in 2026.**
 
-[Repository Map](#-repository-map) • [Module Badges](#-module-badges) • [Quickstart](#-quickstart) • [Learning Paths](#-learning-paths) • [Feature Matrix](#-feature-matrix) • [Contributing](#-contributing)
+[Repository Map](#-repository-map) • [Module Badges](#-module-badges) • [Quickstart](#-quickstart) • [Feature Matrix](#-feature-matrix) • [Tech Stack](#-tech-stack)
 
 </div>
 
@@ -18,7 +18,7 @@
 
 ## 📖 About
 
-This repository is a practical collection of AI engineering patterns, not a single app. Each top-level folder is a focused module you can run independently: agents, MLOps, protocols, and backend systems. Use it as a reference library, a workshop, or a template source for building production-grade AI services.
+This repository represents the state-of-the-art in AI engineering. It is not just a collection of scripts, but a modular ecosystem designed for building scalable, intelligent systems. From autonomous agent orchestration to high-throughput MLOps pipelines and next-gen AI detection, each module serves as a production-ready building block.
 
 **Goals:**
 
@@ -55,11 +55,16 @@ Each module has its own `README.md` and dependency file (`pyproject.toml`, `requ
 ![Data](https://img.shields.io/badge/Data-Postgres%20%7C%20Redis%20%7C%20Neo4j-f59e0b?style=for-the-badge)
 ![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20Vite-ef4444?style=for-the-badge)
 
-</div>
+Get up and running in minutes. Each module is self-contained.
 
----
-
-## 🚀 Quickstart
+### 🕵️ AI Code Detector (New!)
+Analyze codebases for synthetic generation patterns.
+```bash
+cd AICodeDetector/backend
+npm install
+# Configure .env with ANTHROPIC_API_KEY
+npm run dev
+```
 
 ### Python (uv)
 
@@ -153,9 +158,7 @@ npm run dev
 | `Webhooks/`            | Eventing           | Python                 | Sender/receiver patterns      |
 | `Comparison/`          | Model comparison   | HTML, CSS              | Claude vs GPT evaluations     |
 
----
-
-## 🧰 Tech Stack
+We rely on a battle-tested stack optimized for performance and developer experience.
 
 | Category  | Stack                                   |
 | --------- | --------------------------------------- |
@@ -169,12 +172,12 @@ npm run dev
 
 ## 🤝 Contributing
 
-Contributions are welcome and should stay module-focused.
+We welcome contributions to the future of AI engineering.
 
-1. Create a feature branch.
-2. Follow the module’s local conventions and configs.
-3. Use Conventional Commits (e.g., `feat:`, `fix:`, `docs:`).
-4. Open a PR with a clear summary and reproducible steps.
+1.  **Fork** the repository.
+2.  **Select a Module** to improve or **Create a New One**.
+3.  **Follow Conventions:** strict typing, linting, and comprehensive READMEs for new modules.
+4.  **Submit a PR** with a clear description of your architectural decisions.
 
 ---
 
