@@ -6,4 +6,5 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "browser-use>=0.11.5",
+    "instructor>=1.14.5",
 ]

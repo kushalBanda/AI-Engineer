@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "hugging-face-model-trainer": {
+      "source": "huggingface/skills",
+      "sourceType": "github",
+      "computedHash": "8cf1bb6d7dc8c8ed98fa86c9d76f0313e9e44e77dc27912aaaf882727c50ccd2"
+    }
+  }
+}
