@@ -194,5 +194,4 @@ node_modules/
 
 # Ignore
 .vscode/*
-
-.agents/*
+MLOPS/
