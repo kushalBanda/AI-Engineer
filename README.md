@@ -1,7 +1,5 @@
 # ⚡️ AI Engineer
 
-<div align="center">
-
 ![Language](https://img.shields.io/badge/Language-Python%203.13%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Language](https://img.shields.io/badge/Language-TypeScript%205%2B-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Stack](https://img.shields.io/badge/Stack-FastAPI%20%7C%20React%20%7C%20LangGraph-111827?style=for-the-badge)
@@ -11,8 +9,6 @@
 **The definitive, production-grade reference architecture for AI Engineering in 2026.**
 
 [About](#-about) • [Repository Map](#-repository-map) • [Quickstart](#-quickstart) • [Key Capabilities](#-key-capabilities) • [Tech Stack](#-tech-stack) • [Contributing](#-contributing)
-
-</div>
 
 ---
 
@@ -50,8 +46,6 @@ This repository represents the state of the art in AI engineering. It is not jus
 
 ## 🧩 Module Badges
 
-<div align="center">
-
 ![Agents](https://img.shields.io/badge/Agents-LangGraph%20%7C%20OpenAI%20Agents-0ea5e9?style=for-the-badge)
 ![MLOps](https://img.shields.io/badge/MLOps-CI%2FCD%20%7C%20Docker%20%7C%20K8s%20%7C%20HF-10b981?style=for-the-badge)
 ![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Training%20%7C%20Fine--tuning-f97316?style=for-the-badge)
@@ -59,8 +53,6 @@ This repository represents the state of the art in AI engineering. It is not jus
 ![Instructor](https://img.shields.io/badge/Instructor-Pydantic%20%7C%20Structured%20Output-a855f7?style=for-the-badge)
 ![Data](https://img.shields.io/badge/Data-Postgres%20%7C%20Redis%20%7C%20Neo4j-f59e0b?style=for-the-badge)
 ![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20Vite-ef4444?style=for-the-badge)
-
-</div>
 
 ---
 
@@ -158,9 +150,6 @@ Contributions should stay focused, well-documented, and aligned with the modular
 3. Follow local conventions for typing, linting, and documentation.
 4. Submit a PR with a clear description of the change and its rationale.
 
----
+**Build boldly. Ship thoughtfully.**
 
-<div align="center">
-  <p><strong>Build boldly. Ship thoughtfully.</strong></p>
-  <sub>Created by Kushal Banda</sub>
-</div>
+Created by Kushal Banda
