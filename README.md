@@ -10,7 +10,7 @@
 
 **The definitive, production-grade reference architecture for AI Engineering in 2026.**
 
-[Repository Map](#-repository-map) • [Module Badges](#-module-badges) • [Quickstart](#-quickstart) • [Feature Matrix](#-feature-matrix) • [Tech Stack](#-tech-stack)
+[About](#-about) • [Repository Map](#-repository-map) • [Quickstart](#-quickstart) • [Key Capabilities](#-key-capabilities) • [Tech Stack](#-tech-stack) • [Contributing](#-contributing)
 
 </div>
 
@@ -18,28 +18,33 @@
 
 ## 📖 About
 
-This repository represents the state-of-the-art in AI engineering. It is not just a collection of scripts, but a modular ecosystem designed for building scalable, intelligent systems. From autonomous agent orchestration to high-throughput MLOps pipelines and next-gen AI detection, each module serves as a production-ready building block.
+This repository represents the state of the art in AI engineering. It is not just a collection of scripts, but a modular ecosystem designed for building scalable, intelligent systems. From autonomous agent orchestration to high-throughput MLOps pipelines and next-generation AI detection, each module serves as a production-ready building block.
 
-**Goals:**
+### Core Philosophy
 
-- 🧠 Turn cutting-edge AI patterns into runnable systems.
-- 🛠️ Provide realistic infrastructure and deployment workflows.
-- ⚡️ Keep modules small, focused, and easy to remix.
+- **Modular by design:** Every component, from authentication to agent swarms, runs independently.
+- **Production ready:** Built with strict typing, CI/CD pipelines, and scalable infrastructure patterns.
+- **Future proof:** Leverages modern GenAI standards, including MCP, LangGraph, and advanced reasoning workflows.
 
 ---
 
 ## 🧭 Repository Map
 
-| Domain                  | What you’ll find                                  | Entry points                                                 |
-| ----------------------- | -------------------------------------------------- | ------------------------------------------------------------ |
-| Agentic systems         | Multi-agent orchestration, SDK examples, workflows | `Langgraph/`, `AgentSDK-TypeScript/`, `Openai Agents/` |
-| MLOps & deployment      | CI/CD, Docker, Kubernetes, serving pipelines       | `MLOPS/`, `AWS/`, `HuggingFace/`                          |
-| Protocols & integration | MCP implementations, webhooks, system glue         | `MCP/`, `Webhooks/`, `GithubSync/`                     |
-| Structured extraction   | Typed LLM outputs via Instructor + Pydantic        | `567-labs-instructor/`                                  |
-| Core services & data    | Auth, Redis patterns, graph RAG                    | `Authentication/`, `Redis/`, `KnowledgeGraph/`         |
-| Comparison              | Side-by-side model & frontend evaluations          | `Comparison/`                                          |
-
-Each module has its own `README.md` and dependency file (`pyproject.toml`, `requirements.txt`, or `package.json`). Treat modules as standalone projects.
+| Domain | Module | Description |
+| :--- | :--- | :--- |
+| **Agentic Systems** | `Langgraph/` | Complex, stateful multi-agent workflows with conditional routing. |
+| **Agentic Systems** | `AgentSDK-TypeScript/` | TypeScript-first implementation of OpenAI's Agents SDK. |
+| **Agentic Systems** | `Openai Agents/` | Comprehensive playbooks and architectural guides. |
+| **AI Security & Analysis** | `AICodeDetector/` | Intelligent code forensics using Anthropic Claude and the GitHub API to detect AI-generated patterns. |
+| **MLOps & Infra** | `MLOPS/` | End-to-end CI/CD, training pipelines, and model serving. |
+| **MLOps & Infra** | `AWS/` | Infrastructure-as-code and deployment patterns for EC2 and Lambda. |
+| **MLOps & Infra** | `Kubernetes/` | Kubernetes manifests for scaling RAG applications. |
+| **Protocols & Integration** | `MCP/` | Model Context Protocol server and client implementations for universal LLM context. |
+| **Protocols & Integration** | `GithubSync/` | Event-driven full-stack sync engine using React, FastAPI, and Kafka. |
+| **Protocols & Integration** | `Webhooks/` | Robust event ingress and egress patterns. |
+| **Core Services** | `Authentication/` | High-security auth microservice with JWT and Argon2 hashing. |
+| **Core Services** | `Redis/` | High-performance vector stores and caching strategies. |
+| **Core Services** | `KnowledgeGraph/` | GraphRAG implementations using Neo4j for deep context retrieval. |
 
 ---
 
@@ -55,10 +60,12 @@ Each module has its own `README.md` and dependency file (`pyproject.toml`, `requ
 ![Data](https://img.shields.io/badge/Data-Postgres%20%7C%20Redis%20%7C%20Neo4j-f59e0b?style=for-the-badge)
 ![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20Vite-ef4444?style=for-the-badge)
 
-Get up and running in minutes. Each module is self-contained.
+Get up and running quickly. Each module is self-contained, so use the setup flow that matches the area you want to explore.
 
-### 🕵️ AI Code Detector (New!)
+### AI Code Detector
+
 Analyze codebases for synthetic generation patterns.
+
 ```bash
 cd AICodeDetector/backend
 npm install
@@ -66,7 +73,7 @@ npm install
 npm run dev
 ```
 
-### Python (uv)
+### Python Services
 
 ```bash
 cd Authentication
@@ -75,17 +82,7 @@ source .venv/bin/activate
 uvicorn main:app --reload
 ```
 
-### Python (pip)
-
-```bash
-cd Webhooks
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python test.py
-```
-
-### Node/TypeScript
+### Full-Stack Applications
 
 ```bash
 cd GithubSync/client
@@ -93,95 +90,71 @@ npm install
 npm run dev
 ```
 
----
+### MCP Projects
 
-## 🧩 Learning Paths
-
-- **Structured output**: `567-labs-instructor/openai/` → `567-labs-instructor/anthropic/`
-- **Agents first**: `Langgraph/` → `AgentSDK-TypeScript/` → `Openai Agents/`
-- **MLOps first**: `MLOPS/` → `HuggingFace/` → `AWS/`
-- **Protocol-focused**: `MCP/` → `Webhooks/` → `GithubSync/`
-- **Data systems**: `Redis/` → `KnowledgeGraph/` → `Authentication/`
+```bash
+cd MCP/3-simple-server-setup
+uv pip install -r requirements.txt
+mcp dev server.py
+```
 
 ---
 
 ## ✨ Highlights
 
-### Langgraph
+### Advanced Agent Orchestration
 
-- Stateful, multi-step agent workflows.
-- Conditional routing and tool-using chains.
+Leverage `Langgraph` to build agents that reason, plan, and execute. Examples include:
 
-### MCP
+- **Human-in-the-loop** workflows
+- **Multi-agent collaboration** such as drafter and critic patterns
+- **Persistent memory** systems
 
-- End-to-end Model Context Protocol examples.
-- Server/client patterns with Docker references.
+### AI Code Detection
 
-### Hugging Face
+The `AICodeDetector` module adds a deeper analysis layer with:
 
-- Model training and fine-tuning workflows on Hugging Face.
-- Notebook-based experimentation for trainer/job setup.
+- **Engine:** Anthropic Claude models
+- **Integration:** GitHub API hooks for analyzing pull requests and commits
+- **Architecture:** Express.js and TypeScript backend with PostgreSQL persistence
 
-### GithubSync
+### Universal Connectivity with MCP
 
-- Full-stack React + FastAPI + Kafka integration.
-- Event-driven architecture patterns.
+The `MCP/` module implements the **Model Context Protocol**, enabling agents to connect to:
 
-### 567-labs-instructor
-
-- Structured data extraction from LLMs using [Instructor](https://github.com/567-labs/instructor) + Pydantic.
-- Multi-provider examples: OpenAI (code generation) and Anthropic (entity extraction).
-- Automatic validation, retries, and type-safe responses — no manual JSON parsing.
-
-### Authentication
-
-- Production-minded auth service with JWT and SQLAlchemy.
+- Local filesystems
+- Database schemas
+- External APIs such as Slack, Linear, and GitHub
 
 ---
 
-## 🧭 Feature Matrix
-
-| Module                   | Focus              | Tech                   | Notes                         |
-| ------------------------ | ------------------ | ---------------------- | ----------------------------- |
-| `Langgraph/`           | Agent workflows    | LangGraph, LangChain   | Stateful, conditional routing |
-| `AgentSDK-TypeScript/` | Agent SDK          | OpenAI Agents SDK      | TS-first agent patterns       |
-| `Openai Agents/`       | Guides & resources | OpenAI docs            | PDFs and playbooks            |
-| `MCP/`                 | Protocols          | MCP                    | Server/client examples        |
-| `GithubSync/`          | Full-stack sync    | React, FastAPI, Kafka  | Event-driven integration      |
-| `MLOPS/`               | CI/CD & serving    | Docker, GitHub Actions | Pipeline patterns             |
-| `HuggingFace/`         | Model training     | Hugging Face, Python   | Fine-tuning/trainer workflows |
-| `AWS/`                 | Deployment         | EC2, Lambda            | Infra references              |
-| `Authentication/`      | Auth service       | FastAPI, JWT           | Production-minded             |
-| `Redis/`               | Data structures    | Redis                  | Vectors and caching           |
-| `KnowledgeGraph/`      | Graph RAG          | Neo4j                  | Knowledge Graph              |
-| `567-labs-instructor/` | Structured output  | Instructor, Pydantic   | OpenAI & Anthropic examples   |
-| `Webhooks/`            | Eventing           | Python                 | Sender/receiver patterns      |
-| `Comparison/`          | Model comparison   | HTML, CSS              | Claude vs GPT evaluations     |
+## 🧰 Tech Stack
 
 We rely on a battle-tested stack optimized for performance and developer experience.
 
-| Category  | Stack                                   |
-| --------- | --------------------------------------- |
-| Languages | Python 3.13+, TypeScript 5+             |
-| Web       | FastAPI, Flask, React (Vite)            |
-| AI        | LangChain, LangGraph, OpenAI SDK, MCP, Instructor, Hugging Face |
-| Data      | PostgreSQL, Redis, Neo4j, Kafka         |
-| DevOps    | Docker, Kubernetes, GitHub Actions, AWS, Hugging Face Jobs |
+| Layer | Technologies |
+| :--- | :--- |
+| **Languages** | Python 3.13+, TypeScript 5+ |
+| **AI & LLM** | LangChain, LangGraph, OpenAI SDK, Anthropic SDK, MCP |
+| **Backend** | FastAPI, Express, Node.js, Kafka |
+| **Frontend** | React, Vite, Tailwind CSS |
+| **Data** | PostgreSQL, Redis, Neo4j, ChromaDB |
+| **DevOps** | Docker, Kubernetes, GitHub Actions, AWS, uv |
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions to the future of AI engineering.
+Contributions should stay focused, well-documented, and aligned with the modular structure of the repository.
 
-1.  **Fork** the repository.
-2.  **Select a Module** to improve or **Create a New One**.
-3.  **Follow Conventions:** strict typing, linting, and comprehensive READMEs for new modules.
-4.  **Submit a PR** with a clear description of your architectural decisions.
+1. Fork the repository.
+2. Select an existing module to improve, or create a new top-level module.
+3. Follow local conventions for typing, linting, and documentation.
+4. Submit a PR with a clear description of the change and its rationale.
 
 ---
 
 <div align="center">
-  <p><b>Build boldly. Ship thoughtfully.</b></p>
+  <p><strong>Build boldly. Ship thoughtfully.</strong></p>
   <sub>Created by Kushal Banda</sub>
 </div>
