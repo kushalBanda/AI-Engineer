@@ -60,6 +60,12 @@ This repository represents the state of the art in AI engineering. It is not jus
 ![Data](https://img.shields.io/badge/Data-Postgres%20%7C%20Redis%20%7C%20Neo4j-f59e0b?style=for-the-badge)
 ![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20Vite-ef4444?style=for-the-badge)
 
+</div>
+
+---
+
+## 🚀 Quickstart
+
 Get up and running quickly. Each module is self-contained, so use the setup flow that matches the area you want to explore.
 
 ### AI Code Detector
