@@ -1,12 +1,13 @@
 # LineTrace Codebase Analysis
 
 ### File Structure Summary
-- Total Files: 302
-- Total Directories: 109
-- File Extensions: .lock: 7, .toml: 6, .md: 42, .txt: 15, .py: 129, .png: 6, .mdc: 4, .pdf: 11, .csv: 5, .json: 15, .js: 10, .yaml: 5, .css: 7, .html: 3, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .yml: 1, .jsx: 7, .ts: 11
+- Total Files: 333
+- Total Directories: 123
+- File Extensions: .json: 18, .lock: 7, .toml: 6, .md: 43, .txt: 16, .py: 138, .png: 9, .mdc: 4, .pdf: 11, .csv: 5, .js: 12, .yaml: 9, .css: 10, .html: 6, .xml: 1, .pkl: 5, .log: 1, .pem: 1, .ipynb: 1, .yml: 1, .jsx: 7, .ts: 11
 
 ### Directory Tree
 ```
+  ├── skills-lock.json
   ├── Langgraph
    │  ├── Basics
    │  │  ├── requirements.txt
@@ -245,7 +246,24 @@
    │  ├── config.py
    │  ├── requirements.txt
    │  └── KG.py
+  ├── elevenLabs
+   │  ├── setup_tools.py
+   │  ├── requirements.txt
+   │  ├── Makefile
+   │  ├── patient_records.py
+   │  └── main.py
   ├── README.md
+  ├── 567-labs-instructor
+   │  ├── anthropic
+   │  │  └── run.py
+   │  └── openai
+   │    ├── run.py
+   │    ├── program.json
+   │    └── code.py
+  ├── docker-AI
+   │  ├── pnpm-lock.yaml
+   │  ├── index.js
+   │  └── package.json
   ├── AgentSDK-Ts
    │  ├── agentTool.js
    │  ├── Readme.md
@@ -266,9 +284,31 @@
    │  └── EC2
    │    └── FastAPI
   ├── GEMINI.md
+  ├── Comparison
+   │  ├── Frontend-eval
+   │  │  ├── index.html
+   │  │  ├── styles.css
+   │  │  └── README.md
+   │  ├── GPT-5.3-codex
+   │  │  ├── index.html
+   │  │  ├── styles.css
+   │  │  └── script.js
+   │  ├── Claude Opus 4.6
+   │  │  ├── index.html
+   │  │  └── styles.css
+   │  └── assets
+   │    ├── opus-4.6 Vs codex-5.3.png
+   │    ├── 5.3-codex.png
+   │    └── opus-4.6.png
+  ├── HuggingFace
+   │  └── hf-model-trainer-skill.ipynb
   ├── AGENTS.md
   ├── Kubernetes
    │  ├── uv.lock
+   │  ├── python
+   │  │  ├── optimized_retriever.py
+   │  │  ├── optimized_chunker.py
+   │  │  └── optimized_pipeline.py
    │  ├── pyproject.toml
    │  ├── README.md
    │  ├── rag-app
@@ -299,6 +339,10 @@
    │  │  ├── README.md
    │  │  └── data
    │  │    └── index.json
+   │  ├── monitoring
+   │  │  ├── deployment.yaml
+   │  │  ├── namespace.yaml
+   │  │  └── prometheus-config.yaml
    │  └── CLAUDE.md
   ├── Webhooks
    │  ├── sender.py
@@ -396,6 +440,7 @@
    │  ├── database.py
    │  ├── pyproject.toml
    │  └── main.py
+  ├── claude-Ts
   └── AICodeDetector
      ├── postman
       │  └── AICodeDetector.postman_collection.json
