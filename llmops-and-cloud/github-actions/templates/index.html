@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <title>Github Actions Prediction App</title>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Github Actions Prediction App</h2>
+
+        <form method="POST">
+            <label for="SepalLengthCm">SepalLengthCm</label>
+            <input type="number" step="any" name="SepalLengthCm" required>
+
+            <label for="SepalWidthCm">SepalWidthCm</label>
+            <input type="number" step="any" name="SepalWidthCm" required>
+
+            <label for="PetalLengthCm">PetalLengthCm</label>
+            <input type="number" step="any" name="PetalLengthCm" required>
+
+            <label for="PetalWidthCm">PetalWidthCm</label>
+            <input type="number" step="any" name="PetalWidthCm" required>
+
+            <button type="submit">PREDICT</button>
+        </form>
+
+        {% if prediction is not none %}
+            <h3>Prediction : {{ prediction }}</h3>
+        {% endif %}
+    </div>
+
+</body>
+</html>
