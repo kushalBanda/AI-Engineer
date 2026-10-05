@@ -28,19 +28,19 @@ This repository represents the state of the art in AI engineering. It is not jus
 
 | Domain | Module | Description |
 | :--- | :--- | :--- |
-| **Agentic Systems** | `Langgraph/` | Complex, stateful multi-agent workflows with conditional routing. |
-| **Agentic Systems** | `AgentSDK-TypeScript/` | TypeScript-first implementation of OpenAI's Agents SDK. |
-| **Agentic Systems** | `Openai Agents/` | Comprehensive playbooks and architectural guides. |
-| **AI Security & Analysis** | `AICodeDetector/` | Intelligent code forensics using Anthropic Claude and the GitHub API to detect AI-generated patterns. |
-| **MLOps & Infra** | `MLOPS/` | End-to-end CI/CD, training pipelines, and model serving. |
-| **MLOps & Infra** | `AWS/` | Infrastructure-as-code and deployment patterns for EC2 and Lambda. |
-| **MLOps & Infra** | `Kubernetes/` | Kubernetes manifests for scaling RAG applications. |
-| **Protocols & Integration** | `MCP/` | Model Context Protocol server and client implementations for universal LLM context. |
-| **Protocols & Integration** | `GithubSync/` | Event-driven full-stack sync engine using React, FastAPI, and Kafka. |
-| **Protocols & Integration** | `Webhooks/` | Robust event ingress and egress patterns. |
-| **Core Services** | `Authentication/` | High-security auth microservice with JWT and Argon2 hashing. |
-| **Core Services** | `Redis/` | High-performance vector stores and caching strategies. |
-| **Core Services** | `KnowledgeGraph/` | GraphRAG implementations using Neo4j for deep context retrieval. |
+| **Agentic Systems** | `agentic-systems/langgraph/` | Complex, stateful multi-agent workflows with conditional routing. |
+| **Agentic Systems** | `agentic-systems/agent-sdk-ts/` | TypeScript-first implementation of OpenAI's Agents SDK. |
+| **Agentic Systems** | `agentic-systems/openai-agents/` | Comprehensive playbooks and architectural guides. |
+| **AI Security & Analysis** | `ai-security/ai-code-detector/` | Intelligent code forensics using Anthropic Claude and the GitHub API to detect AI-generated patterns. |
+| **MLOps & Infra** | `llmops-and-cloud/github-actions/`, `llmops-and-cloud/lambda-github-actions/` | End-to-end CI/CD, training pipelines, and model serving. |
+| **MLOps & Infra** | `llmops-and-cloud/aws-ec2-fastapi/` | Infrastructure-as-code and deployment patterns for EC2 and Lambda. |
+| **MLOps & Infra** | `llmops-and-cloud/kubernetes/` | Kubernetes manifests for scaling RAG applications. |
+| **Protocols & Integration** | `mcp/` | Model Context Protocol server and client implementations for universal LLM context. |
+| **Protocols & Integration** | `event-driven-ai/github-sync/` | Event-driven full-stack sync engine using React, FastAPI, and Kafka. |
+| **Protocols & Integration** | `event-driven-ai/webhooks/` | Robust event ingress and egress patterns. |
+| **Core Services** | `ai-security/authentication/` | High-security auth microservice with JWT and Argon2 hashing. |
+| **Core Services** | `agent-memory/`, `knowledge-retrieval/` | High-performance vector stores and caching strategies. |
+| **Core Services** | `knowledge-graphs/` | GraphRAG implementations using Neo4j for deep context retrieval. |
 
 ---
 
@@ -65,7 +65,7 @@ Get up and running quickly. Each module is self-contained, so use the setup flow
 Analyze codebases for synthetic generation patterns.
 
 ```bash
-cd AICodeDetector/backend
+cd ai-security/ai-code-detector/backend
 npm install
 # Configure .env with ANTHROPIC_API_KEY
 npm run dev
@@ -74,7 +74,7 @@ npm run dev
 ### Python Services
 
 ```bash
-cd Authentication
+cd ai-security/authentication
 uv sync
 source .venv/bin/activate
 uvicorn main:app --reload
@@ -83,7 +83,7 @@ uvicorn main:app --reload
 ### Full-Stack Applications
 
 ```bash
-cd GithubSync/client
+cd event-driven-ai/github-sync/client
 npm install
 npm run dev
 ```
@@ -91,7 +91,7 @@ npm run dev
 ### MCP Projects
 
 ```bash
-cd MCP/3-simple-server-setup
+cd mcp/3-simple-server-setup
 uv pip install -r requirements.txt
 mcp dev server.py
 ```
@@ -102,7 +102,7 @@ mcp dev server.py
 
 ### Advanced Agent Orchestration
 
-Leverage `Langgraph` to build agents that reason, plan, and execute. Examples include:
+Leverage `agentic-systems/langgraph` to build agents that reason, plan, and execute. Examples include:
 
 - **Human-in-the-loop** workflows
 - **Multi-agent collaboration** such as drafter and critic patterns
@@ -110,7 +110,7 @@ Leverage `Langgraph` to build agents that reason, plan, and execute. Examples in
 
 ### AI Code Detection
 
-The `AICodeDetector` module adds a deeper analysis layer with:
+The `ai-security/ai-code-detector` module adds a deeper analysis layer with:
 
 - **Engine:** Anthropic Claude models
 - **Integration:** GitHub API hooks for analyzing pull requests and commits
@@ -118,7 +118,7 @@ The `AICodeDetector` module adds a deeper analysis layer with:
 
 ### Universal Connectivity with MCP
 
-The `MCP/` module implements the **Model Context Protocol**, enabling agents to connect to:
+The `mcp/` module implements the **Model Context Protocol**, enabling agents to connect to:
 
 - Local filesystems
 - Database schemas
