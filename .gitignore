@@ -178,7 +178,7 @@ cython_debug/
 
 
 # Chat
-GithubSync/chat/
+event-driven-ai/github-sync/chat/
 
 # .md files
 CLAUDE.md
@@ -194,3 +194,8 @@ node_modules/
 
 # Ignore
 .vscode/*
+
+# Cloud credentials and generated ML artifacts
+able-analyst-*.json
+llmops-and-cloud/github-actions/artifacts/
+llmops-and-cloud/github-actions/logs/
