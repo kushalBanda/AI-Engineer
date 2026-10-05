@@ -196,6 +196,6 @@ node_modules/
 .vscode/*
 
 # Cloud credentials and generated ML artifacts
-able-analyst-*.json
+*service-account*.json
 mlops-github-actions-gke/artifacts/
 mlops-github-actions-gke/logs/

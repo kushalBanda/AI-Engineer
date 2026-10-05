@@ -10,8 +10,8 @@ env:
     GKE_CLUSTER: "my-cluster"
     GKE_REGION: "us-central1"
     DEPLOYMENT_NAME: "mlops-app"
-    REPOSITORY: "us-central1-docker.pkg.dev/able-analyst-431912-a9/my-repo"
-    IMAGE: "us-central1-docker.pkg.dev/able-analyst-431912-a9/my-repo/mlops-app"
+    REPOSITORY: "us-central1-docker.pkg.dev/<PROJECT_ID>/my-repo"
+    IMAGE: "us-central1-docker.pkg.dev/<PROJECT_ID>/my-repo/mlops-app"
 
 jobs:
     build-and-deploy:
