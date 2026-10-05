@@ -10,7 +10,7 @@ Runnable AI engineering modules: agents, MCP, memory, retrieval, voice, fine-tun
 
 Reading about AI engineering only goes so far. These modules run. You'll find:
 
-- **20 modules** in three tiers, from first scripts to full services
+- **19 modules** in three tiers, from first scripts to full services
 - Agents in LangGraph and the OpenAI Agents SDK, plus a 7-lesson MCP course
 - Redis for memory and retrieval, and a Neo4j knowledge graph
 - Deploys to AWS, GKE, and Kubernetes
@@ -22,7 +22,7 @@ Every module README lists what it is, how to run it, and what it needs.
 
 - [Getting started](#getting-started)
 - [Projects by difficulty](#projects-by-difficulty)
-  - [Beginner (7)](#-beginner)
+  - [Beginner (6)](#-beginner)
   - [Intermediate (8)](#-intermediate)
   - [Advanced (5)](#-advanced)
 - [Tools on the list](#tools-on-the-list)
@@ -60,7 +60,6 @@ Single ideas and small deploys. Start here.
 
 #### MLOps and cloud
 - [**AWS EC2 with FastAPI**](./aws-ec2-fastapi) · `Tutorial` - Deploy a FastAPI bookstore to an EC2 instance.
-- [**Lambda with GitHub Actions**](./lambda-github-actions) · `Tutorial` - Redeploy an AWS Lambda function on every push.
 
 #### Prompting
 - [**AI dev prompts**](./ai-dev-prompts) · `Reference` - A step-by-step Cursor workflow from idea to PRD to tasks, and the GPT-4.1 prompting guide.
