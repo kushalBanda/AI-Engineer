@@ -40,7 +40,7 @@ This repository represents the state of the art in AI engineering. It is not jus
 | **Protocols & Integration** | `event-driven-ai/webhooks/` | Robust event ingress and egress patterns. |
 | **Core Services** | `ai-security/authentication/` | High-security auth microservice with JWT and Argon2 hashing. |
 | **Core Services** | `agent-memory/`, `knowledge-retrieval/` | High-performance vector stores and caching strategies. |
-| **Core Services** | `knowledge-graphs/knowledge-graph/` | GraphRAG implementations using Neo4j for deep context retrieval. |
+| **Core Services** | `knowledge-graphs/` | GraphRAG implementations using Neo4j for deep context retrieval. |
 
 ---
 
