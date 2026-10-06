@@ -9,11 +9,14 @@ from dataclasses import dataclass, field
 from functools import lru_cache
 from typing import Any
 
+from dotenv import load_dotenv
+
 from optimized_chunker import Chunk, semantic_chunk
 from optimized_retriever import SearchResult, hybrid_search
 
+load_dotenv()
 
-API_KEY = "sk-proj-abc123fake456key789"
+API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 @dataclass
