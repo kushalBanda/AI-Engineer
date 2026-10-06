@@ -1,0 +1,50 @@
+name: Module proposal
+description: Propose a new module before you build it.
+labels: [module-proposal]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Module name
+      description: A short folder name, for example `vector-search-basics`.
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What it builds
+      description: One or two sentences. Say what a reader learns.
+    validations:
+      required: true
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Tier
+      options:
+        - Beginner
+        - Intermediate
+        - Advanced
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      options:
+        - Project
+        - Tutorial
+        - Course
+        - Reference
+    validations:
+      required: true
+  - type: textarea
+    id: depends
+    attributes:
+      label: Depends on
+      description: Services, API keys (names only), and tools the module needs.
+  - type: checkboxes
+    id: ownership
+    attributes:
+      label: Ownership
+      options:
+        - label: I plan to build this module and open the pull request.

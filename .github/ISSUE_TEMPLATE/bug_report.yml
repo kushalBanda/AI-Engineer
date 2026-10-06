@@ -1,0 +1,35 @@
+name: Bug report
+description: A module does not run, or gives a wrong result.
+labels: [bug]
+body:
+  - type: input
+    id: module
+    attributes:
+      label: Module
+      description: The folder name, for example `redis-basics`.
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Say what you did, what you expected, and what you got. Paste the exact error.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The commands you ran, in order.
+      render: bash
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, and Node.js version.
+  - type: markdown
+    attributes:
+      value: |
+        Do not paste API keys, tokens, or `.env` contents. To report a leaked secret, see [SECURITY.md](https://github.com/kushalBanda/AI-Engineer/blob/main/SECURITY.md).
