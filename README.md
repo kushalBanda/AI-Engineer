@@ -104,13 +104,15 @@ Full services and production patterns.
 
 ## Contributing
 
-Keep changes focused.
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
-1. Fork the repository.
-2. Improve a module, or add a new top-level folder for one.
-3. Give new modules a README with What, Run, Article, and Depends on.
-4. Add the module to the right tier above, with a type tag.
-5. Open a pull request that says what changed and why.
+1. Open a **Module proposal** [issue](../../issues/new/choose) for a new module.
+2. Fork the repository and create a branch.
+3. Improve a module, or add a new top-level folder for one.
+4. Copy the [module README template](.github/MODULE_README_TEMPLATE.md). Add the module to the right tier above, with a type tag.
+5. Open a pull request. The template lists the checks.
+
+Report a leaked secret through [private reporting](SECURITY.md). Everyone must follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
