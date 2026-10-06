@@ -24,7 +24,7 @@ python training_pipeline.py   # needs artifacts/raw/data.csv
 python application.py
 ```
 
-GitHub only runs workflows from a repository's root `.github/workflows/`. To use the deploy workflow, copy it there and set the GCP secrets it names.
+GitHub only runs workflows from a repository's root `.github/workflows/`. To use the deploy workflow, copy it there, replace `<PROJECT_ID>` in `deploy.yml` and `kubernetes-deployment.yaml` with your GCP project ID, and set the GCP secrets it names.
 
 ## Article
 
