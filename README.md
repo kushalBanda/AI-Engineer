@@ -1,8 +1,6 @@
 # AI Engineer
 
-![Python 3.13+](https://img.shields.io/badge/Python-3.13%2B-3776AB?style=flat-square&logo=python&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5%2B-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![MIT license](https://img.shields.io/badge/License-MIT-3b82f6?style=flat-square)
+![Python 3.13+](https://img.shields.io/badge/Python-3.13%2B-3776AB?style=flat-square&logo=python&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-5%2B-3178C6?style=flat-square&logo=typescript&logoColor=white) ![MIT license](https://img.shields.io/badge/License-MIT-3b82f6?style=flat-square)
 
 Runnable AI engineering modules: agents, MCP, memory, retrieval, voice, fine-tuning, MLOps, and security. Each folder is one module with its own README.
 
@@ -25,7 +23,6 @@ Every module README lists what it is, how to run it, and what it needs.
   - [Beginner (6)](#-beginner)
   - [Intermediate (8)](#-intermediate)
   - [Advanced (5)](#-advanced)
-- [Tools on the list](#tools-on-the-list)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -104,10 +101,6 @@ Full services and production patterns.
 
 #### Fine-tuning
 - [**Hugging Face fine-tuning**](./huggingface-finetuning) · `Tutorial` - Fine-tune Qwen3-0.6B for support ticket routing and compare metrics before and after.
-
-## Tools on the list
-
-Next up: GCP, GitLab, CircleCI, Jenkins, GitOps, Argo, and MLflow.
 
 ## Contributing
 
