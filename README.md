@@ -2,7 +2,7 @@
 
 ![Python 3.13+](https://img.shields.io/badge/Python-3.13%2B-3776AB?style=flat-square&logo=python&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-5%2B-3178C6?style=flat-square&logo=typescript&logoColor=white) ![MIT license](https://img.shields.io/badge/License-MIT-3b82f6?style=flat-square)
 
-Runnable AI engineering modules, grouped by what you want to build: agents, MCP, memory and RAG, prompting, AI apps, APIs, deployment, and training. Each top-level folder is one module, and this README covers all of them: what each one builds, how to run it, and what it needs. Three larger modules (the MCP course, the context-engineering template, and GitHub sync) also have a full guide in their own folder.
+Runnable AI engineering modules, grouped by what you want to build: agents, MCP, memory and RAG, prompting, AI apps, APIs, deployment, and training. Each top-level folder is one module. This README is the map: what each module builds, what it needs, and where to start. Modules with run steps have a full guide in their own folder, marked 📘.
 
 ## Why this repo?
 
@@ -17,7 +17,6 @@ Reading about AI engineering only goes so far. These modules run. You'll find:
 
 ## Contents
 
-- [How to use this repo](#how-to-use-this-repo)
 - [Module map](#module-map)
 - [Prerequisites at a glance](#prerequisites-at-a-glance)
 - [Learning paths](#learning-paths)
@@ -51,49 +50,33 @@ Reading about AI engineering only goes so far. These modules run. You'll find:
 - [Contributing](#contributing)
 - [License](#license)
 
-## How to use this repo
-
-Every module is self-contained. Jump to the area you care about, open the module's section, copy the keys it names into a `.env` in its folder, and run the commands. You don't need to go in order. Sections marked 📘 link to a full guide in the module's folder.
-
-| Label | Meaning |
-| :--- | :--- |
-| 🟢 Beginner | One idea or a small deploy. A good first module |
-| 🟡 Intermediate | Agents, memory, voice, and pipelines |
-| 🔴 Advanced | Full services and production patterns |
-| `Project` | A runnable app |
-| `Tutorial` | A set of small scripts |
-| `Course` | An ordered series of lessons |
-| `Reference` | Material to read |
-
-Most Python modules use [uv](https://docs.astral.sh/uv/). Use Python 3.13 or newer, and a current Node.js LTS for the TypeScript modules.
-
 ## Module map
 
-| Area | Module | Level | Type | What you build | Folder |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| [Agents](#agents) | [OpenAI Agents SDK in TypeScript](#openai-agents-sdk-in-typescript) | 🟢 Beginner | `Tutorial` | A first agent, agent-as-tool, and dynamic instructions in TypeScript | [`agent-sdk-ts/`](./agent-sdk-ts) |
-| [Agents](#agents) | [OpenAI Agents SDK](#openai-agents-sdk) | 🟡 Intermediate | `Tutorial` | Agents in Python, from one agent to guardrails, managers, routers, and triage | [`openai-agents/`](./openai-agents) |
-| [Agents](#agents) | [LangGraph](#langgraph) | 🟡 Intermediate | `Tutorial` | Stateful agents as graphs: chatbots, ReAct, RAG, memory, workflows, subgraphs | [`langgraph/`](./langgraph) |
-| [Model Context Protocol (MCP)](#model-context-protocol-mcp) | [MCP crash course](#mcp-crash-course) | 🟡 Intermediate | `Course` | MCP servers and clients in Python, with OpenAI, Docker, and lifecycle management | [`mcp-crash-course/`](./mcp-crash-course) |
-| [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Redis basics](#redis-basics) | 🟢 Beginner | `Tutorial` | Redis strings and lists from Node.js and Python | [`redis-basics/`](./redis-basics) |
-| [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Redis agent memory](#redis-agent-memory) | 🟡 Intermediate | `Tutorial` | Short-term and long-term memory for LangGraph agents on Redis | [`redis-agent-memory/`](./redis-agent-memory) |
-| [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Knowledge graph](#knowledge-graph) | 🟡 Intermediate | `Tutorial` | A graph built from text with an LLM, plus a Neo4j quickstart | [`knowledge-graph/`](./knowledge-graph) |
-| [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Agentic RAG with Redis](#agentic-rag-with-redis) | 🔴 Advanced | `Project` | A RAG graph on a Redis vector store with query rewriting and relevance grading | [`agentic-rag-redis/`](./agentic-rag-redis) |
-| [Prompting and context engineering](#prompting-and-context-engineering) | [Official prompting guides](#official-prompting-guides) | 🟢 Beginner | `Reference` | Prompting guides from 15 model providers, with offline PDFs | [`ai-dev-prompts/`](./ai-dev-prompts) |
-| [Prompting and context engineering](#prompting-and-context-engineering) | [Context engineering](#context-engineering) | 🟡 Intermediate | `Reference` | A PRP workflow and template for driving AI coding assistants | [`context-engineering/`](./context-engineering) |
-| [AI applications](#ai-applications) | [ElevenLabs voice agent](#elevenlabs-voice-agent) | 🟡 Intermediate | `Project` | A live clinic voice agent that looks up patients and books appointments | [`elevenlabs-voice-agent/`](./elevenlabs-voice-agent) |
-| [AI applications](#ai-applications) | [AI code detector](#ai-code-detector) | 🔴 Advanced | `Project` | An Express service that asks Claude if code looks AI-generated, with GitHub webhooks | [`ai-code-detector/`](./ai-code-detector) |
-| [APIs and integrations](#apis-and-integrations) | [FastAPI authentication](#fastapi-authentication) | 🟢 Beginner | `Project` | Argon2 password hashing and bearer-token login | [`fastapi-authentication/`](./fastapi-authentication) |
-| [APIs and integrations](#apis-and-integrations) | [Webhooks](#webhooks) | 🟢 Beginner | `Tutorial` | An order notification system with FastAPI webhooks | [`webhooks/`](./webhooks) |
-| [APIs and integrations](#apis-and-integrations) | [GitHub sync](#github-sync) | 🔴 Advanced | `Project` | A GitHub dashboard: React client, FastAPI server, and a Kafka pipeline | [`github-sync/`](./github-sync) |
-| [Deployment and MLOps](#deployment-and-mlops) | [AWS EC2 with FastAPI](#aws-ec2-with-fastapi) | 🟢 Beginner | `Tutorial` | Deploy a FastAPI bookstore to EC2 behind NGINX, or to Lambda | [`aws-ec2-fastapi/`](./aws-ec2-fastapi) |
-| [Deployment and MLOps](#deployment-and-mlops) | [ML pipeline on GKE](#ml-pipeline-on-gke) | 🟡 Intermediate | `Project` | Train, serve with Flask, and deploy to GKE with GitHub Actions | [`mlops-github-actions-gke/`](./mlops-github-actions-gke) |
-| [Deployment and MLOps](#deployment-and-mlops) | [RAG on Kubernetes](#rag-on-kubernetes) | 🔴 Advanced | `Project` | A RAG API on Kubernetes with Prometheus monitoring | [`rag-on-kubernetes/`](./rag-on-kubernetes) |
-| [Model training](#model-training) | [Hugging Face fine-tuning](#hugging-face-fine-tuning) | 🔴 Advanced | `Tutorial` | Fine-tune Qwen3-0.6B for ticket routing and compare metrics | [`huggingface-finetuning/`](./huggingface-finetuning) |
+| Area | Module | What you build | Folder |
+| :--- | :--- | :--- | :--- |
+| [Agents](#agents) | [OpenAI Agents SDK in TypeScript](#openai-agents-sdk-in-typescript) | A first agent, agent-as-tool, and dynamic instructions in TypeScript | [`agent-sdk-ts/`](./agent-sdk-ts) |
+| [Agents](#agents) | [OpenAI Agents SDK](#openai-agents-sdk) | Agents in Python, from one agent to guardrails, managers, routers, and triage | [`openai-agents/`](./openai-agents) |
+| [Agents](#agents) | [LangGraph](#langgraph) | Stateful agents as graphs: chatbots, ReAct, RAG, memory, workflows, subgraphs | [`langgraph/`](./langgraph) |
+| [Model Context Protocol (MCP)](#model-context-protocol-mcp) | [MCP crash course](#mcp-crash-course) | MCP servers and clients in Python, with OpenAI, Docker, and lifecycle management | [`mcp-crash-course/`](./mcp-crash-course) |
+| [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Redis basics](#redis-basics) | Redis strings and lists from Node.js and Python | [`redis-basics/`](./redis-basics) |
+| [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Redis agent memory](#redis-agent-memory) | Short-term and long-term memory for LangGraph agents on Redis | [`redis-agent-memory/`](./redis-agent-memory) |
+| [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Knowledge graph](#knowledge-graph) | A graph built from text with an LLM, plus a Neo4j quickstart | [`knowledge-graph/`](./knowledge-graph) |
+| [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Agentic RAG with Redis](#agentic-rag-with-redis) | A RAG graph on a Redis vector store with query rewriting and relevance grading | [`agentic-rag-redis/`](./agentic-rag-redis) |
+| [Prompting and context engineering](#prompting-and-context-engineering) | [Official prompting guides](#official-prompting-guides) | Prompting guides from 15 model providers, with offline PDFs | [`ai-dev-prompts/`](./ai-dev-prompts) |
+| [Prompting and context engineering](#prompting-and-context-engineering) | [Context engineering](#context-engineering) | A PRP workflow and template for driving AI coding assistants | [`context-engineering/`](./context-engineering) |
+| [AI applications](#ai-applications) | [ElevenLabs voice agent](#elevenlabs-voice-agent) | A live clinic voice agent that looks up patients and books appointments | [`elevenlabs-voice-agent/`](./elevenlabs-voice-agent) |
+| [AI applications](#ai-applications) | [AI code detector](#ai-code-detector) | An Express service that asks Claude if code looks AI-generated, with GitHub webhooks | [`ai-code-detector/`](./ai-code-detector) |
+| [APIs and integrations](#apis-and-integrations) | [FastAPI authentication](#fastapi-authentication) | Argon2 password hashing and bearer-token login | [`fastapi-authentication/`](./fastapi-authentication) |
+| [APIs and integrations](#apis-and-integrations) | [Webhooks](#webhooks) | An order notification system with FastAPI webhooks | [`webhooks/`](./webhooks) |
+| [APIs and integrations](#apis-and-integrations) | [GitHub sync](#github-sync) | A GitHub dashboard: React client, FastAPI server, and a Kafka pipeline | [`github-sync/`](./github-sync) |
+| [Deployment and MLOps](#deployment-and-mlops) | [AWS EC2 with FastAPI](#aws-ec2-with-fastapi) | Deploy a FastAPI bookstore to EC2 behind NGINX, or to Lambda | [`aws-ec2-fastapi/`](./aws-ec2-fastapi) |
+| [Deployment and MLOps](#deployment-and-mlops) | [ML pipeline on GKE](#ml-pipeline-on-gke) | Train, serve with Flask, and deploy to GKE with GitHub Actions | [`mlops-github-actions-gke/`](./mlops-github-actions-gke) |
+| [Deployment and MLOps](#deployment-and-mlops) | [RAG on Kubernetes](#rag-on-kubernetes) | A RAG API on Kubernetes with Prometheus monitoring | [`rag-on-kubernetes/`](./rag-on-kubernetes) |
+| [Model training](#model-training) | [Hugging Face fine-tuning](#hugging-face-fine-tuning) | Fine-tune Qwen3-0.6B for ticket routing and compare metrics | [`huggingface-finetuning/`](./huggingface-finetuning) |
 
 ## Prerequisites at a glance
 
-What each module needs before you run it. Put keys in a `.env` in the module's folder; never commit it.
+What each module needs before you run it. Put keys in a `.env` in the module's folder; never commit it. Most Python modules use [uv](https://docs.astral.sh/uv/) and Python 3.13 or newer; the TypeScript modules need a current Node.js LTS.
 
 | Module | Keys and accounts | Services and tools |
 | :--- | :--- | :--- |
@@ -148,58 +131,17 @@ Build agents that reason, call tools, and hand off work. Two SDKs and one graph 
 
 **Level:** 🟢 Beginner · **Type:** `Tutorial` · **Folder:** [`agent-sdk-ts/`](./agent-sdk-ts)
 
-The OpenAI Agents SDK from TypeScript. Three short scripts, each one idea.
+The OpenAI Agents SDK from TypeScript. Three short scripts, each one idea: your first agent, one agent used as a tool by another, and instructions that change at run time.
 
-| File | What it shows |
-| :--- | :--- |
-| `helloWorld.js` | Your first agent |
-| `agentTool.js` | Use one agent as a tool for another |
-| `dynamicInstructions.js` | Change an agent's instructions at run time |
-
-**Run**
-
-```bash
-cd agent-sdk-ts
-npm install
-# Add OPENAI_API_KEY to .env
-node helloWorld.js
-```
-
-**Depends on**
-
-- A current Node.js LTS.
-- An OpenAI API key.
-- `@openai/agents`, `zod`, and `dotenv` (installed by `npm install`).
+📘 **[Full guide: `agent-sdk-ts/README.md`](./agent-sdk-ts/README.md)**
 
 ### OpenAI Agents SDK
 
 **Level:** 🟡 Intermediate · **Type:** `Tutorial` · **Folder:** [`openai-agents/`](./openai-agents)
 
-The OpenAI Agents SDK in Python, from first agent to multi-agent routing.
+The OpenAI Agents SDK in Python, from first agent to multi-agent routing: guardrails, graph visualization, a manager agent, and router and triage patterns.
 
-| Path | What it shows |
-| :--- | :--- |
-| `Agent SDK/agents-sdk-intro.py` | The SDK in one file |
-| `Agent/01_Simple_Agent.py` | A single agent and a runner |
-| `Agent/02_Graph_Visualization.py` | Drawing the agent graph |
-| `Agent/03_Guardrails.py` | An input guardrail that flags churn-risk messages |
-| `Agent/04_Manager_Agent.py` | A manager agent that delegates to others |
-| `Agentic Patterns/1. Router Agent.py` | Route a request to the right specialist |
-| `Agentic Patterns/2. Triage Agent.py` | Triage, then hand off |
-
-**Run**
-
-```bash
-cd openai-agents
-uv pip install openai-agents python-dotenv pydantic
-# Add OPENAI_API_KEY to .env
-python Agent/01_Simple_Agent.py
-```
-
-**Depends on**
-
-- A recent Python 3.
-- An OpenAI API key.
+📘 **[Full guide: `openai-agents/README.md`](./openai-agents/README.md)**
 
 ### LangGraph
 
@@ -207,30 +149,7 @@ python Agent/01_Simple_Agent.py
 
 Stateful agents as explicit graphs. Each folder adds one idea: a basic graph, a tool-calling chatbot, ReAct, RAG, memory, a drafting agent, and the workflow patterns from Anthropic's agent guide.
 
-| Folder | Contents |
-| :--- | :--- |
-| `Basics/` | Your first graph |
-| `Chatbot/` | A chatbot with tools |
-| `Agent/` | `Agent_Bot`, `ReAct_Bot`, `Memory_Bot`, `RAG`, and `Drafter` |
-| `Workflows + Agents/` | Augmented LLM, prompt chaining, parallelization |
-| `Subgraphs/` | Graphs nested inside graphs |
-| `Advanced AI Agent/` | A larger agent (`main.py`) with its own `pyproject.toml` |
-
-**Run**
-
-```bash
-cd langgraph
-uv pip install -r Basics/requirements.txt
-# Add OPENAI_API_KEY to .env
-python Agent/ReAct_Bot.py
-```
-
-Each folder with a `requirements.txt` lists its own extra packages.
-
-**Depends on**
-
-- A recent Python 3.
-- An OpenAI API key.
+📘 **[Full guide: `langgraph/README.md`](./langgraph/README.md)**
 
 ---
 
@@ -260,16 +179,6 @@ The Model Context Protocol (MCP) gives LLMs a standard way to connect to externa
 | 6. [Running with Docker](./mcp-crash-course/README.md#6-running-with-docker) | An SSE server in a container |
 | 7. [Lifecycle management](./mcp-crash-course/README.md#7-lifecycle-management) | Initialization, operation, termination, and the lifespan object |
 
-**Quick start**
-
-```bash
-cd mcp-crash-course
-uv pip install -r requirements.txt
-mcp dev 3-simple-server-setup/server.py   # try a server in the MCP Inspector
-```
-
-**Depends on:** Python 3, an `OPENAI_API_KEY` for lesson 4, and Docker for lesson 6.
-
 📘 **[Full course: `mcp-crash-course/README.md`](./mcp-crash-course/README.md)**
 
 ---
@@ -293,60 +202,15 @@ Give agents memory and ground answers in your data: Redis data structures, conve
 
 Redis data structures from two languages. Start here before you give an agent memory.
 
-| Path | What it shows |
-| :--- | :--- |
-| `javascript/client.js` | Connect to Redis from Node.js |
-| `javascript/string.js` | String commands |
-| `javascript/list.js` | List commands |
-| `javascript/server.js` | Redis behind a small server |
-| `python/Redis.py` | The same ideas with `redis-py` |
-
-**Run**
-
-```bash
-# Start Redis first
-docker run -d -p 6379:6379 redis:7
-
-cd redis-basics
-python python/Redis.py
-```
-
-For the Node.js files, install the `redis` package (`npm install redis`) and run `node javascript/string.js`.
-
-**Depends on**
-
-- A running Redis on `localhost:6379`.
-- Python 3 with `redis`, or Node.js with `redis`.
+📘 **[Full guide: `redis-basics/README.md`](./redis-basics/README.md)**
 
 ### Redis agent memory
 
 **Level:** 🟡 Intermediate · **Type:** `Tutorial` · **Folder:** [`redis-agent-memory/`](./redis-agent-memory)
 
-Two LangGraph agents that remember.
+Two LangGraph agents that remember. One keeps the current conversation in Redis so a thread survives restarts; the other stores facts across threads and recalls them in later sessions.
 
-| File | What it does |
-| :--- | :--- |
-| `short_term_memory.py` | Keeps the current conversation in Redis, so a thread survives restarts |
-| `long_term_memory_agent.py` | Stores facts across threads and recalls them in later sessions |
-
-**Run**
-
-```bash
-# Start Redis first
-docker run -d -p 6379:6379 redis:7
-
-cd redis-agent-memory
-uv pip install langchain_openai langgraph langgraph-checkpoint-redis redis
-export REDIS_URI=redis://localhost:6379
-export OPENAI_API_KEY=...
-python long_term_memory_agent.py
-```
-
-**Depends on**
-
-- A running Redis, reachable at `REDIS_URI`.
-- An OpenAI API key.
-- Read [Redis basics](#redis-basics) first if Redis is new to you.
+📘 **[Full guide: `redis-agent-memory/README.md`](./redis-agent-memory/README.md)**
 
 ### Knowledge graph
 
@@ -354,25 +218,7 @@ python long_term_memory_agent.py
 
 Turn text into entities and relations, then query the graph instead of searching chunks. This module pairs an LLM graph extractor with a Neo4j quickstart. Stack: LangChain, OpenAI, Neo4j, PyVis.
 
-| Path | What it does |
-| :--- | :--- |
-| [`KG.py`](./knowledge-graph/KG.py) | Extracts a graph from documents with `LLMGraphTransformer` and draws it with PyVis |
-| [`Neo4j/Quickstart.py`](./knowledge-graph/Neo4j/Quickstart.py) | Connects to Neo4j and runs a first query |
-| [`config.py`](./knowledge-graph/config.py) | Reads your API keys from `.env` |
-
-**Run**
-
-```bash
-cd knowledge-graph
-uv pip install langchain-experimental langchain-openai pyvis neo4j python-dotenv
-# Add OPENAI_API_KEY to .env
-python KG.py
-```
-
-**Depends on**
-
-- An OpenAI API key.
-- A running Neo4j instance for `Neo4j/Quickstart.py`.
+📘 **[Full guide: `knowledge-graph/README.md`](./knowledge-graph/README.md)**
 
 ### Agentic RAG with Redis
 
@@ -380,31 +226,7 @@ python KG.py
 
 An agentic RAG pipeline built as a LangGraph graph on a Redis vector store, with query rewriting and relevance grading. The sample question asks what Lilian Weng wrote about the types of agent memory.
 
-| Path | Role |
-| :--- | :--- |
-| `src/agents/` | The graph: `nodes.py`, `edges.py`, `graph.py`, and a Mermaid diagram helper |
-| `src/retriever.py` | Redis-backed retriever |
-| `src/cache/` | Redis connection and cache |
-| `src/config/` | OpenAI and app settings |
-| `src/main.py` | Streams a question through the graph |
-
-**Run**
-
-```bash
-# Start Redis first
-docker run -d -p 6379:6379 redis/redis-stack:latest
-
-cd agentic-rag-redis
-uv sync
-# Add OPENAI_API_KEY and your Redis URL to .env
-cd src && uv run python main.py
-```
-
-**Depends on**
-
-- Python 3.13 or newer (see `.python-version`).
-- A Redis with vector search support. Redis Stack works.
-- An OpenAI API key.
+📘 **[Full guide: `agentic-rag-redis/README.md`](./agentic-rag-redis/README.md)**
 
 ---
 
@@ -612,28 +434,7 @@ Complete apps where the model is the product: a live voice agent and an AI-gener
 
 A live voice agent for a clinic front desk. You speak, the agent answers, and it calls client-side tools to look up patient records and book appointments.
 
-| File | Role |
-| :--- | :--- |
-| `main.py` | Opens a conversation with your ElevenLabs agent and wires the microphone and speaker |
-| `patient_records.py` | The patient lookup the agent calls |
-| `setup_tools.py` | Registers the tools with your ElevenLabs agent |
-| `Makefile` | `install`, `setup`, `tools`, `run` |
-
-**Run**
-
-```bash
-cd elevenlabs-voice-agent
-make setup      # installs PortAudio and Python packages, creates .env
-# Add ELEVENLABS_API_KEY and ELEVENLABS_AGENT_ID to .env
-make tools      # registers the tools
-make run        # starts the conversation
-```
-
-**Depends on**
-
-- An ElevenLabs account with a Conversational AI agent.
-- A microphone and speakers.
-- PortAudio (`make install` handles macOS, Linux, and Windows).
+📘 **[Full guide: `elevenlabs-voice-agent/README.md`](./elevenlabs-voice-agent/README.md)**
 
 ### AI code detector
 
@@ -641,28 +442,7 @@ make run        # starts the conversation
 
 An Express and TypeScript backend that asks Claude whether a piece of code looks AI-generated. It also takes GitHub webhooks, so it can check pull requests and commits as they arrive.
 
-| Path | Role |
-| :--- | :--- |
-| `backend/src/services/detect.ts` | Sends code to Claude and parses the JSON verdict |
-| `backend/src/services/github.ts` and `routes/github.ts` | GitHub integration |
-| `backend/src/utils/githubSignature.ts` | Verifies webhook signatures |
-| `backend/src/db/db.ts` | PostgreSQL connection |
-| `postman/` | A Postman collection with sample requests |
-
-**Run**
-
-```bash
-cd ai-code-detector/backend
-npm install
-# Add ANTHROPIC_API_KEY and DATABASE_URL to .env
-npm run dev
-```
-
-**Depends on**
-
-- A current Node.js LTS.
-- An Anthropic API key.
-- A PostgreSQL database.
+📘 **[Full guide: `ai-code-detector/README.md`](./ai-code-detector/README.md)**
 
 ---
 
@@ -684,27 +464,7 @@ The backend plumbing around AI apps: authentication, webhooks, and event streami
 
 A small FastAPI service with real password handling. Passwords hash with Argon2. Users log in and get a bearer token.
 
-| Endpoint | What it does |
-| :--- | :--- |
-| `POST /users/` | Create a user |
-| `POST /token` | Log in with form credentials and get a token |
-| `GET /users/me` | Return the current user. Needs a bearer token |
-
-**Run**
-
-```bash
-cd fastapi-authentication
-uv sync
-source .venv/bin/activate
-uvicorn main:app --reload
-```
-
-Open `http://localhost:8000/docs` to try the endpoints.
-
-**Depends on**
-
-- Python 3.13 or newer.
-- The database set in `database.py`. Check `.env` for the connection string.
+📘 **[Full guide: `fastapi-authentication/README.md`](./fastapi-authentication/README.md)**
 
 ### Webhooks
 
@@ -712,60 +472,7 @@ Open `http://localhost:8000/docs` to try the endpoints.
 
 A practical webhook example with FastAPI: an order notification system. When a customer places an order, the system notifies an inventory system (to update stock), an email service (to send confirmation), and an analytics service (to track metrics).
 
-| File | Role |
-| :--- | :--- |
-| `receiver.py` | Webhook receiver: the services that get notified |
-| `sender.py` | Webhook sender: the order system that sends notifications |
-| `test.py` | Demo script |
-
-```
-Customer places order
-        ↓
-Order System (sender.py)
-        ↓
-Sends webhooks to all subscribers
-        ↓
-    ┌───┴───┬────────┐
-    ↓       ↓        ↓
-Inventory Email  Analytics
-(receiver.py endpoints)
-```
-
-**Run**
-
-```bash
-cd webhooks
-uvicorn receiver:app --port 8000 --reload   # terminal 1
-uvicorn sender:app --port 8001 --reload     # terminal 2
-python test.py                              # terminal 3
-```
-
-Interactive docs: receiver at `http://localhost:8000/docs`, sender at `http://localhost:8001/docs`.
-
-**Test by hand**
-
-```bash
-# 1. Register webhook subscribers
-curl -X POST http://localhost:8001/subscribe \
-  -H "Content-Type: application/json" \
-  -d '{"url": "http://localhost:8000/webhook/inventory", "name": "Inventory"}'
-
-curl -X POST http://localhost:8001/subscribe \
-  -H "Content-Type: application/json" \
-  -d '{"url": "http://localhost:8000/webhook/email", "name": "Email"}'
-
-# 2. Create an order (triggers webhooks)
-curl -X POST http://localhost:8001/order \
-  -H "Content-Type: application/json" \
-  -d '{"customer_email": "customer@example.com", "items": ["Laptop", "Mouse"], "total": 1050.00}'
-
-# 3. Check subscribers
-curl http://localhost:8001/subscribers
-```
-
-**Depends on**
-
-- Python 3 with the packages in `webhooks/requirements.txt`.
+📘 **[Full guide: `webhooks/README.md`](./webhooks/README.md)**
 
 ### GitHub sync
 
@@ -778,28 +485,6 @@ A full-stack GitHub dashboard. A React client signs you in and shows commits, pu
 | Client | `github-sync/client/` | React, Vite, Bun or npm |
 | API server | `github-sync/server/Github/` | FastAPI, httpx, Pydantic |
 | Event pipeline | `github-sync/server/Kafka/` | Kafka and ZooKeeper in Docker |
-
-**Quick start**
-
-```bash
-# Terminal 1: Kafka and the API server (from the repo root)
-cd github-sync/server
-docker compose up -d
-uv sync
-cp .env.example .env   # add GITHUB_TOKEN
-cd Github && uv run python main.py   # docs at http://localhost:8000/docs
-
-# Terminal 2: the client (from the repo root)
-cd github-sync/client
-bun install            # or: npm install
-bun run dev            # or: npm run dev; opens http://localhost:3000
-
-# Optional: Kafka producer and consumer tests (from github-sync/server)
-uv run python Kafka/Producer.py
-uv run python Kafka/Consumer.py
-```
-
-**Depends on:** Docker, Python 3.13 or newer, Node.js LTS or Bun, and a `GITHUB_TOKEN`.
 
 📘 **[Full guide: `github-sync/README.md`](./github-sync/README.md)**: API endpoints, client sign-in (OAuth or token), project structure, and Kafka notes.
 
@@ -823,65 +508,7 @@ Get models and APIs into production: a VM, a CI/CD pipeline to Kubernetes, and a
 
 A simple FastAPI app that pretends to be a bookstore (`main.py`, `books.json`), and how to deploy it to AWS EC2 behind NGINX, or to AWS Lambda. More commands are in [`aws-ec2-fastapi/Run_Commands.md`](./aws-ec2-fastapi/Run_Commands.md).
 
-**Deploy to AWS EC2**
-
-1. Create an EC2 instance (`t2.micro`) with the latest stable Ubuntu AMI.
-2. [SSH into the instance](https://aws.amazon.com/blogs/compute/new-using-amazon-ec2-instance-connect-for-ssh-access-to-your-ec2-instances/) and install the dependencies:
-
-   ```bash
-   sudo apt-get update
-   sudo apt install -y python3-pip nginx
-   ```
-
-3. Copy the app to the instance (`main.py`, `books.json`, `requirements.txt`) and install its requirements.
-4. Add an NGINX site config. Replace the IP with your instance's public IP:
-
-   ```bash
-   sudo vim /etc/nginx/sites-enabled/fastapi_nginx
-   ```
-
-   ```
-   server {
-       listen 80;
-       server_name <YOUR_EC2_IP>;
-       location / {
-           proxy_pass http://127.0.0.1:8000;
-       }
-   }
-   ```
-
-5. Restart NGINX and start FastAPI:
-
-   ```bash
-   sudo service nginx restart
-   python3 -m uvicorn main:app
-   ```
-
-6. Allow HTTP traffic on port 80 in the instance's security group. Visit the public IP to reach the API.
-
-**Deploy to AWS Lambda**
-
-Add a Lambda handler with Mangum:
-
-```python
-from mangum import Mangum
-
-app = FastAPI()
-handler = Mangum(app)
-```
-
-Install the dependencies into a local folder, zip them, then add the app files:
-
-```bash
-pip install -t lib -r requirements.txt
-(cd lib; zip ../lambda_function.zip -r .)
-zip lambda_function.zip -u main.py
-zip lambda_function.zip -u books.json
-```
-
-**Depends on**
-
-- An AWS account. Never commit your `.pem` key file.
+📘 **[Full guide: `aws-ec2-fastapi/README.md`](./aws-ec2-fastapi/README.md)**
 
 ### ML pipeline on GKE
 
@@ -889,97 +516,15 @@ zip lambda_function.zip -u books.json
 
 A complete ML delivery loop. Data processing and training run as a pipeline. A Flask app serves the model. Docker packages it. A GitHub Actions workflow deploys it to Google Kubernetes Engine on every push to `main`.
 
-| Path | Role |
-| :--- | :--- |
-| `src/data_processing.py` | Reads `artifacts/raw/data.csv` and prepares train and test sets |
-| `src/model_training.py` | Trains a decision tree and reports accuracy, precision, recall, F1, and a confusion matrix |
-| `training_pipeline.py` | Runs both steps in order |
-| `application.py` and `templates/` | Flask app that serves predictions |
-| `Dockerfile` and `kubernetes-deployment.yaml` | Container and cluster config |
-| `.github/workflows/deploy.yml` | CI/CD to GKE |
-
-**Run**
-
-```bash
-cd mlops-github-actions-gke
-uv pip install -r requirements.txt
-python training_pipeline.py   # needs artifacts/raw/data.csv
-python application.py
-```
-
-GitHub only runs workflows from a repository's root `.github/workflows/`. To use the deploy workflow, copy it there, replace `<PROJECT_ID>` in `deploy.yml` and `kubernetes-deployment.yaml` with your GCP project ID, and set the GCP secrets it names.
-
-**Depends on**
-
-- A dataset at `artifacts/raw/data.csv`. The repo doesn't ship it.
-- A GCP project, a GKE cluster, and a service account for the deploy step. Never commit the key file.
-- Docker.
+📘 **[Full guide: `mlops-github-actions-gke/README.md`](./mlops-github-actions-gke/README.md)**
 
 ### RAG on Kubernetes
 
 **Level:** 🔴 Advanced · **Type:** `Project` · **Folder:** [`rag-on-kubernetes/`](./rag-on-kubernetes)
 
-A RAG API packaged for Kubernetes, with Prometheus monitoring and a faster retrieval pipeline.
+A RAG API packaged for Kubernetes, with Prometheus monitoring and a faster retrieval pipeline (hybrid dense and BM25 search, recursive chunking, an embedding cache). Runs locally with Docker or on Minikube.
 
-| Path | Role |
-| :--- | :--- |
-| `rag-app/` | FastAPI service with `/health`, `/ingest`, and `/query`. Uses OpenAI embeddings and an LLM, and a JSON vector store. Has a Dockerfile, Makefile, manifests in `k8s/`, and a Postman collection |
-| `monitoring/` | A `monitoring` namespace and a Prometheus deployment that scrapes the `rag-app` pods |
-| `python/` | Faster RAG: recursive chunking, hybrid dense and BM25 retrieval, and an embedding cache |
-
-**Run locally**
-
-```bash
-cd rag-on-kubernetes/rag-app
-cp .env.example .env   # add OPENAI_API_KEY
-
-# with Docker
-docker compose up --build
-
-# or without Docker
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
-
-**Try it**
-
-```bash
-curl -X POST http://localhost:8000/ingest \
-  -H "Content-Type: application/json" \
-  -d '{"documents":[{"text":"Hello RAG","metadata":{"source":"demo"}}]}'
-
-curl -X POST http://localhost:8000/query \
-  -H "Content-Type: application/json" \
-  -d '{"query":"What is this about?"}'
-```
-
-**Run on Minikube**
-
-```bash
-cd rag-on-kubernetes/rag-app
-make minikube-start
-eval $(make minikube-docker-env)
-make docker-build
-make secret-create
-make apply
-make service
-```
-
-Then deploy monitoring from `rag-on-kubernetes/`:
-
-```bash
-kubectl apply -f monitoring/namespace.yaml
-kubectl apply -f monitoring/prometheus-config.yaml
-kubectl apply -f monitoring/deployment.yaml
-minikube service prometheus -n monitoring
-```
-
-**Depends on**
-
-- Docker.
-- Minikube and `kubectl`, or another Kubernetes cluster.
-- An OpenAI API key.
+📘 **[Full guide: `rag-on-kubernetes/README.md`](./rag-on-kubernetes/README.md)**
 
 ---
 

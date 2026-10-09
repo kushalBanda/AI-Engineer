@@ -1,34 +1,18 @@
 <!--
-Copy this into the root README.md, under the area it belongs to
-(Agents, MCP, Memory and RAG, Prompting, AI applications, APIs and
-integrations, Deployment and MLOps, Model training). Also add it to
-the area's module table, the "Module map", "Prerequisites at a glance",
-and the Contents list. Only courses, copy-out templates, and multi-part
-apps get their own README; see CONTRIBUTING.md.
+Root README section for a module. Copy it into the root README.md,
+under the area it belongs to (Agents, MCP, Memory and RAG, Prompting,
+AI applications, APIs and integrations, Deployment and MLOps, Model
+training). Also add the module to the area's module table, the
+"Module map", "Prerequisites at a glance", and the Contents list.
+
+No code blocks here. Run steps and code go in the module's own README
+(.github/MODULE_README_TEMPLATE.md).
 -->
 
 ### Module name
 
 **Level:** 🟢 Beginner · **Type:** `Tutorial` · **Folder:** [`module-name/`](./module-name)
 
-One or two sentences. Say what the module builds and why it is useful.
+Two or three sentences. Say what the module builds, what it shows, and why it is useful.
 
-| Path | What it shows |
-| :--- | :--- |
-| `path/to/file.py` | What this file does |
-
-**Run**
-
-```bash
-cd module-name
-cp .env.example .env   # only if the module reads a .env
-uv run python path/to/file.py
-```
-
-State the exact commands. A reader must run them from a clean clone.
-
-**Depends on**
-
-- Services the module needs, for example Redis on `localhost:6379`.
-- API keys the module reads, by name only.
-- Language and tool versions.
+📘 **[Full guide: `module-name/README.md`](./module-name/README.md)**
