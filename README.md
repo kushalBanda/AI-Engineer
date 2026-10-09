@@ -8,7 +8,7 @@ Runnable AI engineering modules, grouped by what you want to build: agents, MCP,
 
 Reading about AI engineering only goes so far. These modules run. You'll find:
 
-- **19 modules** across 8 areas, each tagged with a level so you can pick your entry point
+- **18 modules** across 8 areas, each tagged with a level so you can pick your entry point
 - Agents in LangGraph and the OpenAI Agents SDK, plus a 7-lesson MCP course
 - Redis for memory and retrieval, and a Neo4j knowledge graph
 - Deploys to AWS, GKE, and Kubernetes
@@ -27,7 +27,6 @@ Reading about AI engineering only goes so far. These modules run. You'll find:
 - [Model Context Protocol (MCP)](#model-context-protocol-mcp)
   - [MCP crash course](#mcp-crash-course)
 - [Memory, retrieval, and RAG](#memory-retrieval-and-rag)
-  - [Redis basics](#redis-basics)
   - [Redis agent memory](#redis-agent-memory)
   - [Knowledge graph](#knowledge-graph)
   - [Agentic RAG with Redis](#agentic-rag-with-redis)
@@ -58,7 +57,6 @@ Reading about AI engineering only goes so far. These modules run. You'll find:
 | [Agents](#agents) | [OpenAI Agents SDK](#openai-agents-sdk) | Agents in Python, from one agent to guardrails, managers, routers, and triage | [`openai-agents/`](./openai-agents) |
 | [Agents](#agents) | [LangGraph](#langgraph) | Stateful agents as graphs: chatbots, ReAct, RAG, memory, workflows, subgraphs | [`langgraph/`](./langgraph) |
 | [Model Context Protocol (MCP)](#model-context-protocol-mcp) | [MCP crash course](#mcp-crash-course) | MCP servers and clients in Python, with OpenAI, Docker, and lifecycle management | [`mcp-crash-course/`](./mcp-crash-course) |
-| [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Redis basics](#redis-basics) | Redis strings and lists from Node.js and Python | [`redis-basics/`](./redis-basics) |
 | [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Redis agent memory](#redis-agent-memory) | Short-term and long-term memory for LangGraph agents on Redis | [`redis-agent-memory/`](./redis-agent-memory) |
 | [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Knowledge graph](#knowledge-graph) | A graph built from text with an LLM, plus a Neo4j quickstart | [`knowledge-graph/`](./knowledge-graph) |
 | [Memory, retrieval, and RAG](#memory-retrieval-and-rag) | [Agentic RAG with Redis](#agentic-rag-with-redis) | A RAG graph on a Redis vector store with query rewriting and relevance grading | [`agentic-rag-redis/`](./agentic-rag-redis) |
@@ -84,7 +82,6 @@ What each module needs before you run it. Put keys in a `.env` in the module's f
 | [OpenAI Agents SDK](#openai-agents-sdk) | `OPENAI_API_KEY` | Python 3 |
 | [LangGraph](#langgraph) | `OPENAI_API_KEY` | Python 3 |
 | [MCP crash course](#mcp-crash-course) | `OPENAI_API_KEY` (lesson 4) | Python 3, Docker (lesson 6) |
-| [Redis basics](#redis-basics) | — | Redis, Python 3 or Node.js |
 | [Redis agent memory](#redis-agent-memory) | `OPENAI_API_KEY`, `REDIS_URI` | Redis |
 | [Knowledge graph](#knowledge-graph) | `OPENAI_API_KEY` | Neo4j (quickstart) |
 | [Agentic RAG with Redis](#agentic-rag-with-redis) | `OPENAI_API_KEY`, Redis URL | Redis Stack, Python 3.13+ |
@@ -107,7 +104,7 @@ Suggested routes through the repo. Skip anything you already know.
 | Goal | Path |
 | :--- | :--- |
 | Build your first agent | [OpenAI Agents SDK](#openai-agents-sdk) → [LangGraph](#langgraph) → [MCP crash course](#mcp-crash-course) |
-| Give agents memory and knowledge | [Redis basics](#redis-basics) → [Redis agent memory](#redis-agent-memory) → [Agentic RAG with Redis](#agentic-rag-with-redis) → [Knowledge graph](#knowledge-graph) |
+| Give agents memory and knowledge | [Redis agent memory](#redis-agent-memory) → [Agentic RAG with Redis](#agentic-rag-with-redis) → [Knowledge graph](#knowledge-graph) |
 | Ship an AI service | [FastAPI authentication](#fastapi-authentication) → [AWS EC2 with FastAPI](#aws-ec2-with-fastapi) → [ML pipeline on GKE](#ml-pipeline-on-gke) → [RAG on Kubernetes](#rag-on-kubernetes) |
 | Prompt better | [Official prompting guides](#official-prompting-guides) → [Context engineering](#context-engineering) |
 | Build a complete app | [Webhooks](#webhooks) → [ElevenLabs voice agent](#elevenlabs-voice-agent) → [AI code detector](#ai-code-detector) → [GitHub sync](#github-sync) |
@@ -185,24 +182,15 @@ The Model Context Protocol (MCP) gives LLMs a standard way to connect to externa
 
 ## Memory, retrieval, and RAG
 
-Give agents memory and ground answers in your data: Redis data structures, conversational memory, knowledge graphs, and agentic RAG.
+Give agents memory and ground answers in your data: conversational memory, knowledge graphs, and agentic RAG.
 
 | Module | Level | Type |
 | :--- | :--- | :--- |
-| [Redis basics](#redis-basics) | 🟢 Beginner | `Tutorial` |
 | [Redis agent memory](#redis-agent-memory) | 🟡 Intermediate | `Tutorial` |
 | [Knowledge graph](#knowledge-graph) | 🟡 Intermediate | `Tutorial` |
 | [Agentic RAG with Redis](#agentic-rag-with-redis) | 🔴 Advanced | `Project` |
 
-**Where to start:** New to Redis? Do **Redis basics** first, then **Redis agent memory**. For retrieval, go to **Agentic RAG with Redis** or **Knowledge graph**. A production RAG deploy lives in [Deployment and MLOps](#rag-on-kubernetes).
-
-### Redis basics
-
-**Level:** 🟢 Beginner · **Type:** `Tutorial` · **Folder:** [`redis-basics/`](./redis-basics)
-
-Redis data structures from two languages. Start here before you give an agent memory.
-
-📘 **[Full guide: `redis-basics/README.md`](./redis-basics/README.md)**
+**Where to start:** New to Redis? Start with **Redis agent memory**. For retrieval, go to **Agentic RAG with Redis** or **Knowledge graph**. A production RAG deploy lives in [Deployment and MLOps](#rag-on-kubernetes).
 
 ### Redis agent memory
 

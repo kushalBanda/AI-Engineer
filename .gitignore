@@ -199,3 +199,6 @@ node_modules/
 *service-account*.json
 mlops-github-actions-gke/artifacts/
 mlops-github-actions-gke/logs/
+
+# Private keys
+*.pem

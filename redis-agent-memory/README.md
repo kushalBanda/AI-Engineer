@@ -28,4 +28,3 @@ python long_term_memory_agent.py
 
 - A running Redis, reachable at `REDIS_URI`.
 - An OpenAI API key.
-- Read [Redis basics](../redis-basics/README.md) first if Redis is new to you.

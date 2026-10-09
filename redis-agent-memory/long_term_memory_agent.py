@@ -6,7 +6,6 @@ Prereqs (example):
 Ensure Redis is running at REDIS_URI before running this script.
 """
 
-from __future__ import annotations
 
 import getpass
 import os

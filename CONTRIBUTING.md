@@ -68,7 +68,7 @@ Never commit a secret. This includes API keys, tokens, passwords, and service ac
 ## Pull requests
 
 1. Keep each PR to one change.
-2. Use a clear title, for example `fix: correct the Redis port in redis-basics`.
+2. Use a clear title, for example `fix: correct the Redis port in redis-agent-memory`.
 3. Fill in the PR template.
 4. Confirm that the checks pass.
 
