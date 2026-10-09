@@ -24,9 +24,10 @@ For a new module, open a **Module proposal** issue first. This avoids work on a 
 2. Make the run steps work from a clean clone. Test them before you open the PR.
 3. Add a `.env.example` if the module reads a `.env`. List variable names only.
 4. Document the module in the root `README.md`. Don't add a `README.md` inside the module folder.
-   - Copy [`.github/MODULE_SECTION_TEMPLATE.md`](.github/MODULE_SECTION_TEMPLATE.md) under the right tier: Beginner, Intermediate, or Advanced modules.
-   - Add a row to the **Projects by difficulty** table with the tier, type tag, topic, and folder.
-   - Add the section to the table of contents.
+   - Copy [`.github/MODULE_SECTION_TEMPLATE.md`](.github/MODULE_SECTION_TEMPLATE.md) into the area it belongs to: Agents, Model Context Protocol (MCP), Memory, retrieval, and RAG, Prompting and context engineering, AI applications, APIs and integrations, Deployment and MLOps, or Model training. If none fits, propose a new area in your PR.
+   - Add it to the area's module table, the **Module map**, and **Prerequisites at a glance**.
+   - Add the section to the **Contents** list.
+   - Areas are grouped by topic, not by level or folder order. Give each module a level label instead.
 
 ### Type tags
 
@@ -37,9 +38,9 @@ For a new module, open a **Module proposal** issue first. This avoids work on a 
 | `Course` | An ordered series of lessons |
 | `Reference` | Material to read |
 
-### Tiers
+### Levels
 
-| Tier | Use it for |
+| Level | Use it for |
 | :--- | :--- |
 | Beginner | One idea, or a small deploy |
 | Intermediate | Agents, memory, voice, and pipelines |
