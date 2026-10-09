@@ -48,7 +48,7 @@
   ```
 
 ### 📚 Documentation & Explainability
-- **Update `README.md`** when new features are added, dependencies change, or setup steps are modified.
+- **Update the root `README.md`** (this repo's only README; see the module's section) when new features are added, dependencies change, or setup steps are modified. Don't create README files inside module folders.
 - **Comment non-obvious code** and ensure everything is understandable to a mid-level developer.
 - When writing complex logic, **add an inline `# Reason:` comment** explaining the why, not just the what.
 
