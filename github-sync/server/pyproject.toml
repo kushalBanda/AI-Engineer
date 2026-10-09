@@ -2,7 +2,6 @@
 name = "github-sync"
 version = "0.1.0"
 description = "Add your description here"
-readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "kafka-python-ng>=2.2.3",

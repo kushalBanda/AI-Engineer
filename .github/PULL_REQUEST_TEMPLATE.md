@@ -12,7 +12,6 @@
 ## Checklist
 
 - [ ] The change touches one module, or one topic.
-- [ ] The run steps in the module README work from a clean clone.
-- [ ] A new module has a `README.md` with What, Run, Article, and Depends on.
-- [ ] A new module is in the root `README.md`, in the right tier, with a type tag.
+- [ ] The module's run steps in the root `README.md` work from a clean clone.
+- [ ] A new module has a section in the root `README.md` (from `.github/MODULE_SECTION_TEMPLATE.md`) and a row in the Projects by difficulty table. No README inside the module folder.
 - [ ] No secrets are in the diff. `.env` is not committed. `.env.example` has names only.

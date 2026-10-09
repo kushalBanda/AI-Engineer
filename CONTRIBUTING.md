@@ -1,11 +1,11 @@
 # Contributing
 
-Thanks for helping. This repo is a set of runnable AI engineering modules. Each top-level folder is one module.
+Thanks for helping. This repo is a set of runnable AI engineering modules. Each top-level folder is one module. All documentation lives in the root `README.md`; modules don't have their own README files.
 
 ## Ways to help
 
 - Fix a bug or a broken run step in a module.
-- Improve a module README.
+- Improve a module's section in the root `README.md`.
 - Add a new module.
 - Report a problem with an [issue](../../issues/new/choose).
 
@@ -21,13 +21,12 @@ For a new module, open a **Module proposal** issue first. This avoids work on a 
 ## Add a module
 
 1. Create one new top-level folder. Use lowercase words with hyphens, for example `vector-search-basics`.
-2. Add a `README.md`. Copy [`.github/MODULE_README_TEMPLATE.md`](.github/MODULE_README_TEMPLATE.md). It has four sections: **What**, **Run**, **Article**, **Depends on**.
-3. Make the run steps work from a clean clone. Test them before you open the PR.
-4. Add a `.env.example` if the module reads a `.env`. List variable names only.
-5. Add the module to the root `README.md`:
-   - Put it in the right tier: Beginner, Intermediate, or Advanced.
-   - Put it under the right topic heading.
-   - Use this line format: `- [**Name**](./folder) · \`Type\` - description`.
+2. Make the run steps work from a clean clone. Test them before you open the PR.
+3. Add a `.env.example` if the module reads a `.env`. List variable names only.
+4. Document the module in the root `README.md`. Don't add a `README.md` inside the module folder.
+   - Copy [`.github/MODULE_SECTION_TEMPLATE.md`](.github/MODULE_SECTION_TEMPLATE.md) under the right tier: Beginner, Intermediate, or Advanced modules.
+   - Add a row to the **Projects by difficulty** table with the tier, type tag, topic, and folder.
+   - Add the section to the table of contents.
 
 ### Type tags
 
