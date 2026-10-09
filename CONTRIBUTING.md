@@ -1,11 +1,11 @@
 # Contributing
 
-Thanks for helping. This repo is a set of runnable AI engineering modules. Each top-level folder is one module. Documentation lives in the root `README.md`. Only a few large modules also have a README in their own folder (see below).
+Thanks for helping. This repo is a set of runnable AI engineering modules. Each top-level folder is one module. The root `README.md` is the map of all modules. A module with run steps or code also has its own `README.md` with the full guide (see below).
 
 ## Ways to help
 
 - Fix a bug or a broken run step in a module.
-- Improve a module's section in the root `README.md`.
+- Improve a module's README, or its section in the root `README.md`.
 - Add a new module.
 - Report a problem with an [issue](../../issues/new/choose).
 
@@ -23,7 +23,8 @@ For a new module, open a **Module proposal** issue first. This avoids work on a 
 1. Create one new top-level folder. Use lowercase words with hyphens, for example `vector-search-basics`.
 2. Make the run steps work from a clean clone. Test them before you open the PR.
 3. Add a `.env.example` if the module reads a `.env`. List variable names only.
-4. Document the module in the root `README.md`. Most modules don't get a `README.md` of their own (see [Module READMEs](#module-readmes)).
+4. If the module has run steps or code, add a `README.md` to its folder from [`.github/MODULE_README_TEMPLATE.md`](.github/MODULE_README_TEMPLATE.md) (see [Module READMEs](#module-readmes)).
+5. Add the module to the root `README.md`:
    - Copy [`.github/MODULE_SECTION_TEMPLATE.md`](.github/MODULE_SECTION_TEMPLATE.md) into the area it belongs to: Agents, Model Context Protocol (MCP), Memory, retrieval, and RAG, Prompting and context engineering, AI applications, APIs and integrations, Deployment and MLOps, or Model training. If none fits, propose a new area in your PR.
    - Add it to the area's module table, the **Module map**, and **Prerequisites at a glance**.
    - Add the section to the **Contents** list.
@@ -31,13 +32,12 @@ For a new module, open a **Module proposal** issue first. This avoids work on a 
 
 ### Module READMEs
 
-A module gets its own `README.md` only if it is one of these:
+The root `README.md` stays free of code. It says what each module builds, what it needs, and where to start.
 
-- **A course** with several lessons, like `mcp-crash-course/`.
-- **A template** people copy out as its own project, like `context-engineering/`.
-- **A multi-part app** with separate client, server, or pipeline parts, like `github-sync/`.
+- **A module with run steps or code** gets its own `README.md` with the full guide: files, run commands, examples, and dependencies. Its root section is a short summary and a 📘 link to that guide.
+- **A module with nothing to run**, such as a reading list or a notebook you open and run top to bottom, can live entirely in its root section. `ai-dev-prompts/` and `huggingface-finetuning/` work this way.
 
-Then the full guide goes in the module's README. The root section stays short: a summary, a quick start, and a 📘 link to the full guide. Keep the module's rows in the Module map and Prerequisites tables.
+Keep every module's rows in the Module map and Prerequisites tables either way.
 
 ### Type tags
 
