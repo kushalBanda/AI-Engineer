@@ -3,7 +3,8 @@ Copy this into the root README.md, under the area it belongs to
 (Agents, MCP, Memory and RAG, Prompting, AI applications, APIs and
 integrations, Deployment and MLOps, Model training). Also add it to
 the area's module table, the "Module map", "Prerequisites at a glance",
-and the Contents list. Modules don't have their own README.
+and the Contents list. Only courses, copy-out templates, and multi-part
+apps get their own README; see CONTRIBUTING.md.
 -->
 
 ### Module name

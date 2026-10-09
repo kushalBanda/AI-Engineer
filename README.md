@@ -2,7 +2,7 @@
 
 ![Python 3.13+](https://img.shields.io/badge/Python-3.13%2B-3776AB?style=flat-square&logo=python&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-5%2B-3178C6?style=flat-square&logo=typescript&logoColor=white) ![MIT license](https://img.shields.io/badge/License-MIT-3b82f6?style=flat-square)
 
-Runnable AI engineering modules, grouped by what you want to build: agents, MCP, memory and RAG, prompting, AI apps, APIs, deployment, and training. Each top-level folder is one module, and this README is the only documentation: what each module builds, how to run it, and what it needs.
+Runnable AI engineering modules, grouped by what you want to build: agents, MCP, memory and RAG, prompting, AI apps, APIs, deployment, and training. Each top-level folder is one module, and this README covers all of them: what each one builds, how to run it, and what it needs. Three larger modules (the MCP course, the context-engineering template, and GitHub sync) also have a full guide in their own folder.
 
 ## Why this repo?
 
@@ -53,7 +53,7 @@ Reading about AI engineering only goes so far. These modules run. You'll find:
 
 ## How to use this repo
 
-Every module is self-contained. Jump to the area you care about, open the module's section, copy the keys it names into a `.env` in its folder, and run the commands. You don't need to go in order.
+Every module is self-contained. Jump to the area you care about, open the module's section, copy the keys it names into a `.env` in its folder, and run the commands. You don't need to go in order. Sections marked 📘 link to a full guide in the module's folder.
 
 | Label | Meaning |
 | :--- | :--- |
@@ -248,294 +248,29 @@ MCP is the standard way to give models tools and data. One seven-lesson course, 
 
 **Level:** 🟡 Intermediate · **Type:** `Course` · **Folder:** [`mcp-crash-course/`](./mcp-crash-course)
 
-The Model Context Protocol (MCP) gives LLMs a standard way to connect to external data sources and tools. This course takes Python developers from the core concepts to servers and clients that use prompts, resources, and tools.
+The Model Context Protocol (MCP) gives LLMs a standard way to connect to external data sources and tools. This seven-lesson course takes Python developers from the core concepts to servers and clients that use prompts, resources, and tools.
 
-| Lesson | Folder |
+| Lesson | What you learn |
 | :--- | :--- |
-| 1. [Introduction and context](#1-introduction-and-context) | `1-introduction-and-context/` |
-| 2. [Understanding MCP](#2-understanding-mcp) | `2-understanding-mcp/` |
-| 3. [Simple server setup with the Python SDK](#3-simple-server-setup-with-the-python-sdk) | `3-simple-server-setup/` |
-| 4. [OpenAI integration](#4-openai-integration) | `4-openai-integration/` |
-| 5. [MCP vs function calling](#5-mcp-vs-function-calling) | `5-mcp-vs-function-calling/` |
-| 6. [Running with Docker](#6-running-with-docker) | `6-run-with-docker/` |
-| 7. [Lifecycle management](#7-lifecycle-management) | `7-lifecycle-management/` |
+| 1. [Introduction and context](./mcp-crash-course/README.md#1-introduction-and-context) | What MCP is (a standard, not a new technology) and who this course is for |
+| 2. [Understanding MCP](./mcp-crash-course/README.md#2-understanding-mcp) | Hosts, clients, servers, the three primitives, stdio vs SSE |
+| 3. [Simple server setup](./mcp-crash-course/README.md#3-simple-server-setup-with-the-python-sdk) | A first FastMCP server, the Inspector, stdio and SSE clients |
+| 4. [OpenAI integration](./mcp-crash-course/README.md#4-openai-integration) | OpenAI calling MCP tools over a knowledge base |
+| 5. [MCP vs function calling](./mcp-crash-course/README.md#5-mcp-vs-function-calling) | When MCP pays off and when plain function calling wins |
+| 6. [Running with Docker](./mcp-crash-course/README.md#6-running-with-docker) | An SSE server in a container |
+| 7. [Lifecycle management](./mcp-crash-course/README.md#7-lifecycle-management) | Initialization, operation, termination, and the lifespan object |
 
-**Set up**
+**Quick start**
 
 ```bash
 cd mcp-crash-course
-uv pip install -r requirements.txt   # or: pip install -r requirements.txt
+uv pip install -r requirements.txt
+mcp dev 3-simple-server-setup/server.py   # try a server in the MCP Inspector
 ```
 
-The MCP CLI has helpers for development and testing:
+**Depends on:** Python 3, an `OPENAI_API_KEY` for lesson 4, and Docker for lesson 6.
 
-```bash
-mcp dev server.py       # test a server with the MCP Inspector
-mcp install server.py   # install a server in Claude Desktop
-mcp run server.py       # run a server directly
-```
-
-**Resources:** [MCP documentation](https://modelcontextprotocol.io) · [MCP specification](https://spec.modelcontextprotocol.io) · [Python SDK](https://github.com/modelcontextprotocol/python-sdk) · [Official servers](https://github.com/modelcontextprotocol/servers) · [Core architecture](https://modelcontextprotocol.io/docs/concepts/architecture)
-
-#### 1. Introduction and context
-
-**The hype vs. reality.** MCP isn't a new technology. It's a new standard. If you've built AI agents, you've already done the core idea: giving LLMs tools through function calling. MCP standardizes how those tools are exposed and called.
-
-**Personal use vs. backend integration.** Most tutorials show how to plug MCP servers into Claude Desktop, Cursor, or other personal assistants. This course covers the other case: building MCP into your own Python applications and agent systems. You will:
-
-- Understand the technical architecture of MCP
-- Build custom MCP servers with the Python SDK
-- Integrate those servers into Python applications
-- Decide when and how to use MCP
-
-#### 2. Understanding MCP
-
-**Architecture.** MCP uses a client-host-server design, so each server can focus on one domain (file access, web search, a database):
-
-- **MCP hosts**: programs like Claude Desktop, IDEs, or your Python app that want data through MCP
-- **MCP clients**: protocol clients that keep 1:1 connections with servers
-- **MCP servers**: lightweight programs that expose capabilities (tools, resources, prompts)
-- **Local data sources**: files, databases, and services on your computer
-- **Remote services**: external systems reachable over the internet
-
-```mermaid
-flowchart LR
- subgraph Computer["Your Computer"]
-        Client["Host with MCP Client<br>(Claude, IDEs, Tools)"]
-        ServerA["MCP Server A"]
-        ServerB["MCP Server B"]
-        ServerC["MCP Server C"]
-        DataA[("Local<br>Data Source A")]
-        DataB[("Local<br>Data Source B")]
-  end
- subgraph Internet["Internet"]
-        RemoteC[("Remote<br>Service C")]
-  end
-    Client -- MCP Protocol --> ServerA & ServerB & ServerC
-    ServerA <--> DataA
-    ServerB <--> DataB
-    ServerC -- Web APIs --> RemoteC
-```
-
-**Three primitives** a server can implement:
-
-1. [Tools](https://modelcontextprotocol.io/docs/concepts/tools#python): model-controlled functions the LLM can call (API calls, computations)
-2. [Resources](https://modelcontextprotocol.io/docs/concepts/resources#python): application-controlled data that gives context (file contents, database records)
-3. [Prompts](https://modelcontextprotocol.io/docs/concepts/prompts#python): user-controlled templates for LLM interactions
-
-Tools are the most useful primitive for Python developers.
-
-**Transports.**
-
-- **Stdio**: talks over standard input and output. Best when client and server are on the same machine, and during development. No network setup.
-- **SSE (Server-Sent Events)**: HTTP for client-to-server, SSE for server-to-client. Use it for remote access or distributed setups.
-
-```mermaid
-flowchart LR
- subgraph Local["Local Deployment"]
-   subgraph Stdio["Stdio Transport"]
-        Client1["MCP Client"]
-        Server1["MCP Server"]
-   end
- end
- subgraph Remote["Remote Deployment"]
-   subgraph SSE["SSE Transport"]
-        Client2["MCP Client"]
-        Server2["MCP Server"]
-   end
- end
-    Client1 -- stdin/stdout<br>(bidirectional) --> Server1
-    Client2 -- HTTP POST<br>(client to server) --> Server2
-    Server2 -- SSE<br>(server to client) --> Client2
-```
-
-If you know FastAPI, an SSE MCP server will feel familiar: HTTP endpoints, async handlers, and streaming responses.
-
-**Why a standard matters:** build a server once and use it with any MCP client (reusability), combine servers (composability), and use servers others have built (ecosystem). See the [official servers](https://github.com/modelcontextprotocol/servers).
-
-#### 3. Simple server setup with the Python SDK
-
-A first server with one tool:
-
-```python
-# server.py
-from mcp.server.fastmcp import FastMCP
-
-mcp = FastMCP("DemoServer")
-
-@mcp.tool()
-def say_hello(name: str) -> str:
-    """Say hello to someone
-
-    Args:
-        name: The person's name to greet
-    """
-    return f"Hello, {name}! Nice to meet you."
-
-if __name__ == "__main__":
-    mcp.run()
-```
-
-Ways to run it:
-
-- `mcp dev server.py` runs it with the MCP Inspector, a web UI for trying tools and resources.
-- `mcp install server.py` adds it to Claude Desktop's config.
-- `python server.py` or `uv run server.py` runs it directly (only needed for SSE).
-
-By default a server uses the stdio transport, not a network port. To serve over HTTP, switch to SSE:
-
-```python
-from mcp.server.fastmcp import FastMCP
-
-mcp = FastMCP("MyServer", host="127.0.0.1", port=8050)
-
-# Add your tools and resources here...
-
-if __name__ == "__main__":
-    mcp.run(transport="sse")   # serves at http://127.0.0.1:8050
-```
-
-A stdio client that starts the server and calls a tool:
-
-```python
-import asyncio
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
-
-async def main():
-    server_params = StdioServerParameters(command="python", args=["server.py"])
-    async with stdio_client(server_params) as (read_stream, write_stream):
-        async with ClientSession(read_stream, write_stream) as session:
-            await session.initialize()
-            tools_result = await session.list_tools()
-            print("Available tools:")
-            for tool in tools_result.tools:
-                print(f"  - {tool.name}: {tool.description}")
-            result = await session.call_tool("add", arguments={"a": 2, "b": 3})
-            print(f"2 + 3 = {result.content[0].text}")
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-
-The SSE client is the same, but connects with `sse_client` instead:
-
-```python
-from mcp.client.sse import sse_client
-
-async with sse_client("http://localhost:8050/sse") as (read_stream, write_stream):
-    ...
-```
-
-**Which to choose:** use stdio when the client starts the server process itself. Use HTTP (SSE) when the server runs separately, on another machine or container. For production backends, HTTP gives better separation and scaling.
-
-#### 4. OpenAI integration
-
-Connect OpenAI to an MCP server so the model can call your tools while it answers. The server (`server.py`) exposes a `get_knowledge_base` tool that reads Q&A pairs about company policies from `data/kb.json`. The client (`client.py`) connects to the server, converts MCP tools to OpenAI's function format, and passes results back to the model.
-
-**Data flow:**
-
-1. The user asks a question, for example "What is our company's vacation policy?"
-2. OpenAI receives the query and the tools from the MCP server.
-3. OpenAI decides which tools to call.
-4. The MCP client forwards the tool call to the MCP server.
-5. The server runs the tool and returns the data.
-6. The result flows back through the client to OpenAI.
-7. OpenAI writes the final answer with the tool data.
-
-MCP acts as a standard bridge: one interface for tools, your backend hidden behind it, control over exactly what is exposed, and freedom to change the backend without changing the AI integration.
-
-**Run**
-
-```bash
-cd mcp-crash-course/4-openai-integration
-# Add OPENAI_API_KEY to .env
-python client.py
-```
-
-This example uses stdio, so the client starts the server as a subprocess. To run them separately, use SSE as shown in [lesson 3](#3-simple-server-setup-with-the-python-sdk).
-
-#### 5. MCP vs function calling
-
-Compare the MCP version to a plain function-calling version in `function-calling.py`. At this small scale, plain function calling is simpler. MCP pays off when:
-
-- You share tools across several applications.
-- Components run on different machines.
-- You want to use existing MCP servers from the ecosystem.
-- Standardization helps your users.
-
-Plain function calling is better for small self-contained apps, when performance is critical (less overhead), or early in development when speed of iteration matters more than standards.
-
-#### 6. Running with Docker
-
-Run an MCP server with a calculator tool in Docker. Files: `server.py`, `client.py`, `Dockerfile`, `requirements.txt`.
-
-```bash
-cd mcp-crash-course/6-run-with-docker
-docker build -t mcp-server .
-docker run -p 8050:8050 mcp-server
-python client.py   # in another terminal; adds 2 and 3
-```
-
-The server uses SSE on port 8050 and binds to `0.0.0.0` so it is reachable from outside the container. The client connects to `http://localhost:8050/sse`. Start the server before the client.
-
-**Troubleshooting:** check the container is running (`docker ps`), check the port mapping, read the logs (`docker logs <container_id>`), and check firewall settings. If Docker runs on a remote machine, make sure the port is reachable.
-
-#### 7. Lifecycle management
-
-Lifecycle management covers how MCP clients and servers start, run, and stop, so resources are allocated and released correctly.
-
-1. **Initialization**: the client connects, both sides negotiate a protocol version, and the server prepares to handle calls.
-
-   ```python
-   async with stdio_client(server_params) as (read, write):
-       async with ClientSession(read, write) as session:
-           await session.initialize()
-   ```
-
-2. **Operation**: the server exposes tools, the client discovers and calls them, and the server manages the resources they need.
-
-   ```python
-   tools_result = await session.list_tools()
-   result = await session.call_tool(
-       tool_call.function.name,
-       arguments=json.loads(tool_call.function.arguments),
-   )
-   ```
-
-3. **Termination**: resources are released and connections closed. This happens when you exit the context manager.
-
-**The lifespan object** manages app-level resources for the whole life of a server. It sets them up at start, makes them available to every tool, and cleans them up at shutdown:
-
-```python
-from contextlib import asynccontextmanager
-from collections.abc import AsyncIterator
-from dataclasses import dataclass
-
-from mcp.server.fastmcp import Context, FastMCP
-
-@dataclass
-class AppContext:
-    db: Database  # Replace with your actual resource type
-
-@asynccontextmanager
-async def app_lifespan(server: FastMCP) -> AsyncIterator[AppContext]:
-    db = await Database.connect()
-    try:
-        yield AppContext(db=db)
-    finally:
-        await db.disconnect()
-
-mcp = FastMCP("My App", lifespan=app_lifespan)
-
-@mcp.tool()
-def query_db(ctx: Context) -> str:
-    """Tool that uses initialized resources"""
-    db = ctx.request_context.lifespan_context.db
-    return db.query()
-```
-
-Benefits: type safety, guaranteed setup and cleanup, dependency injection into tools, and resource management kept apart from tool code. See the [MCP lifecycle spec](https://modelcontextprotocol.io/specification/2025-03-26/basic/lifecycle#lifecycle).
+📘 **[Full course: `mcp-crash-course/README.md`](./mcp-crash-course/README.md)**
 
 ---
 
@@ -844,84 +579,19 @@ xAI has no general text prompting guide right now. See the [docs home](https://d
 
 **Level:** 🟡 Intermediate · **Type:** `Reference` · **Folder:** [`context-engineering/`](./context-engineering)
 
-A template for context engineering: giving AI coding assistants all the information they need to finish a job end to end. Prompt engineering is about wording a task, like handing someone a sticky note. Context engineering is a full system of documentation, examples, rules, patterns, and validation, like handing them a screenplay.
-
-Why it matters:
-
-1. **Fewer failures.** Most agent failures are context failures, not model failures.
-2. **Consistency.** The AI follows your project's patterns and conventions.
-3. **Complex features.** Multi-step work becomes possible with the right context.
-4. **Self-correction.** Validation loops let the AI fix its own mistakes.
-
-**What's in the folder**
-
-```
-context-engineering/
-├── .claude/commands/
-│   ├── generate-prp.md        # Generates comprehensive PRPs
-│   └── execute-prp.md         # Executes PRPs to implement features
-├── PRPs/
-│   ├── templates/prp_base.md  # Base template for PRPs
-│   └── EXAMPLE_multi_agent_prp.md
-├── examples/                  # Your code examples (critical!)
-├── CLAUDE.md                  # Global rules for the AI assistant
-├── INITIAL.md                 # Template for feature requests
-└── INITIAL_EXAMPLE.md         # Example feature request
-```
+A template for context engineering: giving AI coding assistants all the information they need to finish a job end to end. You describe a feature, generate a PRP (Product Requirements Prompt) with full context and validation gates, then let the assistant execute it. The folder is meant to be copied out as the start of your own project.
 
 **Quick start (in Claude Code)**
 
-1. Edit `CLAUDE.md` with your project rules: project awareness, code structure, testing, style, and documentation standards.
+1. Edit `CLAUDE.md` with your project rules.
 2. Put relevant code examples in `examples/`.
-3. Describe the feature in `INITIAL.md`. See `INITIAL_EXAMPLE.md`.
-4. Generate a PRP (Product Requirements Prompt): `/generate-prp INITIAL.md`
-5. Run it: `/execute-prp PRPs/your-feature-name.md`
+3. Describe the feature in `INITIAL.md` (see `INITIAL_EXAMPLE.md`).
+4. `/generate-prp INITIAL.md`
+5. `/execute-prp PRPs/your-feature-name.md`
 
-The slash commands live in `.claude/commands/`. `$ARGUMENTS` receives whatever you pass after the command name.
+**Depends on:** Claude Code. The slash commands live in `context-engineering/.claude/commands/`.
 
-**Writing `INITIAL.md`**
-
-```markdown
-## FEATURE:
-[What you want to build. Be specific about functionality and requirements]
-
-## EXAMPLES:
-[Example files in examples/ and how to use them]
-
-## DOCUMENTATION:
-[Links to relevant docs, APIs, or MCP server resources]
-
-## OTHER CONSIDERATIONS:
-[Gotchas, specific requirements, things AI assistants often miss]
-```
-
-- **Feature:** be specific. Not "Build a web scraper" but "Build an async web scraper using BeautifulSoup that extracts product data from e-commerce sites, handles rate limiting, and stores results in PostgreSQL."
-- **Examples:** point to files in `examples/` and say what to copy.
-- **Documentation:** API docs, library guides, MCP server docs, database schemas.
-- **Other considerations:** auth, rate limits, common pitfalls, performance needs.
-
-**The PRP workflow**
-
-A PRP is like a PRD, but written to instruct an AI coding assistant: full context, implementation steps with validation gates, error handling patterns, and test requirements.
-
-- `/generate-prp` reads the feature request, researches the codebase for patterns, gathers docs and gotchas, writes a step-by-step plan with validation gates, and scores its confidence from 1 to 10.
-- `/execute-prp` loads the PRP, plans with a task list, implements each part, runs tests and linting, fixes issues, and checks every success criterion.
-
-See `PRPs/EXAMPLE_multi_agent_prp.md` for a full example.
-
-**Using examples well**
-
-AI assistants do much better when they can see patterns. Include code structure (modules, imports, class and function patterns), testing (file layout, mocking, assertions), integrations (API clients, database connections, auth), and CLI patterns (argument parsing, output, error handling).
-
-**Best practices**
-
-1. Be explicit in `INITIAL.md`. Don't assume the AI knows your preferences.
-2. Provide plenty of examples, including what not to do.
-3. Use validation gates. PRPs include test commands that must pass.
-4. Include official docs and specific sections.
-5. Customize `CLAUDE.md` with your conventions.
-
-Resources: [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code) · [Context engineering best practices](https://www.philschmid.de/context-engineering)
+📘 **[Full guide: `context-engineering/README.md`](./context-engineering/README.md)**: template structure, writing `INITIAL.md`, the PRP workflow, using examples, and best practices.
 
 ---
 
@@ -1103,95 +773,35 @@ curl http://localhost:8001/subscribers
 
 A full-stack GitHub dashboard. A React client signs you in and shows commits, pull requests, repositories, and organizations. A FastAPI server talks to the GitHub API. Kafka carries events between producer and consumer.
 
-| Path | Role |
-| :--- | :--- |
-| `client/` | React and Vite UI |
-| `server/Github/` | FastAPI app with routers for commits, pull requests, repositories, organizations |
-| `server/Auth/` | Sign-in |
-| `server/Kafka/` | `Producer.py` and `Consumer.py` |
-| `server/docker-compose.yml` | Kafka and ZooKeeper for local use |
-| `server/Postman/` | A Postman collection |
+| Part | Path | Stack |
+| :--- | :--- | :--- |
+| Client | `github-sync/client/` | React, Vite, Bun or npm |
+| API server | `github-sync/server/Github/` | FastAPI, httpx, Pydantic |
+| Event pipeline | `github-sync/server/Kafka/` | Kafka and ZooKeeper in Docker |
 
-**Run**
+**Quick start**
 
 ```bash
-# Kafka
+# Terminal 1: Kafka and the API server (from the repo root)
 cd github-sync/server
 docker compose up -d
-
-# API server
 uv sync
 cp .env.example .env   # add GITHUB_TOKEN
 cd Github && uv run python main.py   # docs at http://localhost:8000/docs
 
-# Kafka producer and consumer tests (from github-sync/server)
-uv run python Kafka/Producer.py
-uv run python Kafka/Consumer.py
-
-# Client
+# Terminal 2: the client (from the repo root)
 cd github-sync/client
 bun install            # or: npm install
 bun run dev            # or: npm run dev; opens http://localhost:3000
+
+# Optional: Kafka producer and consumer tests (from github-sync/server)
+uv run python Kafka/Producer.py
+uv run python Kafka/Consumer.py
 ```
 
-**API endpoints**
+**Depends on:** Docker, Python 3.13 or newer, Node.js LTS or Bun, and a `GITHUB_TOKEN`.
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| GET | `/org/user` | Get the authenticated user |
-| GET | `/org/user/orgs` | List user organizations |
-| GET | `/org/orgs/{org}` | Get organization info |
-| GET | `/org/orgs/{org}/repos` | List org repositories |
-| GET | `/repos/{owner}/{repo}` | Get repository details |
-| GET | `/repos/{owner}/{repo}/commits` | List commits |
-| GET | `/repos/{owner}/{repo}/commits/{commit_sha}` | Get commit details |
-| GET | `/repos/{owner}/{repo}/pulls` | List pull requests |
-| GET | `/repos/{owner}/{repo}/pulls/{pull_number}` | Get PR details |
-| GET | `/repos/{owner}/{repo}/pulls/{pull_number}/commits` | List PR commits |
-
-**Client sign-in**
-
-- **GitHub OAuth (recommended):** create an OAuth app at [github.com/settings/developers](https://github.com/settings/developers) and set `VITE_GITHUB_CLIENT_ID`, `VITE_GITHUB_CLIENT_SECRET`, and `VITE_GITHUB_REDIRECT_URI` in `client/.env`. `VITE_API_URL` defaults to `http://localhost:8000`. In production, do the OAuth token exchange on the server.
-- **Personal access token (fallback):** create a [token](https://github.com/settings/tokens) with `repo` and `read:org` scopes and choose "Use personal access token" on the login page.
-
-The client validates the token by calling `/org/user`, stores it in `localStorage`, and adds it to every API request through `src/services/api.js` (axios). Protected routes check auth state from `AuthContext`.
-
-```
-client/src/
-├── components/          # Login, Dashboard, UserProfile, OrganizationsList
-├── contexts/            # AuthContext: authentication state
-├── services/api.js      # API client
-├── App.jsx              # Routes
-└── main.jsx             # Entry point
-```
-
-Scripts: `dev`, `build`, and `preview`, with Bun or npm. The client doubles as a small React primer: components, `useState`, the Context API, React Router, and `useEffect` (see `client/REACT_GUIDE.md` and `client/BUN_GUIDE.md`). Ideas to extend it: more GitHub data, error boundaries, loading skeletons, pagination, and search.
-
-**Kafka notes**
-
-Apache Kafka is a distributed event store and stream-processing platform.
-
-- **Topics** are streams of related messages, defined by developers. A topic is a logical grouping, and producers and topics are many-to-many.
-- **Brokers** receive and store messages from producers. A cluster can have many brokers, and each broker manages several partitions.
-- **Producers** write data as messages, from any language or the command-line tool.
-- **Consumers** pull messages from one or more topics. Each consumer's offset (the last message read) is kept in a special topic.
-- **ZooKeeper** is a distributed key-value store that holds configuration, ACLs, and secrets, and coordinates the cluster.
-
-Glossary:
-
-- **Stream:** an unbounded sequence of ordered, immutable data.
-- **Stream processing:** continual calculations on one or more streams.
-- **Event:** an immutable fact about something that happened in the system.
-- **Cluster:** a group of brokers working together.
-- **Partition:** a log inside a topic that guarantees ordering for its data. Partitions are chosen by hashing keys.
-- **ZooKeeper's role:** tells brokers which one leads each partition and tracks cluster membership and config.
-
-**Depends on**
-
-- Docker, for Kafka.
-- A current Node.js LTS (or Bun) for the client.
-- Python 3.13 or newer for the server.
-- A GitHub OAuth app or token.
+📘 **[Full guide: `github-sync/README.md`](./github-sync/README.md)**: API endpoints, client sign-in (OAuth or token), project structure, and Kafka notes.
 
 ---
 
