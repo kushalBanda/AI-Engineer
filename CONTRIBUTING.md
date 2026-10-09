@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping. This repo is a set of runnable AI engineering modules. Each top-level folder is one module. All documentation lives in the root `README.md`; modules don't have their own README files.
+Thanks for helping. This repo is a set of runnable AI engineering modules. Each top-level folder is one module. Documentation lives in the root `README.md`. Only a few large modules also have a README in their own folder (see below).
 
 ## Ways to help
 
@@ -23,10 +23,21 @@ For a new module, open a **Module proposal** issue first. This avoids work on a 
 1. Create one new top-level folder. Use lowercase words with hyphens, for example `vector-search-basics`.
 2. Make the run steps work from a clean clone. Test them before you open the PR.
 3. Add a `.env.example` if the module reads a `.env`. List variable names only.
-4. Document the module in the root `README.md`. Don't add a `README.md` inside the module folder.
-   - Copy [`.github/MODULE_SECTION_TEMPLATE.md`](.github/MODULE_SECTION_TEMPLATE.md) under the right tier: Beginner, Intermediate, or Advanced modules.
-   - Add a row to the **Projects by difficulty** table with the tier, type tag, topic, and folder.
-   - Add the section to the table of contents.
+4. Document the module in the root `README.md`. Most modules don't get a `README.md` of their own (see [Module READMEs](#module-readmes)).
+   - Copy [`.github/MODULE_SECTION_TEMPLATE.md`](.github/MODULE_SECTION_TEMPLATE.md) into the area it belongs to: Agents, Model Context Protocol (MCP), Memory, retrieval, and RAG, Prompting and context engineering, AI applications, APIs and integrations, Deployment and MLOps, or Model training. If none fits, propose a new area in your PR.
+   - Add it to the area's module table, the **Module map**, and **Prerequisites at a glance**.
+   - Add the section to the **Contents** list.
+   - Areas are grouped by topic, not by level or folder order. Give each module a level label instead.
+
+### Module READMEs
+
+A module gets its own `README.md` only if it is one of these:
+
+- **A course** with several lessons, like `mcp-crash-course/`.
+- **A template** people copy out as its own project, like `context-engineering/`.
+- **A multi-part app** with separate client, server, or pipeline parts, like `github-sync/`.
+
+Then the full guide goes in the module's README. The root section stays short: a summary, a quick start, and a 📘 link to the full guide. Keep the module's rows in the Module map and Prerequisites tables.
 
 ### Type tags
 
@@ -37,9 +48,9 @@ For a new module, open a **Module proposal** issue first. This avoids work on a 
 | `Course` | An ordered series of lessons |
 | `Reference` | Material to read |
 
-### Tiers
+### Levels
 
-| Tier | Use it for |
+| Level | Use it for |
 | :--- | :--- |
 | Beginner | One idea, or a small deploy |
 | Intermediate | Agents, memory, voice, and pipelines |

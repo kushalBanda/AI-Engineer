@@ -1,13 +1,15 @@
 <!--
-Copy this into the root README.md, under the right tier
-(Beginner, Intermediate, or Advanced modules). Also add a row
-for the module to the "Projects by difficulty" table and a
-link in the table of contents. Modules don't have their own README.
+Copy this into the root README.md, under the area it belongs to
+(Agents, MCP, Memory and RAG, Prompting, AI applications, APIs and
+integrations, Deployment and MLOps, Model training). Also add it to
+the area's module table, the "Module map", "Prerequisites at a glance",
+and the Contents list. Only courses, copy-out templates, and multi-part
+apps get their own README; see CONTRIBUTING.md.
 -->
 
 ### Module name
 
-🟢 Beginner · `Tutorial` · [`module-name/`](./module-name)
+**Level:** 🟢 Beginner · **Type:** `Tutorial` · **Folder:** [`module-name/`](./module-name)
 
 One or two sentences. Say what the module builds and why it is useful.
 
