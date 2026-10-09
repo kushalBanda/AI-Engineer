@@ -48,7 +48,7 @@
   ```
 
 ### 📚 Documentation & Explainability
-- **Update the root `README.md`** (this repo's only README; see the module's section) when new features are added, dependencies change, or setup steps are modified. Don't create README files inside module folders.
+- **Update `context-engineering/README.md`** (this module's full guide) when new features are added, dependencies change, or setup steps are modified. If the quick start changes, also update the short **Context engineering** section in the root `README.md`.
 - **Comment non-obvious code** and ensure everything is understandable to a mid-level developer.
 - When writing complex logic, **add an inline `# Reason:` comment** explaining the why, not just the what.
 
