@@ -1,136 +1,175 @@
-# 🚀 AI Dev Tasks for Cursor 🤖
+# Official Prompting Guides
 
-Welcome to **AI Dev Tasks**! This repository provides a collection of `.mdc` (Markdown Command) files designed to supercharge your feature development workflow within the [Cursor](https://cursor.sh/) editor. By leveraging these commands with Cursor's AI Agent, you can systematically approach building features, from ideation to implementation, with built-in checkpoints for verification.
+A curated index of prompting guides published **by the model providers themselves**. No third-party blogs, no "ultimate prompt" threads. If a provider ships a model-specific guide, it is listed next to the general one, because advice changes between model generations.
 
-Stop wrestling with monolithic AI requests and start guiding your AI collaborator step-by-step!
+Every guide that is a public web page also has an offline PDF copy in a per-provider folder (`anthropic/`, `openai/`, `google/`, ...), captured in October 2026. The links are the source of truth; the PDFs are snapshots and will go stale as providers update their docs.
 
-## ✨ The Core Idea
+## Contents
 
-Building complex features with AI can sometimes feel like a black box. This workflow aims to bring structure, clarity, and control to the process by:
+- [Anthropic (Claude)](#anthropic-claude)
+- [OpenAI (GPT, o-series, Codex)](#openai-gpt-o-series-codex)
+- [Google (Gemini, Gemma)](#google-gemini-gemma)
+- [Meta (Llama)](#meta-llama)
+- [Mistral](#mistral)
+- [Cohere (Command)](#cohere-command)
+- [xAI (Grok)](#xai-grok)
+- [DeepSeek](#deepseek)
+- [Alibaba (Qwen)](#alibaba-qwen)
+- [Moonshot (Kimi)](#moonshot-kimi)
+- [Amazon (Nova, Bedrock)](#amazon-nova-bedrock)
+- [Microsoft (Azure OpenAI)](#microsoft-azure-openai)
+- [IBM (Granite)](#ibm-granite)
+- [AI21 (Jamba)](#ai21-jamba)
+- [Perplexity (Sonar)](#perplexity-sonar)
+- [Files in this folder](#files-in-this-folder)
 
-1. **Defining Scope:** Clearly outlining what needs to be built with a Product Requirement Document (PRD).
-2. **Detailed Planning:** Breaking down the PRD into a granular, actionable task list.
-3. **Iterative Implementation:** Guiding the AI to tackle one task at a time, allowing you to review and approve each change.
+## Anthropic (Claude)
 
-This structured approach helps ensure the AI stays on track, makes it easier to debug issues, and gives you confidence in the generated code.
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Prompt engineering overview](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview) | Where to start, when prompting is (and isn't) the fix | [PDF](./anthropic/Claude%20Prompt%20Engineering%20Overview.pdf) |
+| [Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) | The living reference: clarity, examples, XML tags, roles, thinking, long context, agents | [PDF](./anthropic/Claude%20Prompting%20Best%20Practices.pdf) |
+| [Prompting Claude Opus 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) | Model-specific notes for Opus 5.5 | [PDF](./anthropic/Prompting%20Claude%20Opus%205.5.pdf) |
+| [Prompting Claude Sonnet 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5-5) | Model-specific notes for Sonnet 5.5 | [PDF](./anthropic/Prompting%20Claude%20Sonnet%205.5.pdf) |
+| [Prompting Claude Haiku 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-haiku-5-5) | Model-specific notes for Haiku 5.5 | [PDF](./anthropic/Prompting%20Claude%20Haiku%205.5.pdf) |
+| [Prompting Claude Fable 5.1](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1) | Model-specific notes for Fable 5.1 | [PDF](./anthropic/Prompting%20Claude%20Fable%205.1.pdf) |
+| [Extended thinking](https://platform.claude.com/docs/en/build-with-claude/extended-thinking) | Prompting and budgeting reasoning | [PDF](./anthropic/Claude%20Extended%20Thinking.pdf) |
+| [System prompt release notes](https://platform.claude.com/docs/en/release-notes/system-prompts/overview) | Anthropic's own published claude.ai system prompts | — |
+| [Interactive prompt engineering tutorial](https://github.com/anthropics/prompt-eng-interactive-tutorial) | 9-chapter hands-on course (Jupyter) | — |
+| [Anthropic courses](https://github.com/anthropics/courses) | API fundamentals, real-world prompting, prompt evals, tool use | — |
+| [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) | Context as a finite resource for agents | [PDF](./anthropic/Effective%20Context%20Engineering%20for%20AI%20Agents.pdf) |
+| [Writing tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents) | Tool descriptions as prompts | [PDF](./anthropic/Writing%20Tools%20for%20Agents.pdf) |
+| [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices) | Prompting an agentic coding tool | [PDF](./anthropic/Claude%20Code%20Best%20Practices.pdf) |
 
-## Workflow: From Idea to Implemented Feature 💡➡️💻
+## OpenAI (GPT, o-series, Codex)
 
-Here's the step-by-step process using the `.mdc` files in this repository:
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Prompting](https://developers.openai.com/api/docs/guides/prompting) | Current general guide: messages, roles, reusable prompts | [PDF](./openai/OpenAI%20Prompting.pdf) |
+| [Prompt engineering](https://developers.openai.com/api/docs/guides/prompt-engineering) | Core strategies and message formatting | [PDF](./openai/OpenAI%20Prompt%20Engineering.pdf) |
+| [Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra) | Latest model family, with a prompting best practices section | [PDF](./openai/Using%20GPT-6.pdf) |
+| [Reasoning best practices](https://developers.openai.com/api/docs/guides/reasoning-best-practices) | How to prompt reasoning models differently from chat models | [PDF](./openai/OpenAI%20Reasoning%20Best%20Practices.pdf) |
+| [GPT-5.2 prompting guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide) | `reasoning_effort`, verbosity, agentic scaffolding | [PDF](./openai/GPT-5.2%20Prompting%20Guide.pdf) |
+| [GPT-5.1 prompting guide](https://cookbook.openai.com/examples/gpt-5/gpt-5-1_prompting_guide) | Personality, steerability, `none` reasoning mode | [PDF](./openai/GPT-5.1%20Prompting%20Guide.pdf) |
+| [GPT-5 prompting guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide) | Agentic eagerness, tool preambles, coding | [PDF](./openai/GPT-5%20Prompting%20Guide.pdf) |
+| [GPT-4.1 prompting guide](https://cookbook.openai.com/examples/gpt4-1_prompting_guide) | Literal instruction following, long context, agent prompts | [PDF](./openai/GPT-4.1%20Prompting%20Guide.pdf) |
+| [o3 / o4-mini prompting guide](https://developers.openai.com/cookbook/examples/o-series/o3o4-mini_prompting_guide) | Function calling with reasoning models | [PDF](./openai/o3%20and%20o4-mini%20Prompting%20Guide.pdf) |
+| [Codex prompting guide (cookbook)](https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide) | Prompting Codex models for coding agents | [PDF](./openai/Codex%20Prompting%20Guide.pdf) |
+| [Prompting Codex](https://developers.openai.com/codex/prompting) | Writing good tasks for the Codex agent | [PDF](./openai/Prompting%20Codex.pdf) |
+| [Prompt optimization cookbook](https://cookbook.openai.com/examples/gpt-5/prompt-optimization-cookbook) | Using the prompt optimizer to fix contradictions and ambiguity | [PDF](./openai/Prompt%20Optimization%20Cookbook.pdf) |
+| [Prompting Realtime models](https://developers.openai.com/api/docs/guides/voice-prompting) | Voice agents: tone, pacing, turn-taking | [PDF](./openai/Prompting%20Realtime%20Models.pdf) |
+| [Realtime prompting guide (cookbook)](https://cookbook.openai.com/examples/realtime_prompting_guide) | Worked voice-agent prompt examples | [PDF](./openai/Realtime%20Prompting%20Guide.pdf) |
+| [Prompting GPT-Live](https://developers.openai.com/api/docs/guides/live-prompting) | Live speech model prompting | [PDF](./openai/Prompting%20GPT-Live.pdf) |
+| [Image prompting](https://developers.openai.com/api/docs/guides/image-prompting) | Prompting image generation and editing | [PDF](./openai/OpenAI%20Image%20Prompting.pdf) |
+| [Image gen models prompting guide](https://cookbook.openai.com/examples/multimodal/image-gen-models-prompting-guide) | Worked image prompt examples | [PDF](./openai/Image%20Gen%20Models%20Prompting%20Guide.pdf) |
+| [Sora 2 prompting guide](https://cookbook.openai.com/examples/sora/sora2_prompting_guide) | Video: shots, camera, timing, style | [PDF](./openai/Sora%202%20Prompting%20Guide.pdf) |
+| [A practical guide to building agents (PDF)](https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf) | Agent instructions, tools, guardrails | [PDF](./openai/A%20Practical%20Guide%20to%20Building%20Agents.pdf) |
 
-### 1️⃣ Create a Product Requirement Document (PRD)
+## Google (Gemini, Gemma)
 
-First, lay out the blueprint for your feature. A PRD clarifies what you're building, for whom, and why.
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Prompt design strategies](https://ai.google.dev/gemini-api/docs/prompting-strategies) | Core Gemini API prompting guide | [PDF](./google/Gemini%20Prompt%20Design%20Strategies.pdf) |
+| [Gemini 3 developer guide](https://ai.google.dev/gemini-api/docs/gemini-3) | Gemini 3 prompting changes: temperature, thinking level, shorter prompts | [PDF](./google/Gemini%203%20Developer%20Guide.pdf) |
+| [What's new in Gemini 3.5 Flash](https://ai.google.dev/gemini-api/docs/generate-content/whats-new-gemini-3.5) | Migration and prompting notes for 3.5 | [PDF](./google/Whats%20New%20in%20Gemini%203.5%20Flash.pdf) |
+| [File prompting strategies](https://ai.google.dev/gemini-api/docs/file-prompting-strategies) | Prompting with images, video, audio, PDFs | [PDF](./google/Gemini%20File%20Prompting%20Strategies.pdf) |
+| [Image generation (Nano Banana)](https://ai.google.dev/gemini-api/docs/image-generation) | Image prompts and editing | [PDF](./google/Gemini%20Image%20Generation.pdf) |
+| [Video generation (Veo 3.1)](https://ai.google.dev/gemini-api/docs/veo) | Veo 3.1 usage and prompt guide | [PDF](./google/Veo%203.1%20Video%20Generation%20and%20Prompt%20Guide.pdf) |
+| [Lyria prompt guide](https://ai.google.dev/gemini-api/docs/lyria-prompt-guide) | Music generation prompting | [PDF](./google/Lyria%20Prompt%20Guide.pdf) |
+| [Introduction to prompting (Google Cloud)](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/introduction-prompt-design) | Enterprise prompting docs and strategies | [PDF](./google/Google%20Cloud%20Introduction%20to%20Prompting.pdf) |
+| [Gemma prompt structure](https://ai.google.dev/gemma/docs/core/prompt-structure) | Gemma chat template and formatting | [PDF](./google/Gemma%20Prompt%20Structure.pdf) |
+| [Gemini for Workspace prompt guide](https://workspace.google.com/learning/content/gemini-prompt-guide) | Prompting Gemini in Docs, Gmail, Sheets | — |
+| [Prompt engineering whitepaper](https://www.kaggle.com/whitepaper-prompt-engineering) | Google's 68-page model-agnostic whitepaper | [PDF](./google/Prompt%20Engineering%20Whitepaper.pdf) |
 
-You can create a lightweight PRD directly within Cursor:
+## Meta (Llama)
 
-1. Ensure you have the `create-prd.mdc` file from this repository accessible.
-2. In Cursor's Agent chat, initiate PRD creation:
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Prompt engineering](https://www.llama.com/docs/how-to-guides/prompting/) | Official Llama prompting how-to | [PDF](./meta/Llama%20Prompt%20Engineering.pdf) |
+| [Model cards and prompt formats](https://www.llama.com/docs/model-cards-and-prompt-formats/) | Special tokens and chat templates per Llama version | [PDF](./meta/Llama%20Model%20Cards%20and%20Prompt%20Formats.pdf) |
 
-   ```
-   Use @create-prd.mdc
-   Here's the feature I want to build: [Describe your feature in detail]
-   Reference these files to help you: [Optional: @file1.py @file2.ts]
-   ```
+## Mistral
 
-   *(Pro Tip: For complex PRDs, using MAX mode in Cursor is highly recommended if your budget allows for more comprehensive generation.)*
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Prompting capabilities](https://docs.mistral.ai/guides/prompting_capabilities) | System vs user prompts, Markdown/XML structure, few-shot, worked examples | [PDF](./mistral/Mistral%20Prompting%20Capabilities.pdf) |
 
-   ![Example of initiating PRD creation](https://pbs.twimg.com/media/Go6DDlyX0AAS7JE?format=jpg&name=large)
+## Cohere (Command)
 
-### 2️⃣ Generate Your Task List from the PRD
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Crafting effective prompts](https://docs.cohere.com/docs/crafting-effective-prompts) | General Command prompting | [PDF](./cohere/Cohere%20Crafting%20Effective%20Prompts.pdf) |
+| [Prompting Command R / R+](https://docs.cohere.com/docs/prompting-command-r) | Model-specific template, RAG and tool-use prompts | [PDF](./cohere/Prompting%20Command%20R.pdf) |
 
-With your PRD drafted (e.g., `MyFeature-PRD.md`), the next step is to generate a detailed, step-by-step implementation plan for your AI Developer.
+## xAI (Grok)
 
-1. Ensure you have `generate-tasks-from-prd.mdc` accessible.
-2. In Cursor's Agent chat, use the PRD to create tasks:
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Speech-to-speech prompting guide](https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech/prompting-guide) | Prompting Grok voice agents | [PDF](./xai/Grok%20Speech-to-Speech%20Prompting%20Guide.pdf) |
 
-   ```
-   Now take @MyFeature-PRD.md and create tasks using @generate-tasks-from-prd.mdc
-   ```
+xAI has no general text prompting guide right now. See the [docs home](https://docs.x.ai/docs).
 
-   *(Note: Replace `@MyFeature-PRD.md` with the actual filename of the PRD you generated in step 1.)*
+## DeepSeek
 
-   ![Example of generating tasks from PRD](https://pbs.twimg.com/media/Go6FITbWkAA-RCT?format=jpg&name=medium)
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [DeepSeek-R1 usage recommendations](https://github.com/deepseek-ai/DeepSeek-R1#usage-recommendations) | Temperature, no few-shot, math directive, forcing `<think>` | [PDF](./deepseek/DeepSeek-R1%20Usage%20Recommendations.pdf) |
+| [Thinking mode guide](https://api-docs.deepseek.com/guides/thinking_mode) | Using thinking mode via API | [PDF](./deepseek/DeepSeek%20Thinking%20Mode%20Guide.pdf) |
+| [Prompt library](https://api-docs.deepseek.com/prompt-library/) | Official example prompts by task | — |
 
-### 3️⃣ Examine Your Task List
+## Alibaba (Qwen)
 
-You'll now have a well-structured task list, often with tasks and sub-tasks, ready for the AI to start working on. This provides a clear roadmap for implementation.
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Qwen documentation](https://qwen.readthedocs.io/en/latest/) | Chat templates, thinking mode, function calling | — |
 
-![Example of a generated task list](https://pbs.twimg.com/media/Go6GNuOWsAEcSDm?format=jpg&name=medium)
+## Moonshot (Kimi)
 
-### 4️⃣ Instruct the AI to Work Through Tasks (and Mark Completion)
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Best practices for prompts](https://platform.kimi.ai/docs/guide/prompt-best-practice) | Official Kimi prompting guide | [PDF](./moonshot/Kimi%20Prompt%20Best%20Practices.pdf) |
 
-To ensure methodical progress and allow for verification, we'll use `process-task-list.mdc`. This command instructs the AI to focus on one task at a time and wait for your go-ahead before moving to the next.
+## Amazon (Nova, Bedrock)
 
-1. Create or ensure you have the `process-task-list.mdc` file accessible.
-2. In Cursor's Agent chat, tell the AI to start with the first task (e.g., `1.1`):
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Nova 2 prompt engineering guide](https://docs.aws.amazon.com/nova/latest/nova2-userguide/prompt-engineering-guide.html) | Current Nova generation | [PDF](./amazon/Amazon%20Nova%202%20Prompt%20Engineering%20Guide.pdf) |
+| [Nova (v1) prompting best practices](https://docs.aws.amazon.com/nova/latest/userguide/prompting.html) | Text, vision, image/video gen, speech | [PDF](./amazon/Amazon%20Nova%20Prompting%20Best%20Practices.pdf) |
+| [Bedrock prompt engineering concepts](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html) | Hub linking to each Bedrock model's guide | [PDF](./amazon/Bedrock%20Prompt%20Engineering%20Concepts.pdf) |
 
-   ```
-   Please start on task 1.1 and use @process-task-list.mdc
-   ```
+## Microsoft (Azure OpenAI)
 
-   *(Important: You only need to reference `@process-task-list.mdc` for the *first* task. The instructions within it guide the AI for subsequent tasks.)*
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Prompt engineering techniques](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/prompt-engineering) | System messages, few-shot, grounding on Azure OpenAI | [PDF](./microsoft/Azure%20OpenAI%20Prompt%20Engineering%20Techniques.pdf) |
 
-   The AI will attempt the task and then prompt you to review.
+## IBM (Granite)
 
-   ![Example of starting on a task with process-task-list.mdc](https://pbs.twimg.com/media/Go6I41KWcAAAlHc?format=jpg&name=medium)
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Granite prompt engineering guide](https://www.ibm.com/granite/docs/use-cases/prompt-engineering) | Prompt templates and techniques for Granite | [PDF](./ibm/Granite%20Prompt%20Engineering%20Guide.pdf) |
 
-### 5️⃣ Review, Approve, and Progress ✅
+## AI21 (Jamba)
 
-As the AI completes each task, you review the changes.
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Prompt engineering for Jamba](https://docs.ai21.com/docs/prompt-engineering) | Jamba-specific prompting | [PDF](./ai21/Jamba%20Prompt%20Engineering.pdf) |
 
-* If the changes are good, simply reply with "yes" (or a similar affirmative) to instruct the AI to mark the task complete and move to the next one.
-* If changes are needed, provide feedback to the AI to correct the current task before moving on.
+## Perplexity (Sonar)
 
-You'll see a satisfying list of completed items grow, providing a clear visual of your feature coming to life!
+| Guide | Covers | Offline |
+| --- | --- | --- |
+| [Prompt guide](https://docs.perplexity.ai/docs/agent-api/prompt-guide) | Prompting search-grounded models | [PDF](./perplexity/Perplexity%20Prompt%20Guide.pdf) |
 
-![Example of a progressing task list with completed items](https://pbs.twimg.com/media/Go6KrXZWkAA_UuX?format=jpg&name=medium)
+## Files in this folder
 
-While it's not always perfect, this method has proven to be a very reliable way to build out larger features with AI assistance.
+PDFs are grouped by provider: `anthropic/`, `openai/`, `google/`, `meta/`, `mistral/`, `cohere/`, `xai/`, `deepseek/`, `moonshot/`, `amazon/`, `microsoft/`, `ibm/`, `ai21/`, `perplexity/`.
 
-### Video Demonstration 🎥
+- Web pages were printed with headless Chrome, and large images were downscaled to keep the folder small.
+- The Amazon Nova guides are split across many pages online, so each PDF merges a whole section into one file.
+- `openai/GPT-4.1 Prompting Guide.pdf` and `openai/A Practical Guide to Building Agents.pdf` are OpenAI's own PDFs, and `google/Prompt Engineering Whitepaper.pdf` is Google's.
+- No PDFs for GitHub repos, docs home pages, or the Gemini for Workspace guide (it is behind a sign-up form).
 
-If you'd like to see this in action, I demonstrated it on [Claire Vo&#39;s &#34;How I AI&#34; podcast](https://www.youtube.com/watch?v=fD4ktSkNCw4).
+## Contributing
 
-![Demonstration of AI Dev Tasks on How I AI Podcast](https://img.youtube.com/vi/fD4ktSkNCw4/maxresdefault.jpg)
-
-## 🗂️ Files in this Repository
-
-* **`create-prd.mdc`**: Guides the AI in generating a Product Requirement Document for your feature.
-* **`generate-tasks-from-prd.mdc`**: Takes a PRD markdown file as input and helps the AI break it down into a detailed, step-by-step implementation task list.
-* **`process-task-list.mdc`**: Instructs the AI on how to process the generated task list, tackling one task at a time and waiting for your approval before proceeding. (This file also contains logic for the AI to mark tasks as complete).
-
-## 🌟 Benefits
-
-* **Structured Development:** Enforces a clear process from idea to code.
-* **Step-by-Step Verification:** Allows you to review and approve AI-generated code at each small step, ensuring quality and control.
-* **Manages Complexity:** Breaks down large features into smaller, digestible tasks for the AI, reducing the chance of it getting lost or generating overly complex, incorrect code.
-* **Improved Reliability:** Offers a more dependable approach to leveraging AI for significant development work compared to single, large prompts.
-* **Clear Progress Tracking:** Provides a visual representation of completed tasks, making it easy to see how much has been done and what's next.
-
-## 🛠️ How to Use
-
-1. **Clone or Download:** Get these `.mdc` files into your project or a central location where Cursor can access them.
-2. **Follow the Workflow:** Systematically use the `.mdc` files in Cursor's Agent chat as described in the 5-step workflow above.
-3. **Adapt and Iterate:**
-   * Feel free to modify the prompts within the `.mdc` files to better suit your specific needs or coding style.
-   * If the AI struggles with a task, try rephrasing your initial feature description or breaking down tasks even further.
-
-## 💡 Tips for Success
-
-* **Be Specific:** The more context and clear instructions you provide (both in your initial feature description and any clarifications), the better the AI's output will be.
-* **MAX Mode for PRDs:** As mentioned, using MAX mode in Cursor for PRD creation (`create-prd.mdc`) can yield more thorough and higher-quality results if your budget supports it.
-* **Correct File Tagging:** Always ensure you're accurately tagging the PRD filename (e.g., `@MyFeature-PRD.md`) when generating tasks.
-* **Patience and Iteration:** AI is a powerful tool, but it's not magic. Be prepared to guide, correct, and iterate. This workflow is designed to make that iteration process smoother.
-
-## 🤝 Contributing
-
-Got ideas to improve these `.mdc` files or have new ones that fit this workflow? Contributions are welcome!
-Please feel free to:
-
-* Open an issue to discuss changes or suggest new features.
-* Submit a pull request with your enhancements.
-
----
-
-Happy AI-assisted developing!
+Add a guide only if the model's provider publishes it. Put the newest model-specific guide first in its provider's table, and drop a PDF snapshot in the provider's folder.

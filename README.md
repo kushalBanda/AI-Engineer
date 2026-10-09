@@ -59,7 +59,7 @@ Single ideas and small deploys. Start here.
 - [**AWS EC2 with FastAPI**](./aws-ec2-fastapi) · `Tutorial` - Deploy a FastAPI bookstore to an EC2 instance.
 
 #### Prompting
-- [**AI dev prompts**](./ai-dev-prompts) · `Reference` - A step-by-step Cursor workflow from idea to PRD to tasks, and the GPT-4.1 prompting guide.
+- [**AI dev prompts**](./ai-dev-prompts) · `Reference` - Official prompting guides from 15 model providers (Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, and more), with offline PDF copies.
 
 ### 🟡 Intermediate
 
