@@ -4,6 +4,7 @@ Metric functions are pure and take lists of successful records; rendering is
 kept separate so the numbers can be reused (notebooks, charts) without Markdown.
 """
 
+from __future__ import annotations
 
 import math
 from collections.abc import Callable, Mapping, Sequence

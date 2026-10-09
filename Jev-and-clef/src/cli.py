@@ -1,5 +1,6 @@
 """Command line entry point: `jev-clef sample | triage | bench | report`."""
 
+from __future__ import annotations
 
 import argparse
 import asyncio

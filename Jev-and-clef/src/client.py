@@ -5,6 +5,7 @@ triage: it sends a state and questions, and returns the raw answers with
 usage and latency.
 """
 
+from __future__ import annotations
 
 import asyncio
 import time

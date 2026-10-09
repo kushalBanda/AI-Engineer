@@ -4,6 +4,8 @@ The decision model only supplies probabilities. Thresholds and routing are
 business rules, so they live here in plain code.
 """
 
+from __future__ import annotations
+
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any, Final, Protocol

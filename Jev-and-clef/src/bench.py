@@ -4,6 +4,7 @@ Each model's results go to `<results_dir>/<model>.jsonl`, one record per
 ticket, appended as they arrive so an interrupted run resumes where it stopped.
 """
 
+from __future__ import annotations
 
 import asyncio
 import json

@@ -4,6 +4,7 @@ The dataset is CDLA-Sharing-1.0, so it is downloaded at run time into the data
 directory (gitignored) instead of being committed.
 """
 
+from __future__ import annotations
 
 import json
 import random

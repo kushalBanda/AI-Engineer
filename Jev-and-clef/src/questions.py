@@ -5,6 +5,8 @@ scored for accuracy. `urgency` and `needs_human` are unlabelled, so the report
 compares how often the models agree on them.
 """
 
+from __future__ import annotations
+
 from collections.abc import Mapping
 from typing import Any, Final
 
